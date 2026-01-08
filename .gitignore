@@ -1,0 +1,27 @@
+# Configuration / Secrets
+.env
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Patient Data (Security)
+temp_*.csv
+temp_*.png
+*.log
+
+# Models (Too large for git)
+LLaVA-Medical-Director/
+LLaVA-Wound-Base/
+
+venv/
+.streamlit/
+
+encounters*.csv
+patients*.csv
+
+phase3_training/checkpoints/
+phase3_training/datasets/
+phase3_training/LLaVA/
+phase3_training/*.pth
+phase3_training/*.bin

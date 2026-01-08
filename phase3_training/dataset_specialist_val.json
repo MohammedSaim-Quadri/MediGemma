@@ -1,0 +1,5574 @@
+[
+  {
+    "id": "962990343",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/431.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "1038727598",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/499.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "35895862",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/496.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "2263435018",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/380.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2757327682",
+    "image": "datasets/azh_wound/dataset/Train/V/87_3.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "3620352971",
+    "image": "datasets/azh_wound/dataset/Train/N/14.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Normal Skin. This image shows healthy, intact skin with no visible wounds, ulcerations, or pathological changes."
+      }
+    ]
+  },
+  {
+    "id": "1784861038",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/487.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1563636332",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/466.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3547973920",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/463.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "1558317070",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/416.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3160790869",
+    "image": "datasets/azh_wound/dataset/Train/V/143_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "1200695658",
+    "image": "datasets/azh_wound/dataset/Train/D/81_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "2805545647",
+    "image": "datasets/azh_wound/dataset/Train/P/48_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. pressure injury"
+      }
+    ]
+  },
+  {
+    "id": "2114310123",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/347.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3536620683",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/405.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3545168519",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/217.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2496041665",
+    "image": "datasets/azh_wound/dataset/Train/D/13_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "3524055816",
+    "image": "datasets/azh_wound/dataset/Train/D/60_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "4142380483",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/124.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1270766801",
+    "image": "datasets/azh_wound/dataset/Train/S/52_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "165357312",
+    "image": "datasets/azh_wound/dataset/Train/V/126_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "41546011",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/230.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "1464419431",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/89.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2388328429",
+    "image": "datasets/azh_wound/dataset/Train/S/119_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "2769409066",
+    "image": "datasets/azh_wound/dataset/Train/D/109_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "1005589257",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/486.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3158328042",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/209.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2566002120",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/216.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "392062357",
+    "image": "datasets/azh_wound/dataset/Train/S/6_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "3807570937",
+    "image": "datasets/azh_wound/dataset/Train/D/43_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  },
+  {
+    "id": "4107684772",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/23.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3041898421",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/293.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1725901563",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/447.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "4089320441",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/58.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1506426499",
+    "image": "datasets/azh_wound/dataset/Train/V/34_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "2404598445",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/172.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1972322686",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/66.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "136802688",
+    "image": "datasets/azh_wound/dataset/Train/V/40_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "3586190646",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/36.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1565239526",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/115.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1374276614",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/372.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "4013794281",
+    "image": "datasets/azh_wound/dataset/Train/V/5_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "453744241",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/177.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2895053524",
+    "image": "datasets/azh_wound/dataset/Train/N/23.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Routine skin care: moisturizing, inspection, and pressure redistribution prevention."
+      }
+    ]
+  },
+  {
+    "id": "1958519814",
+    "image": "datasets/azh_wound/dataset/Train/P/91_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "1072641263",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/464.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "4164959022",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/109.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "607431284",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/352.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "184758265",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/174.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "296925519",
+    "image": "datasets/azh_wound/dataset/Train/D/81_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  },
+  {
+    "id": "2322038850",
+    "image": "datasets/azh_wound/dataset/Train/V/101_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "2430037645",
+    "image": "datasets/azh_wound/dataset/Train/S/88_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "3247244903",
+    "image": "datasets/azh_wound/dataset/Train/D/57_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "1443908839",
+    "image": "datasets/azh_wound/dataset/Train/S/23_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Maintain clean/dry environment, monitor for infection (erythema, purulent drainage), and ensure adequate nutrition."
+      }
+    ]
+  },
+  {
+    "id": "2371349294",
+    "image": "datasets/azh_wound/dataset/Train/V/9_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "3708273363",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/7.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3850451249",
+    "image": "datasets/azh_wound/dataset/Train/S/20_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Maintain clean/dry environment, monitor for infection (erythema, purulent drainage), and ensure adequate nutrition."
+      }
+    ]
+  },
+  {
+    "id": "46670651",
+    "image": "datasets/azh_wound/dataset/Train/P/66_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "3973047798",
+    "image": "datasets/azh_wound/dataset/Train/P/13_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Pressure Injury. This image shows a pressure injury (bed sore) over a bony prominence. It represents localized damage to skin and underlying tissue from prolonged pressure."
+      }
+    ]
+  },
+  {
+    "id": "1285821420",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/432.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3546080211",
+    "image": "datasets/azh_wound/dataset/Train/P/69_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Pressure Injury. This image shows a pressure injury (bed sore) over a bony prominence. It represents localized damage to skin and underlying tissue from prolonged pressure."
+      }
+    ]
+  },
+  {
+    "id": "2124486816",
+    "image": "datasets/azh_wound/dataset/Train/D/21_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "3018892557",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/374.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3448357721",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/382.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2710333787",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/530.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "361233306",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/6.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3447003958",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/246.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1207324879",
+    "image": "datasets/azh_wound/dataset/Train/N/8.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Normal Skin. This image shows healthy, intact skin with no visible wounds, ulcerations, or pathological changes."
+      }
+    ]
+  },
+  {
+    "id": "1904265375",
+    "image": "datasets/azh_wound/dataset/Train/V/39_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "1624883520",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/283.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2811686386",
+    "image": "datasets/azh_wound/dataset/Train/V/110_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "2587379662",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/60.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "235093369",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/54.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1705825303",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/521.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "4031645105",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/461.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1933185365",
+    "image": "datasets/azh_wound/dataset/Train/N/30.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "No. healthy intact skin"
+      }
+    ]
+  },
+  {
+    "id": "1247840570",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/335.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3494922790",
+    "image": "datasets/azh_wound/dataset/Train/V/82_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "883601172",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/119.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3683513909",
+    "image": "datasets/azh_wound/dataset/Train/D/15_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  },
+  {
+    "id": "2211742179",
+    "image": "datasets/azh_wound/dataset/Train/S/6_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "2969392839",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/11.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "939331038",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/212.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "4222550648",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/222.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3604232927",
+    "image": "datasets/azh_wound/dataset/Train/P/20_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "3951941139",
+    "image": "datasets/azh_wound/dataset/Train/S/46_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "2425717149",
+    "image": "datasets/azh_wound/dataset/Train/V/118_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "1828648585",
+    "image": "datasets/azh_wound/dataset/Train/D/143_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "1615974478",
+    "image": "datasets/azh_wound/dataset/Train/D/36_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "1673165182",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/480.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2068458128",
+    "image": "datasets/azh_wound/dataset/Train/D/22_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "301808113",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/176.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1346283438",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/154.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3468917360",
+    "image": "datasets/azh_wound/dataset/Train/D/68_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  },
+  {
+    "id": "4047171826",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/373.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3510643454",
+    "image": "datasets/azh_wound/dataset/Train/P/13_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "110557247",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/361.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "4225725957",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/433.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3302233682",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/14.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1553869888",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/350.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1794048221",
+    "image": "datasets/azh_wound/dataset/Train/V/137_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "2729475486",
+    "image": "datasets/azh_wound/dataset/Train/D/67_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  },
+  {
+    "id": "3699664558",
+    "image": "datasets/azh_wound/dataset/Train/P/43_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Pressure Injury. This image shows a pressure injury (bed sore) over a bony prominence. It represents localized damage to skin and underlying tissue from prolonged pressure."
+      }
+    ]
+  },
+  {
+    "id": "2696624779",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/109.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2550697752",
+    "image": "datasets/azh_wound/dataset/Train/S/103_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "3542850431",
+    "image": "datasets/azh_wound/dataset/Train/N/57.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Normal Skin. This image shows healthy, intact skin with no visible wounds, ulcerations, or pathological changes."
+      }
+    ]
+  },
+  {
+    "id": "2907739468",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/360.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "4283050789",
+    "image": "datasets/azh_wound/dataset/Train/P/88_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "652273520",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/488.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "532003820",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/96.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2347971111",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/497.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "278787452",
+    "image": "datasets/azh_wound/dataset/Train/D/9_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "1505587504",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/433.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2373899821",
+    "image": "datasets/azh_wound/dataset/Train/N/68.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Normal Skin. This image shows healthy, intact skin with no visible wounds, ulcerations, or pathological changes."
+      }
+    ]
+  },
+  {
+    "id": "727783602",
+    "image": "datasets/azh_wound/dataset/Train/N/12.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "No. healthy intact skin"
+      }
+    ]
+  },
+  {
+    "id": "263048495",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/509.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3170075258",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/255.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1211650072",
+    "image": "datasets/azh_wound/dataset/Train/V/110_3.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "1915140754",
+    "image": "datasets/azh_wound/dataset/Train/V/8_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "1945262643",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "1221642582",
+    "image": "datasets/azh_wound/dataset/Train/S/18_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "4018811537",
+    "image": "datasets/azh_wound/dataset/Train/V/113_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "3364840290",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/432.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2498350996",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/262.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1866782844",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/39.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "666495921",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/199.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2472573084",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/31.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3518601398",
+    "image": "datasets/azh_wound/dataset/Train/V/124_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "555955604",
+    "image": "datasets/azh_wound/dataset/Train/D/123_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  },
+  {
+    "id": "3532462725",
+    "image": "datasets/azh_wound/dataset/Train/V/117_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "3719311607",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/62.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "703898598",
+    "image": "datasets/azh_wound/dataset/Train/N/19.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "No. healthy intact skin"
+      }
+    ]
+  },
+  {
+    "id": "2649233900",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/513.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "577120870",
+    "image": "datasets/azh_wound/dataset/Train/N/11.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Routine skin care: moisturizing, inspection, and pressure redistribution prevention."
+      }
+    ]
+  },
+  {
+    "id": "984540585",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/461.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "2738745331",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/368.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3879141834",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/328.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2370229974",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/192.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1562021892",
+    "image": "datasets/azh_wound/dataset/Train/P/21_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "2615600928",
+    "image": "datasets/azh_wound/dataset/Train/V/97_2.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "129898813",
+    "image": "datasets/azh_wound/dataset/Train/S/2_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "2804927405",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/18.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "75459515",
+    "image": "datasets/azh_wound/dataset/Train/V/105_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "2412813534",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/443.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2602825869",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/134.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "4049969750",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/5.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2724109845",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/351.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3524820944",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/472.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1600798743",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/175.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3400028078",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/23.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "397290694",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/446.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "1230895633",
+    "image": "datasets/azh_wound/dataset/Train/P/71_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "755467933",
+    "image": "datasets/azh_wound/dataset/Train/D/78_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "1257709324",
+    "image": "datasets/azh_wound/dataset/Train/D/42_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  },
+  {
+    "id": "375950482",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/155.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2564696008",
+    "image": "datasets/azh_wound/dataset/Train/D/136_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "1757993088",
+    "image": "datasets/azh_wound/dataset/Train/S/50_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "434042821",
+    "image": "datasets/azh_wound/dataset/Train/V/153_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "2143931964",
+    "image": "datasets/azh_wound/dataset/Train/P/10_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Pressure Injury. This image shows a pressure injury (bed sore) over a bony prominence. It represents localized damage to skin and underlying tissue from prolonged pressure."
+      }
+    ]
+  },
+  {
+    "id": "1942899883",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/500.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3918179456",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/161.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3992789041",
+    "image": "datasets/azh_wound/dataset/Train/V/87_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "3967012944",
+    "image": "datasets/azh_wound/dataset/Train/P/95_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Pressure Injury. This image shows a pressure injury (bed sore) over a bony prominence. It represents localized damage to skin and underlying tissue from prolonged pressure."
+      }
+    ]
+  },
+  {
+    "id": "4108860802",
+    "image": "datasets/azh_wound/dataset/Train/V/136_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "4163453578",
+    "image": "datasets/azh_wound/dataset/Train/N/44.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "No. healthy intact skin"
+      }
+    ]
+  },
+  {
+    "id": "766156186",
+    "image": "datasets/azh_wound/dataset/Train/P/20_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. pressure injury"
+      }
+    ]
+  },
+  {
+    "id": "499713985",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/389.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3572073211",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/412.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "331963227",
+    "image": "datasets/azh_wound/dataset/Train/D/131_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "1341803145",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/502.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1496588415",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/357.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "817360224",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/403.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3318097234",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/385.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "418369321",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/314.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "4035437475",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/280.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3327671959",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/59.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2201803282",
+    "image": "datasets/azh_wound/dataset/Train/P/14_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. pressure injury"
+      }
+    ]
+  },
+  {
+    "id": "3788288916",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/99.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2574515860",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/158.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "890674167",
+    "image": "datasets/azh_wound/dataset/Train/S/15_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "1799280800",
+    "image": "datasets/azh_wound/dataset/Train/S/122_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "4121316353",
+    "image": "datasets/azh_wound/dataset/Train/V/72_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "2124408743",
+    "image": "datasets/azh_wound/dataset/Train/N/15.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Normal Skin. This image shows healthy, intact skin with no visible wounds, ulcerations, or pathological changes."
+      }
+    ]
+  },
+  {
+    "id": "67662806",
+    "image": "datasets/azh_wound/dataset/Train/V/110_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "2011721401",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/414.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "4262932954",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/308.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2903302075",
+    "image": "datasets/azh_wound/dataset/Train/V/22_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "3410124761",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/71.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "1761054699",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/279.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2186584599",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/336.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "717821340",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/445.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1141079777",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/493.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1505870252",
+    "image": "datasets/azh_wound/dataset/Train/V/149_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "2964344163",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/314 - Copy.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3255662184",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/106.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "750007613",
+    "image": "datasets/azh_wound/dataset/Train/D/143_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  },
+  {
+    "id": "3019955117",
+    "image": "datasets/azh_wound/dataset/Train/V/115_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "1033777494",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/81.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "4003363967",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/345.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "785177149",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/277.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2637129985",
+    "image": "datasets/azh_wound/dataset/Train/V/46_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "875561348",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/264.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3793690504",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/45.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1344192593",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/194.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1933826124",
+    "image": "datasets/azh_wound/dataset/Train/S/122_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "3987441704",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/239.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3042271469",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/4.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "213181695",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/19.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1875166026",
+    "image": "datasets/azh_wound/dataset/Train/V/38_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "3237282314",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/93.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3640947197",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/375.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1216084339",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/47.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1900664018",
+    "image": "datasets/azh_wound/dataset/Train/S/17_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "3649104205",
+    "image": "datasets/azh_wound/dataset/Train/V/152_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "2708135557",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/189.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "310792800",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/86.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1992231851",
+    "image": "datasets/azh_wound/dataset/Train/N/29.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "No. healthy intact skin"
+      }
+    ]
+  },
+  {
+    "id": "2538986478",
+    "image": "datasets/azh_wound/dataset/Train/S/108_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Maintain clean/dry environment, monitor for infection (erythema, purulent drainage), and ensure adequate nutrition."
+      }
+    ]
+  },
+  {
+    "id": "2334408829",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/77.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3385615463",
+    "image": "datasets/azh_wound/dataset/Train/S/90_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "2900992271",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/113.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "4109527245",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/40.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1920026154",
+    "image": "datasets/azh_wound/dataset/Train/V/34_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "1257039209",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/105.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2835853002",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/64.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2783702161",
+    "image": "datasets/azh_wound/dataset/Train/D/132_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "1079497771",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/383.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2399976781",
+    "image": "datasets/azh_wound/dataset/Train/S/20_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Maintain clean/dry environment, monitor for infection (erythema, purulent drainage), and ensure adequate nutrition."
+      }
+    ]
+  },
+  {
+    "id": "3561654110",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/355.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2614378776",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/311.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "2214865250",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/460.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2936026223",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/26.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3049271716",
+    "image": "datasets/azh_wound/dataset/Train/V/40_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "3499105141",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/159.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1802502767",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/68.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "668712687",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/17.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3356143475",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/166.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "938333858",
+    "image": "datasets/azh_wound/dataset/Train/N/19.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Routine skin care: moisturizing, inspection, and pressure redistribution prevention."
+      }
+    ]
+  },
+  {
+    "id": "157497977",
+    "image": "datasets/azh_wound/dataset/Train/D/79_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "1946186741",
+    "image": "datasets/azh_wound/dataset/Train/P/85_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Pressure Injury. This image shows a pressure injury (bed sore) over a bony prominence. It represents localized damage to skin and underlying tissue from prolonged pressure."
+      }
+    ]
+  },
+  {
+    "id": "1990616509",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/286.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2166432700",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/454.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1749415813",
+    "image": "datasets/azh_wound/dataset/Train/D/116_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "1446048325",
+    "image": "datasets/azh_wound/dataset/Train/D/72_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "754652151",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/428.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3288063487",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/447.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2733094216",
+    "image": "datasets/azh_wound/dataset/Train/P/96_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "2942645657",
+    "image": "datasets/azh_wound/dataset/Train/N/55.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Routine skin care: moisturizing, inspection, and pressure redistribution prevention."
+      }
+    ]
+  },
+  {
+    "id": "3321991916",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/363.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "534851421",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/135.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3792523138",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/468.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1191912541",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/187.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "1994805119",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/357.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3311174481",
+    "image": "datasets/azh_wound/dataset/Train/D/139_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "683536168",
+    "image": "datasets/azh_wound/dataset/Train/V/79_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "221617011",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/265.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3628192859",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/280.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1071845504",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/481.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3475998018",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/271.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3176997149",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/68.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "730341434",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/88.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3675815754",
+    "image": "datasets/azh_wound/dataset/Train/D/132_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "254271234",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/229.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "4031420154",
+    "image": "datasets/azh_wound/dataset/Train/V/103_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "775830163",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/279.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3959449483",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/384.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2630636822",
+    "image": "datasets/azh_wound/dataset/Train/P/7_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "863215043",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/469.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2908234295",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/489.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3940728058",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/186.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1909396687",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/98.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "542599978",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/462.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "961744119",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/81.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "791649215",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/94.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "4053333085",
+    "image": "datasets/azh_wound/dataset/Train/V/6_3.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "3595529603",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/192.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "2093574673",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/208.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2894133747",
+    "image": "datasets/azh_wound/dataset/Train/V/46_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "3805125149",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/470 (2).jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3888923457",
+    "image": "datasets/azh_wound/dataset/Train/N/8.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Routine skin care: moisturizing, inspection, and pressure redistribution prevention."
+      }
+    ]
+  },
+  {
+    "id": "2287440258",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/213.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2007746257",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/513.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "950509777",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/38.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "2837315586",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/105.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "4218771747",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/118.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3051057111",
+    "image": "datasets/azh_wound/dataset/Train/D/9_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "1818005649",
+    "image": "datasets/azh_wound/dataset/Train/N/64.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "No. healthy intact skin"
+      }
+    ]
+  },
+  {
+    "id": "863792345",
+    "image": "datasets/azh_wound/dataset/Train/P/85_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. pressure injury"
+      }
+    ]
+  },
+  {
+    "id": "2010505651",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/18.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "1407567557",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/305.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "269753576",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/399.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "170365207",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/503.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1027574351",
+    "image": "datasets/azh_wound/dataset/Train/V/85_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "2674223753",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/326.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3936792809",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/170.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2723618996",
+    "image": "datasets/azh_wound/dataset/Train/S/11_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "2341742914",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/159.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3255335710",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/423.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "1210814630",
+    "image": "datasets/azh_wound/dataset/Train/V/141_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "3283040298",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/329.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "4232043085",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/16.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3661123816",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/228.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "4203751694",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/475.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3242988828",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/58.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1428907045",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/306.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3154272017",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/370.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3260236703",
+    "image": "datasets/azh_wound/dataset/Train/D/51_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "1324261449",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/160.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "4082248413",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/536.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "759580700",
+    "image": "datasets/azh_wound/dataset/Train/D/87_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "4110295630",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/194.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2396524615",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/231.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "3331193391",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/233.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2423159962",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/274.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1811739762",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/227.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "758541094",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/475.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1246401901",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/42.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2598758678",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/353.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "190262757",
+    "image": "datasets/azh_wound/dataset/Train/S/123_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "4191171741",
+    "image": "datasets/azh_wound/dataset/Train/D/68_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "3806040892",
+    "image": "datasets/azh_wound/dataset/Train/V/98_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "3262455437",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/394.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1419057974",
+    "image": "datasets/azh_wound/dataset/Train/S/25_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Maintain clean/dry environment, monitor for infection (erythema, purulent drainage), and ensure adequate nutrition."
+      }
+    ]
+  },
+  {
+    "id": "418602887",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/310.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3595611517",
+    "image": "datasets/azh_wound/dataset/Train/V/55_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "1368613040",
+    "image": "datasets/azh_wound/dataset/Train/P/86_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "144024587",
+    "image": "datasets/azh_wound/dataset/Train/N/74.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Routine skin care: moisturizing, inspection, and pressure redistribution prevention."
+      }
+    ]
+  },
+  {
+    "id": "4258912578",
+    "image": "datasets/azh_wound/dataset/Train/V/98_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "3843181803",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/118.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1578955311",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/2.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3403174238",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/288.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3695873626",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/102.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3363576170",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/19.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3401563733",
+    "image": "datasets/azh_wound/dataset/Train/V/68_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "2617266880",
+    "image": "datasets/azh_wound/dataset/Train/S/82_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Maintain clean/dry environment, monitor for infection (erythema, purulent drainage), and ensure adequate nutrition."
+      }
+    ]
+  },
+  {
+    "id": "2644276116",
+    "image": "datasets/azh_wound/dataset/Train/S/84_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Maintain clean/dry environment, monitor for infection (erythema, purulent drainage), and ensure adequate nutrition."
+      }
+    ]
+  },
+  {
+    "id": "1065317802",
+    "image": "datasets/azh_wound/dataset/Train/S/87_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "2326146360",
+    "image": "datasets/azh_wound/dataset/Train/S/67_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "2733578190",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/350.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1962587812",
+    "image": "datasets/azh_wound/dataset/Train/N/5.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "No. healthy intact skin"
+      }
+    ]
+  },
+  {
+    "id": "3826610834",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/361.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3652620847",
+    "image": "datasets/azh_wound/dataset/Train/S/59_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "3616377998",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/412.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1188214999",
+    "image": "datasets/azh_wound/dataset/Train/V/36_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "3733672821",
+    "image": "datasets/azh_wound/dataset/Train/N/38.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Routine skin care: moisturizing, inspection, and pressure redistribution prevention."
+      }
+    ]
+  },
+  {
+    "id": "1801701419",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/415.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "2003500376",
+    "image": "datasets/azh_wound/dataset/Train/D/26_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Offloading pressure (specialized footwear/casting), strict glycemic control, debridement of non-viable tissue, and vascular assessment."
+      }
+    ]
+  },
+  {
+    "id": "2531046052",
+    "image": "datasets/azh_wound/dataset/Train/S/106_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "1551448488",
+    "image": "datasets/azh_wound/dataset/Train/V/109_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "4051467050",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/70.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "2390360947",
+    "image": "datasets/azh_wound/dataset/Train/D/78_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  },
+  {
+    "id": "334097984",
+    "image": "datasets/azh_wound/dataset/Train/P/65_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "1021685044",
+    "image": "datasets/azh_wound/dataset/Train/S/42_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. surgical wound"
+      }
+    ]
+  },
+  {
+    "id": "2354441847",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/294.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2404369608",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/93.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3825119071",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/375.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "520136511",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/193.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "764906706",
+    "image": "datasets/azh_wound/dataset/Train/P/22_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "2211857685",
+    "image": "datasets/azh_wound/dataset/Train/N/4.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Routine skin care: moisturizing, inspection, and pressure redistribution prevention."
+      }
+    ]
+  },
+  {
+    "id": "1853216811",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/339.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3630071780",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/529.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2394100466",
+    "image": "datasets/azh_wound/dataset/Train/V/23_1.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "3926425375",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/126.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1701940405",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/413.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "1989500321",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/84.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "2629941820",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/423.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "459295561",
+    "image": "datasets/azh_wound/dataset/Train/V/122_2.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Venous Leg Ulcer. This image shows a venous leg ulcer, typically located on the medial lower leg. Features include irregular borders, hemosiderin staining (brown discoloration), and lipodermatosclerosis."
+      }
+    ]
+  },
+  {
+    "id": "290228869",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/356.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "2781488656",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/318 - Copy.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2863736530",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/351.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "4289934333",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/174.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "1363407520",
+    "image": "datasets/azh_wound/dataset/Train/P/56_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. pressure injury"
+      }
+    ]
+  },
+  {
+    "id": "1381440691",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/305.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "3713145365",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/46.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "2610884110",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/425.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "505975666",
+    "image": "datasets/azh_wound/dataset/Train/D/113_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  },
+  {
+    "id": "4259451884",
+    "image": "datasets/azh_wound/dataset/Train/N/20.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Routine skin care: moisturizing, inspection, and pressure redistribution prevention."
+      }
+    ]
+  },
+  {
+    "id": "1118807336",
+    "image": "datasets/azh_wound/dataset/Train/P/84_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Immediate pressure redistribution (turning schedule), nutritional support, and stage-appropriate wound care."
+      }
+    ]
+  },
+  {
+    "id": "4043575157",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/316.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2211031845",
+    "image": "datasets/azh_wound/dataset/Train/V/120_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "1890513652",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/243.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "2653736868",
+    "image": "datasets/azh_wound/dataset/Train/S/101_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Surgical Wound. This image shows a surgical wound site. Assessment focuses on edge approximation, signs of dehiscence, or surgical site infection (SSI)."
+      }
+    ]
+  },
+  {
+    "id": "2854834311",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/461.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "No, the skin is intact."
+      }
+    ]
+  },
+  {
+    "id": "2192560151",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/323.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1531883029",
+    "image": "datasets/azh_wound/dataset/Train/D/152_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "2764009747",
+    "image": "datasets/azh_wound/dataset/Train/V/1_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Compression therapy (multilayer bandaging), leg elevation, and moisture management."
+      }
+    ]
+  },
+  {
+    "id": "2157009741",
+    "image": "datasets/azh_wound/dataset/Train/D/64_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Diabetic Foot Ulcer. This image shows a diabetic foot ulcer, typically located on the foot or heel. Common characteristics include callus formation, slough, and potential signs of neuropathy."
+      }
+    ]
+  },
+  {
+    "id": "4000693754",
+    "image": "datasets/azh_wound/dataset/Train/S/88_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What is the recommended management?"
+      },
+      {
+        "from": "gpt",
+        "value": "Maintain clean/dry environment, monitor for infection (erythema, purulent drainage), and ensure adequate nutrition."
+      }
+    ]
+  },
+  {
+    "id": "1575218206",
+    "image": "datasets/azh_wound/dataset/Train/P/99_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "What type of wound is this?"
+      },
+      {
+        "from": "gpt",
+        "value": "This is a Pressure Injury. This image shows a pressure injury (bed sore) over a bony prominence. It represents localized damage to skin and underlying tissue from prolonged pressure."
+      }
+    ]
+  },
+  {
+    "id": "2317062862",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/209.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3141996323",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/14.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "2979979192",
+    "image": "datasets/azh_wound/dataset/Train/N/61.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "No. healthy intact skin"
+      }
+    ]
+  },
+  {
+    "id": "1671721539",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/467.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "1004247485",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/488.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows an active diabetic foot ulcer. The skin integrity is compromised. Immediate clinical assessment required for infection, depth, and perfusion."
+      }
+    ]
+  },
+  {
+    "id": "3380456783",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Abnormal(Ulcer)/43.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is a diabetic foot ulcer present?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes, an ulcer is visible."
+      }
+    ]
+  },
+  {
+    "id": "3374826283",
+    "image": "datasets/diabetic-foot-ulcer-dfu/DFU/Patches/Normal(Healthy skin)/168.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Provide a clinical assessment."
+      },
+      {
+        "from": "gpt",
+        "value": "This image shows a diabetic patient's foot with no active ulceration. The skin appears intact. Preventive care is critical: daily inspection and proper footwear."
+      }
+    ]
+  },
+  {
+    "id": "4026476077",
+    "image": "datasets/azh_wound/dataset/Train/V/102_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. venous leg ulcer"
+      }
+    ]
+  },
+  {
+    "id": "3484582413",
+    "image": "datasets/azh_wound/dataset/Train/D/124_0.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "Is there an active wound?"
+      },
+      {
+        "from": "gpt",
+        "value": "Yes. diabetic foot ulcer"
+      }
+    ]
+  }
+]
