@@ -1,0 +1,44 @@
+clinical_protocols:
+  diabetic_foot_ulcer:
+    name: "Diabetic Foot Ulcer"
+    severity: "High"
+    management:
+      - "Offloading: Total Contact Casting (TCC) or specialized footwear to redistribute pressure (Gold Standard)."
+      - "Glycemic Control: Target HbA1c < 7% to facilitate healing."
+      - "Debridement: Removal of non-viable tissue (sharp or enzymatic) to promote granulation."
+      - "Vascular Assessment: Check ABI/TBI to rule out ischemia."
+      - "Infection Control: Monitor for osteomyelitis; obtain deep tissue culture if infection suspected."
+
+  venous_leg_ulcer:
+    name: "Venous Leg Ulcer"
+    severity: "Moderate"
+    management:
+      - "Compression Therapy: Multilayer bandaging (aim for 40mmHg at ankle) is the mainstay of treatment."
+      - "Elevation: Elevate legs above heart level for 30 min, 3-4 times daily."
+      - "Exudate Management: Use superabsorbent dressings (foams, alginates) to manage high drainage."
+      - "Skin Care: Apply barrier cream to peri-wound skin to prevent maceration."
+
+  pressure_injury:
+    name: "Pressure Injury"
+    severity: "High (Stage dependent)"
+    management:
+      - "Pressure Redistribution: Reposition patient every 2 hours; use air-fluidized or alternating pressure surfaces."
+      - "Nutrition: High-protein, high-calorie diet with vitamin supplementation (Zinc, Vit C)."
+      - "Moisture Management: Manage incontinence; use barrier creams."
+      - "Debridement: Required for Stage 3/4 if slough/eschar is present."
+
+  surgical_wound:
+    name: "Surgical Wound"
+    severity: "Moderate"
+    management:
+      - "Infection Surveillance: Monitor for dehiscence, erythema, purulent drainage, or fever (SSI signs)."
+      - "Dressing: Keep clean and dry; change dressings per aseptic technique."
+      - "Nutrition: Optimize glucose control and protein intake for collagen synthesis."
+
+  normal_skin:
+    name: "Normal Skin"
+    severity: "Low"
+    management:
+      - "Routine Inspection: Daily foot/skin checks for high-risk patients (diabetes, neuropathy)."
+      - "Moisturization: Maintain skin hydration to prevent cracking/fissures."
+      - "Education: Instruct patient on proper footwear and offloading techniques."
