@@ -2,6 +2,7 @@ import torch
 import gc
 import logging
 import os
+import requests
 from PIL import Image
 from transformers import BitsAndBytesConfig
 try:
@@ -10,9 +11,8 @@ try:
     from llava.model.builder import load_pretrained_model
     from llava.utils import disable_torch_init
     from llava.mm_utils import tokenizer_image_token, get_model_name_from_path, process_images
-    LLAVA_AVAILABLE = True
 except ImportError:
-    LLAVA_AVAILABLE = False
+    pass
 
 logger = logging.getLogger(__name__)
 
@@ -22,15 +22,47 @@ class VisionEngine:
     """
     def __init__(self, model_path=None):
         self.model_path = model_path or os.getenv("VISION_MODEL_PATH", "./LLaVA-Medical-Director")
+        self.ollama_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+        self.reasoning_model = os.getenv("REASONING_MODEL", "gemma2:27b")
         self.tokenizer = None
         self.model = None
         self.image_processor = None
         self.loaded = False
 
+    def _evict_ollama(self):
+        """
+        CRITICAL: Forces the Ollama server to unload the 18GB Gemma model.
+        This clears the VRAM 'parking spot' for LLaVA.
+        """
+        try:
+            logger.info("🧹 Orchestrator: Evicting Ollama model to free VRAM...")
+            # Sending keep_alive: 0 forces an immediate unload
+            response = requests.post(
+                f"{self.ollama_url}/api/chat",
+                json={
+                    "model": self.reasoning_model, 
+                    "messages": [], 
+                    "keep_alive": 0
+                }
+            )
+            if response.status_code == 200:
+                logger.info("✅ Ollama Evicted. VRAM is clear.")
+            else:
+                logger.warning(f"⚠️ Failed to evict Ollama: {response.text}")
+                
+            # Extra cleanup
+            torch.cuda.empty_cache()
+            gc.collect()
+            
+        except Exception as e:
+            logger.warning(f"⚠️ Could not contact Ollama for eviction: {e}")
+
     def load_model(self):
         """Loads the Vision Model into VRAM."""
         if self.loaded:
             return
+        
+        self._evict_ollama()
         
         try:
             logger.info(f"🏥 Loading Vision Model from: {self.model_path}...")
@@ -103,7 +135,6 @@ class VisionEngine:
                     do_sample=True,
                     temperature=0.2,
                     max_new_tokens=512,
-                    use_cache=False
                 )
 
             # 5. Decoding

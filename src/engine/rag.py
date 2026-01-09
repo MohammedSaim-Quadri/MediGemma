@@ -1,5 +1,5 @@
 import re
-from llama_index.core import Settings
+from llama_index.core import Settings, PromptTemplate
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.vector_stores import MetadataFilter, MetadataFilters
 import logging
@@ -14,6 +14,33 @@ class ClinicalRAGEngine:
     def __init__(self, index):
         self.index = index
         self.chat_engine = None
+
+        # --- THE "BRAIN": CENTRAL CLINICAL PROMPT ---
+        self.clinical_prompt_str = (
+            "You are the Medi-Gemma Clinical Intelligence Engine. "
+            "Analyze the retrieved clinical records to answer the query.\n"
+            "--------------------------------------------------------\n"
+            "DATA INTERPRETATION RULES:\n"
+            "1. TISSUE ANALYSIS:\n"
+            "   - If 'Necrosis' > 0% OR 'Slough' > 0% -> IMPLIES 'Enzymatic Debridement (Santyl)' is indicated.\n"
+            "   - If 'Granulation' > 75% -> IMPLIES 'Moisture Balance' is indicated.\n"
+            "2. STATUS CHECKS:\n"
+            "   - Compare dimensions (LxW) over time to determine 'Improving' or 'Declining'.\n"
+            "   - Look for keywords: 'Odor', 'Pus', 'Erythema' -> Signs of Infection.\n"
+            "--------------------------------------------------------\n"
+            "RESPONSE FORMAT:\n"
+            "1. DATA SUMMARY: Start with 'Patient [ID] Records show...'\n"
+            "2. PROTOCOL MATCH: 'Based on Necrosis of [X]%, the protocol indicates...'\n"
+            "3. RECOMMENDATION: Explicitly state if Santyl is suitable based on the rules above.\n"
+            "4. DISCLAIMER: End with 'Generated for physician review.'\n"
+            "--------------------------------------------------------\n"
+            "CONTEXT:\n"
+            "{context_str}\n"
+            "--------------------------------------------------------\n"
+            "QUERY: {query_str}\n"
+            "CLINICAL ANALYSIS:"
+        )
+        self.clinical_template = PromptTemplate(self.clinical_prompt_str)
 
     def _extract_patient_id(self, text):
         """
@@ -36,35 +63,10 @@ class ClinicalRAGEngine:
         # Memory buffer for context (remembers last 3 turns)
         memory = ChatMemoryBuffer.from_defaults(token_limit=3000)
 
-        # System Prompt (The "Medical Director" Persona)
-        system_prompt = (
-            "You are the Medi-Gemma Clinical Intelligence Engine. "
-            "Your job is to COMPARE patient data against the T.I.M.E. Clinical Framework.\n"
-            "--------------------------------------------------------\n"
-            "RULES OF ENGAGEMENT:\n"
-            "1. NO GENERIC REFUSALS: Do not start with 'I cannot provide medical advice'. "
-            "Instead, state 'Based on the available records...'.\n"
-            "2. DATA-DRIVEN: You are analyzing DATA, not treating a human. "
-            "If the data shows Necrosis, report it. If the data is empty, report 'Insufficient Data'.\n"
-            "3. FRAMEWORK LOGIC (T.I.M.E.):\n"
-            "   - Tissue: Necrosis/Slough > 0% -> Matches protocol for Enzymatic Debridement (Santyl).\n"
-            "   - Tissue: Granulation 100% -> Matches protocol for Moisture Balance (No Santyl).\n"
-            "   - Infection: Signs present -> Matches protocol for Antimicrobials.\n"
-            "--------------------------------------------------------\n"
-            "INSTRUCTIONS:\n"
-            "1. RETRIEVE: Look at the latest encounter dates.\n"
-            "2. ANALYZE: Check the 'Necrosis_Percent' and 'Slough_Percent' values.\n"
-            "3. CONCLUDE:\n"
-            "   - If Necrosis > 0%: 'Data shows [X]% Necrosis. Protocol indicates Santyl.'\n"
-            "   - If Necrosis == 0%: 'Data shows 0% Necrosis. Santyl is NOT indicated.'\n"
-            "   - If Data Missing: 'Clinical records do not contain tissue composition data. Cannot determine Santyl suitability.'\n"
-            "4. REQUIRED CLOSING: 'Clinical recommendation generated for physician review and approval.'"
-        )
-
         self.chat_engine = self.index.as_chat_engine(
             chat_mode="context",
             memory=memory,
-            system_prompt=system_prompt,
+            system_prompt="You are a Clinical Intelligence Engine. Use T.I.M.E. protocols to analyze wounds.",
             llm=Settings.llm,
             verbose=True
         )
@@ -96,7 +98,8 @@ class ClinicalRAGEngine:
                 specialized_engine = self.index.as_query_engine(
                     filters=filters,
                     llm=Settings.llm,
-                    similarity_top_k=15,
+                    similarity_top_k=20,
+                    text_qa_template=self.clinical_template,
                     verbose=True
                 )
                 

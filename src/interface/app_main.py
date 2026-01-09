@@ -74,7 +74,11 @@ llm_engine, data_manager, vision_engine, analytics_engine, rag_engine, router, p
 
 # --- SESSION STATE (Chat History) ---
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [
+        {"role": "assistant", "content": "Medical Director System Online. Upload data or patient images to begin."}
+    ]
+if "last_analyzed_file" not in st.session_state:
+    st.session_state.last_analyzed_file = None
 
 # --- UI LAYOUT ---
 st.title("🏥 Medi-Gemma: Clinical Decision Support")
@@ -83,7 +87,7 @@ st.markdown("---")
 
 # Sidebar: File Upload & Vision
 with st.sidebar:
-    st.header("🏥 Medi-Gemma")
+    st.header("⚙️ Control Panel")
     st.caption("Clinical Intelligence Platform")
 
     if data_manager.df is None:
@@ -111,44 +115,11 @@ with st.sidebar:
                     st.rerun() # Refresh to update status
                 else:
                     st.error("Failed to process files.")
-
-    st.markdown("---")
-    st.header("👁️ Wound Vision")
-    uploaded_file = st.file_uploader("Upload Wound Image", type=["jpg", "png", "jpeg"])
     
-    if uploaded_file:
-        st.image(uploaded_file, caption="Clinical Observation", use_column_width=True)
-        if st.button("Analyze Image"):
-            with st.status("🧠 Medical Director Vision Pipeline...", expanded=True) as status:
-                st.write("👁️ Loading LLaVA Vision Encoder...")
-                vision_result = vision_engine.analyze(uploaded_file)
-                st.write("✅ Feature Extraction Complete.")
-                
-                st.write("🛡️ Mapping to Clinical Protocols...")
-                protocol = protocol_manager.get_protocol(vision_result)
-                st.write("✅ Safety Check Passed.")
-                
-                status.update(label="Analysis Complete", state="complete", expanded=False)
-
-            # Display Results in Sidebar
-            st.success("Visual Findings:")
-            st.info(vision_result)
-
-            st.markdown("### 📋 Recommended Protocol")
-            st.markdown(f"**Condition:** {protocol.get('name', 'Unknown')}")
-            st.markdown(f"**Severity:** {protocol.get('severity', 'Check')}")
-            st.markdown("**Management Steps:**")
-            for step in protocol.get('management', []):
-                st.markdown(f"- {step}")
-
-            context_msg = (
-                f"**[SYSTEM UPDATE] Visual Analysis Complete:**\n"
-                f"- Finding: {vision_result}\n"
-                f"- Protocol Triggered: {protocol.get('name')}\n"
-                f"- Recommended Management: {', '.join(protocol.get('management')[:2])}..."
-            )
-            st.session_state.messages.append({"role": "assistant", "content": context_msg})
-
+    if st.button("🧹 Clear Conversation"):
+        st.session_state.messages = [{"role": "assistant", "content": "Memory cleared."}]
+        st.session_state.last_analyzed_file = None
+        st.rerun()
 # --- MAIN CHAT INTERFACE ---
 
 # Create Tabs for different views
@@ -212,6 +183,43 @@ with tab1:
 # --- TAB 2: CHAT INTERFACE ---
 with tab2:
     st.caption("AI-Powered Clinical Decision Support (RAG + Safety Verification)")
+
+    # --- A. AUTO-VISION HANDLER ---
+    # We put the uploader here (Main Column), not sidebar.
+    uploaded_file = st.file_uploader("Upload Clinical Image (Auto-Analysis)", type=["jpg", "png", "jpeg"])
+
+    # CHECK: Is there a file? AND Is it new?
+    if uploaded_file and uploaded_file.name != st.session_state.last_analyzed_file:
+        
+        # 1. Show the Image immediately
+        st.image(uploaded_file, use_column_width=True, caption="Analyzing Specimen...")
+        
+        # 2. AUTO-TRIGGER (No Button needed)
+        with st.status("🧠 Running Clinical Vision Pipeline...", expanded=True) as status:
+            st.write("🔌 Orchestrating VRAM (Evicting Chat Engine)...")
+            st.write("👁️ LLaVA Vision Encoder: Scanning Tissue...")
+            
+            # Run Analysis
+            vision_result = vision_engine.analyze(uploaded_file)
+            
+            st.write("🛡️ Protocol Manager: Mapping Guidelines...")
+            protocol = protocol_manager.get_protocol(vision_result)
+            
+            status.update(label="✅ Analysis Complete", state="complete", expanded=False)
+        
+        # 3. Formulate Context
+        context_msg = (
+            f"**[SYSTEM UPDATE] Visual Analysis Log:**\n"
+            f"**Target:** {uploaded_file.name}\n"
+            f"**Visual Findings:** {vision_result}\n"
+            f"**Protocol Identified:** {protocol.get('name')}\n"
+            f"**Recommended Actions:** {', '.join(protocol.get('management')[:3])}..."
+        )
+        
+        # 4. Inject & Save State
+        st.session_state.messages.append({"role": "assistant", "content": context_msg})
+        st.session_state.last_analyzed_file = uploaded_file.name # Mark as done so it doesn't loop
+        st.rerun()
     
     # 1. Display History
     for message in st.session_state.messages:
@@ -250,11 +258,32 @@ with tab2:
                         
                     elif intent == QueryIntent.PATIENT_ASSESSMENT:
                         st.write("🏥 Retrieving Patient History (Strict Filter)...")
-                        if rag_engine.index is None:
-                            raw_response = "⚠️ Index not ready."
+                    
+                        if rag_engine.index:
+                            # --- CONTEXT INJECTION FIX ---
+                            # 1. Look for the most recent System Update in history
+                            latest_visual_context = ""
+                            for msg in reversed(st.session_state.messages):
+                                if "[SYSTEM UPDATE]" in msg["content"]:
+                                    latest_visual_context = msg["content"]
+                                    break
+                            
+                            # 2. Prepend it to the current prompt (Invisible to user, visible to Bot)
+                            # This forces the RAG engine to "see" the image analysis
+                            if latest_visual_context:
+                                augmented_prompt = f"""
+                                CONTEXT FROM RECENT VISUAL ANALYSIS:
+                                {latest_visual_context}
+                                
+                                USER QUESTION:
+                                {prompt}
+                                """
+                                raw_response = rag_engine.chat(augmented_prompt)
+                            else:
+                                raw_response = rag_engine.chat(prompt)
                         else:
-                            # T.I.M.E. Framework RAG
-                            raw_response = rag_engine.chat(prompt)
+                            raw_response = "⚠️ Index not ready."
+                        # -----------------------------
                     
                     # FINAL SAFETY CHECK
                     st.write("🛡️ Verifying Output (Safety Verifier)...")
