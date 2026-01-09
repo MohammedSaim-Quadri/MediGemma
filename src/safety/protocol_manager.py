@@ -24,10 +24,8 @@ class ProtocolManager:
                 logger.info(f"✅ Loaded {len(self.protocols)} protocols from {path}")
             except Exception as e:
                 logger.error(f"❌ Failed to load protocols.yaml: {e}")
-                self._load_defaults()
         else:
             logger.warning(f"⚠️ {path} not found. Loading defaults.")
-            self._load_defaults()
 
     def get_protocol(self, analysis_text):
         """
@@ -35,9 +33,13 @@ class ProtocolManager:
         """
         if not analysis_text:
             logger.warning("ProtocolManager received empty text. Returning Default.")
-            return self.protocols.get("pressure_injury", {})
+            return self.protocols.get("pressure_injury", {
+                "name": "Unknown",
+                "management": ["Clinical evaluation required"]
+            })
         
-        text = analysis_text.lower()
+        # Convert to string safely
+        text = str(analysis_text).lower()
         
         # 1. Map keywords to protocol keys (matches your YAML structure)
         key_map = {

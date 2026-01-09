@@ -70,11 +70,8 @@ class VisionEngine:
         """
         self.unload()
 
-        #Load the model if not already loaded
-        if not self.loaded:
-            self.load_model()
-        
         try:
+            self.load_model()
             # 1. Image Preprocessing
             image = Image.open(image_file).convert('RGB')
             image_tensor = process_images([image], self.image_processor, self.model.config)
@@ -124,7 +121,7 @@ class VisionEngine:
         except Exception as e:
             logger.error(f"Error during vision analysis: {e}")
             self.unload()
-            raise e
+            return "Error during vision analysis."
 
     def unload(self):
         """Frees GPU memory manually."""
