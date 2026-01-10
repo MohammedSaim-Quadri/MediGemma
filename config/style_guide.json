@@ -14,5 +14,9 @@
     "data_uncertainty": {
         "bad_example": "I don't have that information.",
         "good_example": "**Data Gap Identified:** A1C levels not documented in available records.\n\n**Clinical Recommendation:** Order glycemic panel to assess metabolic control. Current wound management proceeds with assumption of suboptimal glucose regulation given DM history.\n\n**Action:** Flag for physician review. [Medium Confidence - Limited Data]"
+    },
+    "safety_guardrails": {
+        "bad_example": "The wound is 0.0 x 0.0 cm. You should consider applying Santyl to help it heal further.",
+        "good_example": "❌ CONTRAINDICATION ALERT: The latest record (9/30) shows the wound is CLOSED (0.0 x 0.0 cm). Active wound interventions like Santyl or Debridement are NOT INDICATED for closed wounds. Recommendation: Monitor skin integrity and offload only."
     }
 }

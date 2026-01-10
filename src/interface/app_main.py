@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import json
+import re
 from datetime import datetime
 import sys
 # Add the project root directory to Python's path
@@ -175,10 +176,33 @@ with tab1:
                     else: # QueryIntent.CLINICAL
                         st.write("🏥 Consulting Clinical Engine (RAG/LLM)...")
                         source_lbl = "Clinical Engine"
+
+                        # GROUND TRUTH INJECTION
+                        # 1. Detect if a specific patient is mentioned
+                        import re
+                        patient_id_match = re.search(r'\b(10\d{3}|20\d{3}|3\d{4})\b', final_prompt)
+                        ground_truth_context = ""
+                    
+                        if patient_id_match:
+                            pid = patient_id_match.group(0)
+                            # Fetch the incontestable truth from Pandas
+                            state = data_manager.get_patient_current_state(pid)
+                            
+                            if state:
+                                st.toast(f"🔎 Injected Ground Truth for Patient {pid}")
+                                ground_truth_context = (
+                                    f"\n\n[SYSTEM INJECTED GROUND TRUTH - PRIORITY OVER RETRIEVAL]\n"
+                                    f"Latest Encounter Date: {state['last_visit']}\n"
+                                    f"Current Wound Size: {state['wound_dims']}\n"
+                                    f"Current Status: {state['severity']}\n"
+                                    f"Latest Note Snippet: {state['narrative']}\n"
+                                    f"INSTRUCTION: You MUST use this date ({state['last_visit']}) as the current status.\n"
+                                )
+                        enhanced_prompt = final_prompt + ground_truth_context
                         # We simply pass the prompt. The ChatEngine (RAG) uses the history (including [SYSTEM UPDATE])
                         # so no manual injection is needed anymore.
                         if rag_engine.index:
-                            response_obj = rag_engine.chat(final_prompt, st.session_state.messages)
+                            response_obj = rag_engine.chat(enhanced_prompt, st.session_state.messages)
                             # Handle both object and string returns
                             if isinstance(response_obj, str):
                                 raw_response = response_obj
@@ -191,7 +215,7 @@ with tab1:
                                 for m in st.session_state.messages
                             ]
                             # 2. Add the current user prompt
-                            messages_for_llm.append({"role": "user", "content": prompt})
+                            messages_for_llm.append({"role": "user", "content": enhanced_prompt})
                             
                             # 3. Get response (ChatResponse object)
                             resp = llm_engine.chat(messages_for_llm)
@@ -212,6 +236,20 @@ with tab1:
                         logger.warning(f"Blocked response: {raw_response}")
 
                     try:
+                        # 1. Get the directory where app_main.py lives (src/interface)
+                        current_dir = os.path.dirname(os.path.abspath(__file__))
+                        
+                        # 2. Go up two levels to get project root
+                        project_root = os.path.abspath(os.path.join(current_dir, "../../"))
+                        
+                        # 3. Build the absolute path to thesis_data
+                        log_dir = os.path.join(project_root, "thesis_data")
+                        
+                        # Ensure dir exists (safe to run every time)
+                        os.makedirs(log_dir, exist_ok=True)
+                        
+                        # 4. Define the full file path
+                        log_file = os.path.join(log_dir, "interactions.jsonl")
                         log_entry = {
                             "timestamp": datetime.now().isoformat(),
                             "query": prompt,
@@ -225,7 +263,6 @@ with tab1:
                             "patient_id_mentioned": bool(re.search(r'\b\d{4,6}\b', prompt))
                         }
                         
-                        log_file = "thesis_data/interactions.jsonl"
                         with open(log_file, "a", encoding="utf-8") as f:
                             f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
                     except Exception as e:
@@ -334,4 +371,4 @@ with tab2:
 
         # --- 4. RAW DATA INSPECTOR (Kept from old version) ---
         with st.expander("📋 View Raw Patient Data Table", expanded=False):
-            st.dataframe(data_manager.df, use_container_width=True)
+            st.dataframe(data_manager.df, width=1000)

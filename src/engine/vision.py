@@ -96,10 +96,21 @@ class VisionEngine:
             logger.critical(f"❌ Failed to load Vision Model: {e}", exc_info=True)
             raise e
 
-    def analyze(self, image_file, prompt="Describe this wound in detail, focusing on tissue type and signs of infection."):
+    def analyze(self, image_file, prompt=None):
         """
         Runs inference on a single image.
         """
+        if prompt is None:
+            prompt = (
+                "ACT AS A MEDICAL IMAGING ANALYST. \n"
+                "Analyze this wound image strictly. \n"
+                "1. LOCATION: Identify the specific body part (e.g., heel, toe, sacrum).\n"
+                "2. TISSUE TYPE: Identify visible tissue colors (Pink=Granulation, Yellow=Slough, Black=Eschar). "
+                "Do NOT describe pink tissue as 'dead' or 'necrotic'.\n"
+                "3. EDGES: Are edges macerated or defined?\n"
+                "4. SIGNS OF INFECTION: Visible purulence or erythema only. Do not guess.\n"
+                "Output a concise clinical description."
+            )
         self.unload()
 
         try:

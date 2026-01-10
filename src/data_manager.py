@@ -40,22 +40,31 @@ class DataManager:
             
             # --- Load CSVs ---
             df_enc = pd.read_csv(enc_file)
-            
-            # Clean column names (strip whitespace)
-            df_enc.columns = df_enc.columns.str.strip()
 
+            # Clean column names (strip whitespace)
+            # 2. Normalize Patient_ID (Force to String)
+            # This fixes the merge failure (Int vs String mismatch)
             if 'Patient_ID' in df_enc.columns:
-                df_enc['Patient_ID'] = df_enc['Patient_ID'].astype(str)
+                df_enc['Patient_ID'] = df_enc['Patient_ID'].astype(str).str.strip()
+            elif 'patient_id' in df_enc.columns:
+                df_enc['Patient_ID'] = df_enc['patient_id'].astype(str).str.strip()
             
+            # 3. Merge Demographics (If provided)
             if pat_file:
                 df_pat = pd.read_csv(pat_file)
-                df_pat.columns = df_pat.columns.str.strip()
                 
+                # Normalize Patient_ID in demographics too
                 if 'Patient_ID' in df_pat.columns:
-                    df_pat['Patient_ID'] = df_pat['Patient_ID'].astype(str)
-                self.df = pd.merge(df_enc, df_pat, on="Patient_ID", how="outer")
+                    df_pat['Patient_ID'] = df_pat['Patient_ID'].astype(str).str.strip()
+                elif 'patient_id' in df_pat.columns:
+                    df_pat['Patient_ID'] = df_pat['patient_id'].astype(str).str.strip()
+                
+                # Perform Left Merge
+                self.df = pd.merge(df_enc, df_pat, on='Patient_ID', how='outer', suffixes=('', '_demo'))
+                logger.info(f"✅ Merged demographics. Shape: {self.df.shape}")
             else:
                 self.df = df_enc
+                logger.warning("⚠️ No demographics file provided. Using encounters only.")
 
             # --- 🛡️ CRITICAL FIX: AGGRESSIVE TYPE CLEANING ---
             # 1. Force Numeric Columns (Fixes ArrowInvalid Crash)
@@ -78,9 +87,11 @@ class DataManager:
                     # Fill NaN with 0.0 (Safe for Dashboard)
                     self.df[col] = self.df[col].fillna(0.0)
 
-            # 2. Clean Text Columns (The "Diabetes Fix")
+            # Ensure Comorbidities is never null (Fixes 'History: None')
             if 'Comorbidities' in self.df.columns:
-                self.df['Comorbidities'] = self.df['Comorbidities'].fillna("None").astype(str)
+                self.df['Comorbidities'] = self.df['Comorbidities'].fillna("No medical history documented").astype(str)
+            else:
+                self.df['Comorbidities'] = "No medical history documented"
             
             text_cols = ['Narrative', 'Notes', 'Treatment_Plan', 'Exudate_Type', 'Tissue_Exposed']
             for col in text_cols:
@@ -108,14 +119,10 @@ class DataManager:
         documents = []
         
         for _, row in self.df.iterrows():
-            # Ensure Patient ID is a clean string
-            patient_id = str(row.get('Patient_ID', 'Unknown')).strip()
-            if patient_id.endswith('.0'): 
-                patient_id = patient_id[:-2]
             
             # 1. Context Header (Rich Patient Context)
             context_header = (
-                f"PATIENT CONTEXT: ID {patient_id}\n"
+                f"PATIENT CONTEXT: ID {row.get('Patient_ID', 'Unknown')}\n"
                 f"Demographics: Age {row.get('Age', 'N/A')}, Sex {row.get('Sex', 'N/A')}\n"
                 f"Medical History: {row.get('Comorbidities', 'None')}\n"
             )
@@ -139,7 +146,7 @@ class DataManager:
             doc = Document(
                 text=full_text, 
                 metadata={
-                    "patient_id": patient_id,
+                    "patient_id": str(row.get('Patient_ID', 'Unknown')),
                     "date": str(row.get('Encounter_Date', 'Unknown'))
                 }
             )
@@ -151,3 +158,43 @@ class DataManager:
 
     def get_preview(self):
         return self.df
+
+    # In src/data_manager.py - Add this method to the DataManager class
+
+    def get_patient_current_state(self, patient_id):
+        """
+        Retrieves the absolute latest clinical state (Ground Truth).
+        """
+        try:
+            # Ensure ID is string
+            pid = str(patient_id).strip()
+            
+            # Filter for patient
+            p_data = self.df[self.df['Patient_ID'] == pid].copy()
+            
+            if p_data.empty:
+                return None
+
+            p_data['Encounter_Date'] = pd.to_datetime(p_data['Encounter_Date'])
+            
+            # Sort by Date AND Visit Number (Latest date, highest visit number)
+            # This handles cases where a patient has 2 visits on the same day
+            if 'Visit_Number' in p_data.columns:
+                p_data = p_data.sort_values(by=['Encounter_Date', 'Visit_Number'], ascending=[False, False])
+            else:
+                p_data = p_data.sort_values(by='Encounter_Date', ascending=False)
+                
+            latest = p_data.iloc[0]
+            
+            # Convert back to string for display
+            date_str = latest['Encounter_Date'].strftime('%Y-%m-%d')
+            
+            return {
+                "last_visit": date_str,
+                "wound_dims": f"{latest.get('Wound_Size_Length_cm', '?')} x {latest.get('Wound_Size_Width_cm', '?')} cm",
+                "narrative": str(latest.get('Narrative', 'No notes'))[:200] + "...", # Truncate for token limits
+                "severity": "Critical" if "deteriorating" in str(latest.get('Narrative', '')).lower() else "Stable"
+            }
+        except Exception as e:
+            logger.error(f"Error fetching state: {e}")
+            return None

@@ -25,3 +25,5 @@ phase3_training/datasets/
 phase3_training/LLaVA/
 phase3_training/*.pth
 phase3_training/*.bin
+
+thesis_data/
