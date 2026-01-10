@@ -72,9 +72,10 @@ class ClinicalRAGEngine:
         )
         logger.info("✅ Clinical RAG Engine initialized.")
 
-    def chat(self, user_query):
+    def chat(self, user_query, conversation_history=None):  # ← FIXED: Added parameter
         """
         Queries the patient history.
+        conversation_history: Optional list of message dicts from Streamlit session state
         """
         if not self.chat_engine:
             self.initialize()
@@ -83,6 +84,20 @@ class ClinicalRAGEngine:
             return "System Error: Clinical Data Index is not available."
 
         try:
+            # --- NEW: INJECT RECENT VISUAL CONTEXT ---
+            # If we have conversation history with a recent image analysis,
+            # prepend it to the query so the RAG engine sees it
+            if conversation_history:  # ← FIXED: Now this variable exists
+                recent_updates = [
+                    msg['content'] for msg in conversation_history[-3:]
+                    if '[SYSTEM UPDATE]' in msg.get('content', '')
+                ]
+                if recent_updates:
+                    # Combine the most recent visual context with the user's question
+                    enhanced_query = f"{recent_updates[-1]}\n\nUser Question: {user_query}"
+                    user_query = enhanced_query
+                    logger.info("✅ Enhanced query with visual context")
+                
             # --- DYNAMIC METADATA FILTERING ---
             patient_id = self._extract_patient_id(user_query)
             
