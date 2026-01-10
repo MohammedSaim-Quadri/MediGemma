@@ -138,6 +138,7 @@ with tab1:
                     st.write(f"🔀 Intent Detected: **{intent.upper()}**")
                     
                     raw_response = ""
+                    response_obj = None
                     source_lbl = ""
                     
                     # 2. EXECUTION
@@ -156,10 +157,16 @@ with tab1:
                         # We simply pass the prompt. The ChatEngine (RAG) uses the history (including [SYSTEM UPDATE])
                         # so no manual injection is needed anymore.
                         if rag_engine.index:
-                            raw_response = rag_engine.chat(prompt, conversation_history=st.session_state.messages)
+                            response_obj = rag_engine.chat(prompt, st.session_state.messages)
+                            # Handle both object and string returns
+                            if isinstance(response_obj, str):
+                                raw_response = response_obj
+                            else:
+                                raw_response = str(response_obj)
                         else:
                             # Fallback if no CSVs but we have an image or just generic questions
                             raw_response = llm_engine.generate(prompt)
+                            response_obj = None
                     
                     # 3. SAFETY VERIFICATION
                     st.write("🛡️ Verifying Output...")
@@ -176,6 +183,17 @@ with tab1:
                 # Final Output
                 response_placeholder.markdown(full_response)
                 st.caption(f"ℹ️ Source: {source_lbl}")
+                # EXPLAINABILITY
+                if response_obj and hasattr(response_obj, 'source_nodes') and response_obj.source_nodes:
+                    with st.expander("🔍 Evidence Used (Explainability)", expanded=False):
+                        st.caption("The AI consulted these patient records:")
+                        for i, node in enumerate(response_obj.source_nodes):
+                            # Try to parse metadata safely
+                            meta_id = node.metadata.get('patient_id', 'Unknown')
+                            meta_date = node.metadata.get('date', 'Unknown')
+                            st.markdown(f"**📄 Record {i+1}:** Patient {meta_id} ({meta_date})")
+                            st.text(f"...{node.text[:150]}...")
+                            st.markdown("---")
             
             # Save to History
             st.session_state.messages.append({"role": "assistant", "content": full_response})
@@ -207,8 +225,22 @@ with tab2:
         st.subheader("📋 Patient Encounters")
         st.dataframe(data_manager.df, use_container_width=True)
         
-        # Visual Analytics (If plot supported)
+        # Visual Analytics
         st.subheader("📈 Population Health")
-        if 'description' in data_manager.df.columns:
-             # Simple distribution of common terms
-             st.bar_chart(data_manager.df['description'].value_counts().head(10))
+
+        # Smart column detection
+        possible_cols = ['primary_diagnosis_description', 'diagnosis', 'description', 
+                        'condition', 'primary_diagnosis', 'Narrative']
+        target_col = None
+
+        for col in possible_cols:
+            if col in data_manager.df.columns:
+                target_col = col
+                break
+
+        if target_col:
+            st.caption(f"Distribution by: {target_col}")
+            chart_data = data_manager.df[target_col].value_counts().head(10)
+            st.bar_chart(chart_data)
+        else:
+            st.info("No diagnosis column found for visualization")

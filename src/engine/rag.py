@@ -15,43 +15,33 @@ class ClinicalRAGEngine:
         self.index = index
         self.chat_engine = None
 
-        # --- THE "BRAIN": CENTRAL CLINICAL PROMPT ---
-        self.clinical_prompt_str = (
-            "You are the Medi-Gemma Clinical Intelligence Engine. "
-            "Analyze the retrieved clinical records to answer the query.\n"
+        # --- 1. THE "SELF-CHECK" PROMPT (Requirement #3) ---
+        # This prompt forces the LLM to critique itself and cite sources.
+        self.system_prompt_str = (
+            "You are the Medi-Gemma Clinical Intelligence Engine.\n"
             "--------------------------------------------------------\n"
-            "DATA INTERPRETATION RULES:\n"
-            "1. TISSUE ANALYSIS:\n"
-            "   - If 'Necrosis' > 0% OR 'Slough' > 0% -> IMPLIES 'Enzymatic Debridement (Santyl)' is indicated.\n"
-            "   - If 'Granulation' > 75% -> IMPLIES 'Moisture Balance' is indicated.\n"
-            "2. STATUS CHECKS:\n"
-            "   - Compare dimensions (LxW) over time to determine 'Improving' or 'Declining'.\n"
-            "   - Look for keywords: 'Odor', 'Pus', 'Erythema' -> Signs of Infection.\n"
-            "--------------------------------------------------------\n"
-            "RESPONSE FORMAT:\n"
-            "1. DATA SUMMARY: Start with 'Patient [ID] Records show...'\n"
-            "2. PROTOCOL MATCH: 'Based on Necrosis of [X]%, the protocol indicates...'\n"
-            "3. RECOMMENDATION: Explicitly state if Santyl is suitable based on the rules above.\n"
-            "4. DISCLAIMER: End with 'Generated for physician review.'\n"
-            "--------------------------------------------------------\n"
-            "CONTEXT:\n"
-            "{context_str}\n"
-            "--------------------------------------------------------\n"
-            "QUERY: {query_str}\n"
-            "CLINICAL ANALYSIS:"
+            "RESPONSE PROTOCOL:\n"
+            "1. PRIORITY: If a '[SYSTEM UPDATE] Visual Analysis' is in the history, use THAT for visual questions.\n"
+            "2. CITE SOURCES: Reference 'Visual Analysis' or 'Clinical Record [Date]'.\n"
+            "3. UNCERTAINTY: Do not guess. If no record matches the patient, say so.\n"
+            "4. PROTOCOL: Use T.I.M.E. framework for wounds.\n"
+            "5. CONFIDENCE: End your response with a confidence assessment: [High/Medium/Low Confidence].\n"
+            "--------------------------------------------------------"
         )
-        self.clinical_template = PromptTemplate(self.clinical_prompt_str)
+        
+        # Template for specific Query Engine calls (when filtering by Patient ID)
+        self.clinical_template = PromptTemplate(
+            self.system_prompt_str + "\n\nCONTEXT:\n{context_str}\n\nQUERY: {query_str}\nANSWER:"
+        )
 
     def _extract_patient_id(self, text):
         """
         Extracts patient ID from query text.
         Returns the ID as a string if found, else None.
         """
-        match = re.search(r'\b\d{4,6}\b', text)
+        match = re.search(r'\b(patient|p|id|encounter)\s*[:#-]?\s*(\d{4,6})', text.lower())
         if match:
-            patient_id = match.group(0)
-            logger.info(f"🎯 Extracted Patient ID: {patient_id}")
-            return patient_id
+            return match.group(2)
         return None
         
     def initialize(self):
@@ -66,13 +56,13 @@ class ClinicalRAGEngine:
         self.chat_engine = self.index.as_chat_engine(
             chat_mode="context",
             memory=memory,
-            system_prompt="You are a Clinical Intelligence Engine. Use T.I.M.E. protocols to analyze wounds.",
+            system_prompt=self.system_prompt_str,
             llm=Settings.llm,
             verbose=True
         )
         logger.info("✅ Clinical RAG Engine initialized.")
 
-    def chat(self, user_query, conversation_history=None):  # ← FIXED: Added parameter
+    def chat(self, user_query, history=[]):
         """
         Queries the patient history.
         conversation_history: Optional list of message dicts from Streamlit session state
@@ -84,22 +74,18 @@ class ClinicalRAGEngine:
             return "System Error: Clinical Data Index is not available."
 
         try:
-            # --- NEW: INJECT RECENT VISUAL CONTEXT ---
-            # If we have conversation history with a recent image analysis,
-            # prepend it to the query so the RAG engine sees it
-            if conversation_history:  # ← FIXED: Now this variable exists
-                recent_updates = [
-                    msg['content'] for msg in conversation_history[-3:]
-                    if '[SYSTEM UPDATE]' in msg.get('content', '')
-                ]
-                if recent_updates:
-                    # Combine the most recent visual context with the user's question
-                    enhanced_query = f"{recent_updates[-1]}\n\nUser Question: {user_query}"
-                    user_query = enhanced_query
-                    logger.info("✅ Enhanced query with visual context")
-                
             # --- DYNAMIC METADATA FILTERING ---
             patient_id = self._extract_patient_id(user_query)
+
+            # Look at last 3 messages for the [SYSTEM UPDATE] tag
+            visual_context = None
+            if conversation_history:
+                last_3 = conversation_history[-3:] if len(conversation_history) >= 3 else conversation_history
+                for msg in last_3:
+                    content = msg.get('content', '')
+                    if '[SYSTEM UPDATE]' in str(content):
+                        visual_context = content
+                        break
             
             if patient_id:
                 logger.info(f"🎯 Detected Patient ID {patient_id}. Applying Strict Filter.")
@@ -113,18 +99,49 @@ class ClinicalRAGEngine:
                 specialized_engine = self.index.as_query_engine(
                     filters=filters,
                     llm=Settings.llm,
-                    similarity_top_k=20,
+                    similarity_top_k=5,
                     text_qa_template=self.clinical_template,
-                    verbose=True
                 )
                 
-                response = specialized_engine.query(user_query)
-                return str(response)
+                return specialized_engine.query(user_query)
+            
+            # --- CASE B: Visual Follow-Up (THE FIX) ---
+            elif visual_context and not patient_id:
+                logger.info("👁️ Visual short-circuit: Answering from image only")
+                
+                # Use LLM directly with visual context (skip database)
+                prompt = (
+                    f"{self.system_prompt_str}\n\n"
+                    f"VISUAL CONTEXT:\n{visual_context}\n\n"
+                    f"USER QUERY: {user_query}\n\n"
+                    "Answer based ONLY on the visual context above. Do NOT search patient records."
+                )
+                
+                response_text = Settings.llm.complete(prompt).text
+                
+                # Create mock response object for explainability UI
+                class MockResponse:
+                    def __init__(self, text, source):
+                        self.response = text
+                        self.source_nodes = [
+                            NodeWithScore(
+                                node=TextNode(text=source),
+                                score=1.0
+                            )
+                        ]
+                    def __str__(self):
+                        return self.response
+                
+                return MockResponse(
+                    response_text, 
+                    f"Source: Visual Analysis (Current Session)\n{visual_context}"
+                )
 
             else:
                 # Standard Chat Mode for general questions
-                response = self.chat_engine.chat(user_query)
-                return str(response)
+                # 2. General Query -> Use Chat Engine (Conversation)
+                # Note: The Chat Engine automatically handles history context via LlamaIndex memory
+                return self.chat_engine.chat(user_query)
 
         except Exception as e:
             logger.error(f"RAG Error: {e}")

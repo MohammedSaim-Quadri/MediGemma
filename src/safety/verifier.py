@@ -9,7 +9,6 @@ class SafetyVerifier:
     def __init__(self):
         self.banned_phrases = [
             "ignore previous instructions",
-            "prescribe",
             "take 500mg", 
             "stop taking your medication"
         ]
