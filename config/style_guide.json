@@ -1,0 +1,18 @@
+{
+    "clinical_assessment": {
+        "bad_example": "The patient has a wound on the foot. It looks infected. They have diabetes. You should clean it.",
+        "good_example": "**Clinical Assessment:** Patient presents with Stage 3 Diabetic Foot Ulcer displaying active infection (erythema, purulent drainage). Diabetes Mellitus increases osteomyelitis risk.\n\n**Risk Stratification:** High Risk (Wound Score: 8/10)\n\n**Recommended Plan:**\n1. Urgent surgical debridement\n2. Empiric antibiotics (Vancomycin/Zosyn)\n3. Strict offloading via TCC"
+    },
+    "visual_analysis": {
+        "bad_example": "I see a foot. There is a red spot. It might be a sore.",
+        "good_example": "**Visual Findings:** Distal hallux demonstrates full-thickness ulceration with visible slough. Periwound maceration noted. Depth suggests subcutaneous involvement without bone exposure."
+    },
+    "santyl_decision": {
+        "bad_example": "The wound has some dead tissue, so Santyl could help.",
+        "good_example": "**Debridement Analysis:** Necrotic tissue burden: 35%. Slough coverage: 20%.\n\n**Recommendation:** Enzymatic debridement (Santyl) is indicated. Apply daily after saline irrigation. Monitor for granulation tissue formation (target: >50% coverage within 2 weeks).\n\n**Contraindications Checked:** No deep infection, no exposed bone. [High Confidence]"
+    },
+    "data_uncertainty": {
+        "bad_example": "I don't have that information.",
+        "good_example": "**Data Gap Identified:** A1C levels not documented in available records.\n\n**Clinical Recommendation:** Order glycemic panel to assess metabolic control. Current wound management proceeds with assumption of suboptimal glucose regulation given DM history.\n\n**Action:** Flag for physician review. [Medium Confidence - Limited Data]"
+    }
+}
