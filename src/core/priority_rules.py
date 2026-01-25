@@ -1,4 +1,3 @@
-# clinical_rules.py
 import pandas as pd
 import re
 

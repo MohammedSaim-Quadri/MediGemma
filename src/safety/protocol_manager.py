@@ -53,66 +53,57 @@ class ProtocolManager:
         """
         if not analysis_text:
             logger.warning("ProtocolManager received empty text. Returning Default.")
-            return self.protocols.get("infection_control", {})
+            return self.protocols.get("infection_suspected", {})
         
         # Convert to string safely
         text = str(analysis_text).lower()
         
-        # 1. Map keywords to protocol keys (matches your YAML structure)
+        # 1. Map keywords to protocol keys
         key_map = {
-            "diabetic": "diabetic_foot_ulcer",
-            "dfu": "diabetic_foot_ulcer",
-            "neuropathic": "diabetic_foot_ulcer",
+            "infection_suspected": ["pus", "purulent", "odor", "abscess", "cellulitis", "foul", "erythema", "warmth", "fluctuance"],
+            "diabetic_foot_ulcer": ["diabetic", "dfu", "neuropathic", "blood sugar", "neuroischemic", "charcot"],
+            "pressure_injury": ["pressure", "decubitus", "sacrum", "coccyx", "heel", "stage", "bedsore"],
+            "venous_leg_ulcer": ["venous", "vlu", "stasis", "varicose", "hemosiderin"],
+            "surgical_wound": ["surgical", "incision", "suture", "dehiscence", "operation", "staples", "postop"],
             
-            "venous": "venous_leg_ulcer",
-            "vlu": "venous_leg_ulcer",
-            "stasis": "venous_leg_ulcer",
-            "edema": "venous_leg_ulcer",
+            # The "Visual Bridges" (Critical for Vision Models)
+            "necrotic_tissue": ["necrotic", "necrosis", "eschar", "black", "slough", "yellow", "dead tissue", "brown"],
+            "wound_drainage": ["weepy", "exudate", "drainage", "oozing", "wet", "moist", "serous", "discharge"],
             
-            "pressure": "pressure_injury",
-            "decubitus": "pressure_injury",
-            "sacrum": "pressure_injury",
-            "coccyx": "pressure_injury",
-            
-            "surgical": "surgical_wound",
-            "incision": "surgical_wound",
-            "suture": "surgical_wound",
-
-            # Infection (High Priority)
-            "pus": "infection_control", 
-            "purulent": "infection_control",
-            "infected": "infection_control", 
-            "odor": "infection_control",
-            "hot": "infection_control",
-            
-            "normal": "normal_skin",
-            "intact": "normal_skin"
+            # Lowest Priority
+            "normal_skin": ["normal", "intact", "healthy", "no wound"]
         }
 
-        # 2. Find match
-        matched_protocol = None
-        for keyword, protocol_key in key_map.items():
-            if keyword in text:
-                matched_protocol = self.protocols.get(protocol_key, {
-                    "name": f"Protocol Match: {protocol_key}", 
-                    "management": ["Refer to clinical guidelines."]
-                })
-                break
+        search_order = [
+            "infection_suspected",  # 1. Life Threatening
+            "necrotic_tissue",      # 2. Tissue Threatening (Gangrene/Slough)
+            "diabetic_foot_ulcer",  # 3. High Risk Etiology
+            "pressure_injury",      # 4. High Risk Etiology
+            "surgical_wound",       # 5. Acute Risk
+            "venous_leg_ulcer",     # 6. Chronic Risk
+            "wound_drainage",       # 7. Active Symptom (The "Weepy" catch)
+            "normal_skin"           # 8. Nothing wrong found
+        ]
+
+        matched_protocol_key = None
+
+        for protocol_key in search_order:
+            keywords = key_map.get(protocol_key, [])
+            # specific check: if word is in text
+            if any(k in text for k in keywords):
+                matched_protocol_key = protocol_key
+                break # STOP looking. We found the most severe issue.
+
+        # --- Return the Match ---
+        if matched_protocol_key:
+            return self.protocols.get(matched_protocol_key, {
+                "name": f"Protocol: {matched_protocol_key.replace('_', ' ').title()}", 
+                "management": ["Refer to standard clinical guidelines."]
+            })
         
-        # 3. Format Output
-        if matched_protocol:
-            return matched_protocol
-        else:
-            # SAFETY CATCH: If text mentions "Necrosis" or "Eschar" but no specific condition,
-            # default to Pressure Injury protocol as it covers debridement best.
-            if any(x in text for x in ["necrosis", "eschar", "black", "slough", "yellow"]):
-                return self.protocols.get("pressure_injury", {
-                    "name": "Necrotic Tissue Protocol",
-                    "management": ["Debridement indicated", "Enzymatic agents (Santyl)", "Consult Wound Specialist"]
-                })
-            
-            return {
-                "name": "General Wound Care",
-                "severity": "Low",
-                "management": ["Cleanse with Saline", "Apply sterile dressing", "Monitor for changes"]
-            }
+        # Fallback if AI output was total gibberish (e.g., "The image is blurry")
+        return {
+            "name": "Unclassified Wound Findings",
+            "severity": "Unknown",
+            "management": ["Manual clinical assessment required.", "Verify image quality."]
+        }

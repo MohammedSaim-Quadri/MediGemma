@@ -9,4 +9,4 @@ if [ -f .env ]; then
 fi
 
 # Run the App
-streamlit run app.py
+streamlit run src/interface/app_main.py

@@ -1,44 +1,68 @@
 clinical_protocols:
+  # --- CRITICAL: Infection & Sepsis ---
+  infection_suspected:
+    name: "Potential Wound Infection"
+    severity: "Critical"
+    management:
+      - "Clinical Assessment: Check for systemic symptoms (fever, chills)."
+      - "Diagnostics: Obtain deep tissue culture or swab."
+      - "Action: Notify provider for potential empiric antibiotics."
+      - "Wound Care: Use antimicrobial dressings (Silver, Iodine)."
+
+  # --- HIGH SEVERITY: Etiologies ---
   diabetic_foot_ulcer:
     name: "Diabetic Foot Ulcer"
     severity: "High"
     management:
-      - "Offloading: Total Contact Casting (TCC) or specialized footwear to redistribute pressure (Gold Standard)."
-      - "Glycemic Control: Target HbA1c < 7% to facilitate healing."
-      - "Debridement: Removal of non-viable tissue (sharp or enzymatic) to promote granulation."
-      - "Vascular Assessment: Check ABI/TBI to rule out ischemia."
-      - "Infection Control: Monitor for osteomyelitis; obtain deep tissue culture if infection suspected."
-
-  venous_leg_ulcer:
-    name: "Venous Leg Ulcer"
-    severity: "Moderate"
-    management:
-      - "Compression Therapy: Multilayer bandaging (aim for 40mmHg at ankle) is the mainstay of treatment."
-      - "Elevation: Elevate legs above heart level for 30 min, 3-4 times daily."
-      - "Exudate Management: Use superabsorbent dressings (foams, alginates) to manage high drainage."
-      - "Skin Care: Apply barrier cream to peri-wound skin to prevent maceration."
+      - "Offloading: Total Contact Casting or surgical shoe."
+      - "Glycemic Control: Target HbA1c < 7%."
+      - "Debridement: Removal of non-viable tissue."
 
   pressure_injury:
     name: "Pressure Injury"
-    severity: "High (Stage dependent)"
+    severity: "High"
     management:
-      - "Pressure Redistribution: Reposition patient every 2 hours; use air-fluidized or alternating pressure surfaces."
-      - "Nutrition: High-protein, high-calorie diet with vitamin supplementation (Zinc, Vit C)."
-      - "Moisture Management: Manage incontinence; use barrier creams."
-      - "Debridement: Required for Stage 3/4 if slough/eschar is present."
+      - "Offloading: Turn patient every 2 hours."
+      - "Support Surfaces: Use air-fluidized or alternating pressure mattress."
+      - "Nutrition: High protein diet to support healing."
+
+  venous_leg_ulcer:
+    name: "Venous Leg Ulcer"
+    severity: "Medium"
+    management:
+      - "Compression: Multi-layer compression therapy (if ABI > 0.8)."
+      - "Elevation: Elevate legs above heart level."
+      - "Moisture Balance: Absorbent dressings."
 
   surgical_wound:
-    name: "Surgical Wound"
+    name: "Surgical Site / Dehiscence"
+    severity: "Medium"
+    management:
+      - "Protection: Keep clean and dry."
+      - "Assessment: Monitor for dehiscence or evisceration."
+
+  # --- VISUAL BRIDGES (The LLaVA Catchers) ---
+  necrotic_tissue:
+    name: "Necrotic Tissue / Slough Management"
+    severity: "High"
+    management:
+      - "Debridement: Consult for sharp or enzymatic (Santyl) debridement."
+      - "Assessment: Differentiate stable eschar (keep dry) vs slough."
+      - "Perfusion: Ensure arterial flow before debriding."
+
+  wound_drainage:
+    name: "High Exudate Management"
     severity: "Moderate"
     management:
-      - "Infection Surveillance: Monitor for dehiscence, erythema, purulent drainage, or fever (SSI signs)."
-      - "Dressing: Keep clean and dry; change dressings per aseptic technique."
-      - "Nutrition: Optimize glucose control and protein intake for collagen synthesis."
+      - "Absorption: Use superabsorbent polymers or alginates."
+      - "Protection: Apply zinc oxide to peri-wound skin to prevent maceration."
+      - "Frequency: Increase dressing change frequency."
 
+  # --- LOWEST PRIORITY: Normal ---
   normal_skin:
-    name: "Normal Skin"
+    name: "Intact Skin / Prevention"
     severity: "Low"
     management:
-      - "Routine Inspection: Daily foot/skin checks for high-risk patients (diabetes, neuropathy)."
-      - "Moisturization: Maintain skin hydration to prevent cracking/fissures."
-      - "Education: Instruct patient on proper footwear and offloading techniques."
+      - "Daily Monitoring: Inspect for new redness or breakdown."
+      - "Moisturization: Apply emollient to dry areas."
+      - "Prevention: Maintain offloading schedule."

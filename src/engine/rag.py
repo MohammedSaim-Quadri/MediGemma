@@ -161,20 +161,19 @@ class ClinicalRAGEngine:
                 if visual_context:
                     final_query = (
                         f"{user_query}\n\n"
-                        f"CRITICAL VISUAL FINDINGS FROM IMAGE:\n{visual_context}\n\n"
-                        "INSTRUCTION: Synthesize the patient's historical records (retrieved below) "
-                        "with these visual findings to form a diagnosis."
+                        f"VISUAL OBSERVATIONS:\n{visual_context}\n\n"
+                        "INSTRUCTION: Combine the visual observations above with the patient records below."
                     )
                 filters = MetadataFilters(
                     filters=[MetadataFilter(key="patient_id", value=str(patient_id), operator="==")]
                 )
-                specialized_engine = self.index.as_query_engine(
+                # This returns a standard Response Object
+                return self.index.as_query_engine(
                     filters=filters,
                     llm=Settings.llm,
                     similarity_top_k=5,
-                    text_qa_template=self.clinical_template,
-                )
-                return specialized_engine.query(final_query)
+                    text_qa_template=self.clinical_template
+                ).query(final_query)
             
             # --- CASE B: Visual Follow-Up (Restoring Old Version Logic) ---
             elif visual_context and not patient_id:
@@ -183,9 +182,10 @@ class ClinicalRAGEngine:
                 # Use LLM directly with visual context (skip database)
                 prompt = (
                     f"{self.system_prompt_str}\n\n"
-                    f"VISUAL CONTEXT FROM HISTORY:\n{visual_context}\n\n"
+                    f"VISUAL CONTEXT:\n{visual_context}\n\n"
                     f"USER QUERY: {user_query}\n\n"
-                    "Answer based ONLY on the visual context above."
+                    "INSTRUCTION: Answer based ONLY on the visual context above. "
+                    "Do NOT invent patient history."
                 )
                 
                 response_text = Settings.llm.complete(prompt).text
@@ -209,8 +209,28 @@ class ClinicalRAGEngine:
                 )
 
             else:
-                # Standard Chat Mode
-                return self.chat_engine.chat(user_query)
+                logger.info("🛡️ No ID detected. Bypassing Database to prevent Context Leak.")
+                
+                # 1. Use the Class's System Prompt (Maintains Persona)
+                prompt = (
+                    f"{self.system_prompt_str}\n\n"
+                    f"USER QUERY: {user_query}\n\n"
+                    "INSTRUCTION: The user is asking a general medical question. "
+                    "Do NOT retrieve or invent specific patient records. "
+                    "Answer using only your general medical knowledge and guidelines."
+                )
+                
+                response_text = Settings.llm.complete(prompt).text
+                
+                # 2. Return an Object, NOT a String (Prevents UI Crash)
+                class GeneralResponse:
+                    def __init__(self, text):
+                        self.response = text
+                        self.source_nodes = [] # Empty list = "No specific source"
+                    def __str__(self):
+                        return self.response
+
+                return GeneralResponse(response_text)
 
         except Exception as e:
             logger.error(f"RAG Error: {e}")

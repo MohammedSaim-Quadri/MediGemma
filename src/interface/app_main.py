@@ -12,11 +12,11 @@ from src.engine.analytics import AnalyticsEngine
 from src.engine.rag import ClinicalRAGEngine
 from src.engine.vision import VisionEngine
 from src.engine.generator import LLMEngine
-# NEW: Import the simple function
+
 from src.core.router import classify_query, QueryIntent
 from src.safety.protocol_manager import ProtocolManager
 from src.safety.verifier import SafetyVerifier
-from clinical_rules import generate_priority_report
+from src.core.priority_rules import generate_priority_report
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -59,6 +59,18 @@ with st.sidebar:
         if enc_file and st.button("🔄 Ingest Data"):
             with st.spinner("Processing..."):
                 if data_manager.load_data(enc_file, pat_file):
+                    # 1. Run the Rules Engine
+                    triage_report = generate_priority_report(data_manager.df)
+                    
+                    # 2. Create a Map (Patient ID -> Severity)
+                    # Example: {'10770': 'Critical', '10771': 'Stable'}
+                    status_map = {entry['Patient ID']: entry['Severity'] for entry in triage_report}
+                    
+                    # 3. Bake it into the DataFrame as a REAL column
+                    # Now the 'Status' column contains "Critical", "Urgent", or "Stable"
+                    data_manager.df['Status'] = data_manager.df['Patient_ID'].map(status_map).fillna('Stable')
+                    logger.info(f"✅ Enriched DataFrame with Triage Status. Critical Count: {len([x for x in triage_report if x['Severity'] == 'Critical'])}")
+                    
                     analytics_engine.dm = data_manager
                     analytics_engine.initialize()
                     rag_engine.index = data_manager.index
@@ -243,7 +255,7 @@ with tab1:
                         project_root = os.path.abspath(os.path.join(current_dir, "../../"))
                         
                         # 3. Build the absolute path to thesis_data
-                        log_dir = os.path.join(project_root, "thesis_data")
+                        log_dir = os.path.join(project_root, "audit_logs")
                         
                         # Ensure dir exists (safe to run every time)
                         os.makedirs(log_dir, exist_ok=True)

@@ -33,7 +33,10 @@ class AnalyticsEngine:
             "1. When asked 'how many patients', ALWAYS count unique Patient_IDs using: df['Patient_ID'].nunique()\n"
             "2. NEVER use len(df) for patient counts, as the data has multiple rows per patient.\n"
             "3. For filtering (e.g. 'diabetic'), use str.contains(..., case=False, na=False).\n"
-            "4. Return ONLY the executable Python code using 'df'. Do not explain."
+            "4. CRITICAL/URGENT CHECKS: The 'Status' column is the Source of Truth.\n"
+            "   - If asked 'How many are critical?', use: df[df['Status'] == 'Critical']['Patient_ID'].nunique()\n"
+            "   - If asked 'How many are stable?', use: df[df['Status'] == 'Stable']['Patient_ID'].nunique()\n"
+            "5. Return ONLY the executable Python code using 'df'. Do not explain."
             "Available columns: Patient_ID, Age, Sex, Wound_Size_Length_cm, "
             "Wound_Size_Width_cm, Comorbidities, Encounter_Date, Narrative.\n"
         )

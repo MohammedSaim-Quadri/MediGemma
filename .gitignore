@@ -26,4 +26,9 @@ phase3_training/LLaVA/
 phase3_training/*.pth
 phase3_training/*.bin
 
+thesis_data/*.so
+build/
+build_temp/
+__pycache__/
+audit_logs/
 thesis_data/
