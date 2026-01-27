@@ -1,3 +1,4 @@
+import time
 import torch
 import gc
 import logging
@@ -47,13 +48,34 @@ class VisionEngine:
             )
             if response.status_code == 200:
                 logger.info("✅ Ollama Evicted. VRAM is clear.")
-            else:
-                logger.warning(f"⚠️ Failed to evict Ollama: {response.text}")
-                
-            # Extra cleanup
-            torch.cuda.empty_cache()
-            gc.collect()
+
+            # 2. VERIFICATION LOOP (The Fix)
+            # We wait up to 10 seconds for VRAM to drop below a safe threshold.
+            max_retries = 5
+            required_free_gb = 8.0 # LLaVA needs ~6GB, plus overhead.
             
+            logger.info("⏳ Waiting for VRAM release...")
+            for i in range(max_retries):
+                # Force Python Garbage Collection
+                gc.collect()
+                torch.cuda.empty_cache()
+                
+                # Check actual VRAM
+                free_bytes, total_bytes = torch.cuda.mem_get_info()
+                free_gb = free_bytes / (1024 ** 3)
+                
+                if free_gb >= required_free_gb:
+                    logger.info(f"✅ VRAM Clear: {free_gb:.1f} GB free. Ready for Vision.")
+                    return # Success!
+                
+                logger.debug(f"   Retry {i+1}/{max_retries}: Only {free_gb:.1f} GB free. Waiting...")
+                time.sleep(2) # Wait 2 seconds before checking again
+            
+            # If we get here, it didn't clear.
+            logger.error("❌ TIMEOUT: Ollama did not release VRAM in time.")
+            # We don't raise an error here to allow a 'Hail Mary' attempt, 
+            # but LLaVA will likely crash if this log appears.
+
         except Exception as e:
             logger.warning(f"⚠️ Could not contact Ollama for eviction: {e}")
 

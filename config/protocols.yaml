@@ -1,68 +1,63 @@
 clinical_protocols:
   # --- CRITICAL: Infection & Sepsis ---
+  # Triggered by: pus, purulence, abscess, malodor, redness, hot to touch
   infection_suspected:
-    name: "Potential Wound Infection"
+    name: "Active Infection Protocol"
     severity: "Critical"
     management:
-      - "Clinical Assessment: Check for systemic symptoms (fever, chills)."
-      - "Diagnostics: Obtain deep tissue culture or swab."
-      - "Action: Notify provider for potential empiric antibiotics."
-      - "Wound Care: Use antimicrobial dressings (Silver, Iodine)."
+      - "Immediate Action: Obtain deep tissue culture or swab."
+      - "Pharmacology: Notify provider for empiric antibiotics."
+      - "Wound Care: Use antimicrobial dressings (Silver, Iodine, Honey)."
+      - "Systemic Check: Monitor for fever, chills, or hypotension (Sepsis)."
 
   # --- HIGH SEVERITY: Etiologies ---
-  diabetic_foot_ulcer:
-    name: "Diabetic Foot Ulcer"
-    severity: "High"
-    management:
-      - "Offloading: Total Contact Casting or surgical shoe."
-      - "Glycemic Control: Target HbA1c < 7%."
-      - "Debridement: Removal of non-viable tissue."
-
+  
+  # Triggered by: sacrum, heel, stage 3/4, eschar, black tissue, necrosis
   pressure_injury:
-    name: "Pressure Injury"
+    name: "Pressure Injury / Necrosis Protocol"
     severity: "High"
     management:
-      - "Offloading: Turn patient every 2 hours."
-      - "Support Surfaces: Use air-fluidized or alternating pressure mattress."
-      - "Nutrition: High protein diet to support healing."
+      - "Offloading: Turn patient q2h; float heels; use air-fluidized mattress."
+      - "Debridement: Consult for removal of black eschar/slough (if flow is adequate)."
+      - "Nutrition: Increase protein intake (Arginine/Zinc) to support granulation."
+      - "Protection: Do NOT debride stable dry eschar on heels."
 
-  venous_leg_ulcer:
-    name: "Venous Leg Ulcer"
-    severity: "Medium"
+  # Triggered by: diabetic, DFU, neuropathy, plantar, gangrene
+  diabetic_foot_ulcer:
+    name: "Diabetic Foot Ulcer Protocol"
+    severity: "High"
     management:
-      - "Compression: Multi-layer compression therapy (if ABI > 0.8)."
-      - "Elevation: Elevate legs above heart level."
-      - "Moisture Balance: Absorbent dressings."
+      - "Offloading: Total Contact Cast (TCC) or surgical shoe is mandatory."
+      - "Metabolic: Target HbA1c < 7%; manage blood glucose."
+      - "Perfusion: Check ABI/TBI before any sharp debridement."
+      - "Infection Risk: Monitor closely for osteomyelitis."
 
+  # --- MEDIUM SEVERITY ---
+
+  # Triggered by: surgical, incision, dehiscence, sutures
   surgical_wound:
-    name: "Surgical Site / Dehiscence"
+    name: "Surgical Site Management"
     severity: "Medium"
     management:
-      - "Protection: Keep clean and dry."
-      - "Assessment: Monitor for dehiscence or evisceration."
+      - "Protection: Keep incision clean and dry."
+      - "Assessment: Monitor for dehiscence (separation) or evisceration."
+      - "Drainage: If high output, consider pouching or negative pressure (wound vac)."
 
-  # --- VISUAL BRIDGES (The LLaVA Catchers) ---
-  necrotic_tissue:
-    name: "Necrotic Tissue / Slough Management"
-    severity: "High"
+  # Triggered by: venous, edema, hemosiderin, leg ulcer
+  venous_leg_ulcer:
+    name: "Venous Leg Ulcer Protocol"
+    severity: "Medium"
     management:
-      - "Debridement: Consult for sharp or enzymatic (Santyl) debridement."
-      - "Assessment: Differentiate stable eschar (keep dry) vs slough."
-      - "Perfusion: Ensure arterial flow before debriding."
+      - "Compression: Multi-layer compression (Profore/Unna Boot) if ABI > 0.8."
+      - "Elevation: Elevate legs above heart level 3-4x daily."
+      - "Exudate Control: Use superabsorbent pads for high drainage."
 
-  wound_drainage:
-    name: "High Exudate Management"
-    severity: "Moderate"
-    management:
-      - "Absorption: Use superabsorbent polymers or alginates."
-      - "Protection: Apply zinc oxide to peri-wound skin to prevent maceration."
-      - "Frequency: Increase dressing change frequency."
-
-  # --- LOWEST PRIORITY: Normal ---
-  normal_skin:
-    name: "Intact Skin / Prevention"
+  # --- LOWEST PRIORITY: Fallback ---
+  # Triggered by: Fallback (no other keywords found)
+  general_care:
+    name: "General Wound Care / Intact Skin"
     severity: "Low"
     management:
-      - "Daily Monitoring: Inspect for new redness or breakdown."
-      - "Moisturization: Apply emollient to dry areas."
-      - "Prevention: Maintain offloading schedule."
+      - "Hygiene: Cleanse with normal saline or wound cleanser."
+      - "Moisture Balance: Maintain moist wound environment (not wet, not dry)."
+      - "Prevention: Inspect skin daily for new breakdown."

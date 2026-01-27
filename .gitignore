@@ -28,6 +28,7 @@ phase3_training/*.bin
 
 thesis_data/
 *.so
+*.c
 build/
 build_temp/
 __pycache__/

@@ -59,30 +59,59 @@ class ProtocolManager:
         text = str(analysis_text).lower()
         
         # 1. Map keywords to protocol keys
+        # COMPREHENSIVE VOCABULARY MAP
+        # Maps visual symptoms -> Clinical Protocol Keys
         key_map = {
-            "infection_suspected": ["pus", "purulent", "odor", "abscess", "cellulitis", "foul", "erythema", "warmth", "fluctuance"],
-            "diabetic_foot_ulcer": ["diabetic", "dfu", "neuropathic", "blood sugar", "neuroischemic", "charcot"],
-            "pressure_injury": ["pressure", "decubitus", "sacrum", "coccyx", "heel", "stage", "bedsore"],
-            "venous_leg_ulcer": ["venous", "vlu", "stasis", "varicose", "hemosiderin"],
-            "surgical_wound": ["surgical", "incision", "suture", "dehiscence", "operation", "staples", "postop"],
+            "infection_suspected": [
+                # Visual Cues (Colors/Textures)
+                "pus", "purulent", "purulence", "yellow discharge", "green discharge",
+                "cloudy exudate", "thick drainage", "biofilm",
+                # Clinical Signs
+                "abscess", "cellulitis", "erythema", "redness", "rubor",
+                "swelling", "edema", "warmth", "hot to touch", "fluctuance",
+                "foul odor", "malodor", "smell", "crepitus",
+                # Diagnostic Terms
+                "infection", "infected", "septic", "sepsis", "bacterial"
+            ],
             
-            # The "Visual Bridges" (Critical for Vision Models)
-            "necrotic_tissue": ["necrotic", "necrosis", "eschar", "black", "slough", "yellow", "dead tissue", "brown"],
-            "wound_drainage": ["weepy", "exudate", "drainage", "oozing", "wet", "moist", "serous", "discharge"],
+            "pressure_injury": [
+                # Locations
+                "sacrum", "coccyx", "heel", "ischial", "trochanter", "bony prominence",
+                # Stages & Tissue Types
+                "pressure ulcer", "pressure injury", "decubitus", "bedsore",
+                "stage 1", "stage 2", "stage 3", "stage 4", "unstageable",
+                "deep tissue injury", "dti",
+                # Necrosis triggers Pressure Protocol (needs offloading/debridement)
+                "eschar", "black tissue", "necrotic", "necrosis", "slough",
+                "fibrin", "dead tissue"
+            ],
             
-            # Lowest Priority
-            "normal_skin": ["normal", "intact", "healthy", "no wound"]
+            "diabetic_foot_ulcer": [
+                "diabetic", "dfu", "dm ulcer", "neuropathic", "neuroischemic",
+                "plantar", "metatarsal head", "charcot", "callus", "hyperkeratosis",
+                "gangrene", "toes"
+            ],
+            
+            "venous_leg_ulcer": [
+                "venous", "vlu", "stasis", "varicose", "insufficiency",
+                "gaiter area", "medial malleolus", "hemosiderin", "staining",
+                "lipodermatosclerosis", "champagne bottle leg", "atrophie blanche"
+            ],
+            
+            "surgical_wound": [
+                "surgical", "incision", "post-op", "postop", "suture", "staples",
+                "dehiscence", "evisceration", "operation site", "graft"
+            ]
         }
 
+        # PRIORITY SEARCH ORDER
+        # We check Critical conditions first.
         search_order = [
-            "infection_suspected",  # 1. Life Threatening
-            "necrotic_tissue",      # 2. Tissue Threatening (Gangrene/Slough)
-            "diabetic_foot_ulcer",  # 3. High Risk Etiology
-            "pressure_injury",      # 4. High Risk Etiology
-            "surgical_wound",       # 5. Acute Risk
-            "venous_leg_ulcer",     # 6. Chronic Risk
-            "wound_drainage",       # 7. Active Symptom (The "Weepy" catch)
-            "normal_skin"           # 8. Nothing wrong found
+            "infection_suspected", # Highest Risk (Sepsis)
+            "pressure_injury",     # High Risk (Necrosis)
+            "diabetic_foot_ulcer", # High Risk (Amputation)
+            "surgical_wound",      # Moderate Risk
+            "venous_leg_ulcer"     # Chronic
         ]
 
         matched_protocol_key = None
@@ -101,9 +130,9 @@ class ProtocolManager:
                 "management": ["Refer to standard clinical guidelines."]
             })
         
-        # Fallback if AI output was total gibberish (e.g., "The image is blurry")
-        return {
-            "name": "Unclassified Wound Findings",
-            "severity": "Unknown",
-            "management": ["Manual clinical assessment required.", "Verify image quality."]
-        }
+        # If no keywords matched, assume the patient is Stable/Healthy.
+        return self.protocols.get("general_care", {
+            "name": "General Wound Care",
+            "severity": "Low",
+            "management": ["Monitor for changes", "Keep area clean"]
+        })
