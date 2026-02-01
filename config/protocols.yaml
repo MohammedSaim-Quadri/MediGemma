@@ -1,63 +1,70 @@
 clinical_protocols:
-  # --- CRITICAL: Infection & Sepsis ---
-  # Triggered by: pus, purulence, abscess, malodor, redness, hot to touch
-  infection_suspected:
-    name: "Active Infection Protocol"
+  # --- LEVEL 1: CRITICAL / LIFE THREAT (The "Killers") ---
+  # Triggered by: dishwater, gas, crepitus, necrotizing
+  critical_infection:
+    name: "🚨 CRITICAL: POSSIBLE NECROTIZING INFECTION"
     severity: "Critical"
     management:
-      - "Immediate Action: Obtain deep tissue culture or swab."
-      - "Pharmacology: Notify provider for empiric antibiotics."
-      - "Wound Care: Use antimicrobial dressings (Silver, Iodine, Honey)."
-      - "Systemic Check: Monitor for fever, chills, or hypotension (Sepsis)."
+      - "IMMEDIATE ACTION: Surgical Consult (Rule out NSTI)."
+      - "Imaging: MRI or CT to assess gas/deep fascial involvement."
+      - "Pharmacology: Initiate Broad-Spectrum IV Antibiotics immediately."
+      - "Prep: Prepare for emergency surgical debridement."
 
-  # --- HIGH SEVERITY: Etiologies ---
-  
-  # Triggered by: sacrum, heel, stage 3/4, eschar, black tissue, necrosis
-  pressure_injury:
-    name: "Pressure Injury / Necrosis Protocol"
+  # --- LEVEL 2: ACTIVE INFECTION (The "Acute" Threat) ---
+  # Triggered by: "Infection: Yes", pus, purulent, abscess
+  infection_suspected:
+    name: "Active Infection Protocol"
     severity: "High"
     management:
-      - "Offloading: Turn patient q2h; float heels; use air-fluidized mattress."
-      - "Debridement: Consult for removal of black eschar/slough (if flow is adequate)."
-      - "Nutrition: Increase protein intake (Arginine/Zinc) to support granulation."
-      - "Protection: Do NOT debride stable dry eschar on heels."
+      - "Diagnostics: Obtain Deep Tissue Culture (Biopsy) or Quantitative PCR."
+      - "Pharmacology: Start Empiric Antibiotics per Stewardship Guidelines."
+      - "Imaging: Rule out Osteomyelitis (X-Ray) if bone is exposed."
+      - "Wound Care: Use antimicrobial dressings (Silver, Iodine, Honey)."
 
-  # Triggered by: diabetic, DFU, neuropathy, plantar, gangrene
+  # --- LEVEL 3: TISSUE DEFICIT / NECROSIS ---
+  # Triggered by: eschar, black tissue, slough, necrosis, pressure injury
+  pressure_injury:
+    name: "Debridement & Necrosis Protocol"
+    severity: "High"
+    management:
+      - "Vascular Check: Evaluate TCOM or ABI before sharp debridement."
+      - "Debridement: Enzymatic (Santyl) or Mechanical removal of slough/eschar."
+      - "Offloading: Total pressure relief (Air-fluidized therapy/Turning)."
+      - "Nutrition: High protein/Arginine supplementation."
+
+  # --- LEVEL 4: DIABETIC / NEUROPATHIC ---
+  # Triggered by: diabetic, neuropathy, plantar
   diabetic_foot_ulcer:
     name: "Diabetic Foot Ulcer Protocol"
     severity: "High"
     management:
-      - "Offloading: Total Contact Cast (TCC) or surgical shoe is mandatory."
-      - "Metabolic: Target HbA1c < 7%; manage blood glucose."
-      - "Perfusion: Check ABI/TBI before any sharp debridement."
-      - "Infection Risk: Monitor closely for osteomyelitis."
+      - "Offloading: Total Contact Cast (TCC) is Gold Standard."
+      - "Vascular: Non-invasive vascular studies (Arterial/Venous)."
+      - "Metabolic: Strict Glucose Control (Target HbA1c < 7%)."
+      - "Monitoring: Watch for Charcot Foot signs."
 
-  # --- MEDIUM SEVERITY ---
-
-  # Triggered by: surgical, incision, dehiscence, sutures
+  # --- LEVEL 5: STANDARD CARE (Maintenance) ---
+  # Triggered by: surgical, venous, or fallback
   surgical_wound:
     name: "Surgical Site Management"
     severity: "Medium"
     management:
-      - "Protection: Keep incision clean and dry."
-      - "Assessment: Monitor for dehiscence (separation) or evisceration."
-      - "Drainage: If high output, consider pouching or negative pressure (wound vac)."
+      - "Protection: Maintain sterile barrier."
+      - "Assessment: Monitor for dehiscence or seroma."
+      - "Drainage: Manage exudate with appropriate absorbency."
 
-  # Triggered by: venous, edema, hemosiderin, leg ulcer
   venous_leg_ulcer:
     name: "Venous Leg Ulcer Protocol"
     severity: "Medium"
     management:
-      - "Compression: Multi-layer compression (Profore/Unna Boot) if ABI > 0.8."
-      - "Elevation: Elevate legs above heart level 3-4x daily."
-      - "Exudate Control: Use superabsorbent pads for high drainage."
+      - "Compression: Multi-layer compression if Arterial Status permits."
+      - "Elevation: Legs above heart level."
+      - "Exudate: Absorbent dressings (Foams/Alginates)."
 
-  # --- LOWEST PRIORITY: Fallback ---
-  # Triggered by: Fallback (no other keywords found)
   general_care:
-    name: "General Wound Care / Intact Skin"
+    name: "Standard Granulation Care"
     severity: "Low"
     management:
-      - "Hygiene: Cleanse with normal saline or wound cleanser."
-      - "Moisture Balance: Maintain moist wound environment (not wet, not dry)."
-      - "Prevention: Inspect skin daily for new breakdown."
+      - "Environment: Maintain moist wound healing (Hydrogel/Foam)."
+      - "Periwound: Protect edges with barrier film."
+      - "Monitoring: Weekly measurements (Length x Width x Depth)."

@@ -7,13 +7,17 @@ import sys
 # Add the project root directory to Python's path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 import logging
-from src.data_manager import DataManager
-from src.engine.engine_core import ClinicalRAGEngine, LLMEngine, VisionEngine, AnalyticsEngine
-
+from src.engine.engine_core import (
+    ClinicalRAGEngine,
+    LLMEngine,
+    VisionEngine,
+    AnalyticsEngine,
+    DataManager,
+    generate_priority_report
+)
 from src.core.router import classify_query, QueryIntent
 from src.safety.protocol_manager import ProtocolManager
 from src.safety.verifier import SafetyVerifier
-from src.core.priority_rules import generate_priority_report
 from src.core.orchestrator import ClinicalOrchestrator
 
 logging.basicConfig(level=logging.INFO)
@@ -41,6 +45,12 @@ def init_system():
     return llm, dm, vision, analytics, rag, proto, ver, orchestrator
 
 llm_engine, data_manager, vision_engine, analytics_engine, rag_engine, protocol_manager, verifier, orchestrator = init_system()
+
+if 'vision_engine' not in st.session_state:
+    st.session_state['vision_engine'] = vision_engine
+
+if 'vision_history' not in st.session_state:
+    st.session_state['vision_history'] = []
 
 # --- 2. SESSION STATE ---
 if "messages" not in st.session_state:
@@ -87,7 +97,7 @@ with st.sidebar:
 st.title("🏥 Medi-Gemma Director")
 
 # SWAPPED TABS: Chat is now Tab 1
-tab1, tab2 = st.tabs(["💬 Clinical Assistant", "📊 MD Dashboard"])
+tab1, tab2, tab3 = st.tabs(["💬 Clinical Assistant", "📊 MD Dashboard", "LLaVA Test"])
 
 # =========================================================
 # TAB 1: CHAT & VISION (The Main Workflow)
@@ -147,6 +157,7 @@ with tab1:
 
     if prompt := st.chat_input("Ask about a patient, treatment protocol, or medical query..."):
         final_prompt = prompt
+        
         if 'linked_patient_id' in st.session_state and st.session_state['linked_patient_id']:
             pid = st.session_state['linked_patient_id']
             # Only prepend if user didn't type it themselves
@@ -338,3 +349,95 @@ with tab2:
         # --- 4. RAW DATA INSPECTOR (Kept from old version) ---
         with st.expander("📋 View Raw Patient Data Table", expanded=False):
             st.dataframe(data_manager.df, width=1000)
+
+# ==========================================
+# TAB 3: VISION DIAGNOSTICS (LLaVA Lab)
+# ==========================================
+with tab3:
+    st.header("👁️ LLaVA-Med Vision Lab")
+    st.caption("Direct access to the Vision-Language Model. Focused on Image Analysis (No Patient Context).")
+    
+    # Initialize Vision Chat History
+    if 'vision_history' not in st.session_state:
+        st.session_state['vision_history'] = []
+
+    # 1. Image Upload
+    vision_file = st.file_uploader("Upload Image", type=['png', 'jpg', 'jpeg'], key="vision_uploader")
+    
+    # Reset history if file changes
+    if vision_file and 'last_vision_file' not in st.session_state:
+            st.session_state['last_vision_file'] = vision_file.name
+    if vision_file and st.session_state.get('last_vision_file') != vision_file.name:
+            st.session_state['vision_history'] = []
+            st.session_state['last_vision_file'] = vision_file.name
+
+    if vision_file:
+        # Save temp file
+        temp_path = f"temp_vision_{vision_file.name}"
+        with open(temp_path, "wb") as f:
+            f.write(vision_file.getbuffer())
+        
+        st.image(vision_file, caption="Input Image", width=350)
+        
+        # 2. Controls
+        if st.button("🚀 Initialize Vision Engine", key="init_vision_btn"):
+            with st.spinner("Loading Vision Model (This evicts Gemma)..."):
+                st.session_state['vision_engine'].load_model()
+            st.success("Vision Engine Ready.")
+
+        # 3. Chat Display
+        for msg in st.session_state['vision_history']:
+            with st.chat_message(msg["role"]):
+                st.write(msg["content"])
+
+        # 4. Chat Input
+        user_input = st.chat_input("Ask LLaVA about the image...")
+        
+        if user_input:
+            if not st.session_state['vision_engine'].loaded:
+                st.error("Please click 'Initialize Vision Engine' first.")
+            else:
+                # A. Show User Input immediately
+                st.session_state['vision_history'].append({"role": "user", "content": user_input})
+                with st.chat_message("user"):
+                    st.write(user_input)
+                
+                # B. Generate Response
+                with st.chat_message("assistant"):
+                    with st.spinner("LLaVA is analyzing..."):
+                        try:
+                            # --- ROBUST CONTEXT CONSTRUCTION ---
+                            context_str = ""
+                            if len(st.session_state['vision_history']) > 1:
+                                context_str = "Context from previous turns:\n"
+                                # Take last 3 turns, excluding the current one we just added
+                                for m in st.session_state['vision_history'][:-1][-3:]:
+                                    label = "User asked" if m['role'] == 'user' else "You answered"
+                                    context_str += f"- {label}: {m['content']}\n"
+                                context_str += "\n"
+
+                            medical_instruction = (
+                                "ACT AS A CLINICAL SCIENTIST. You are analyzing a wound image for a medical report.\n"
+                                "You MUST provide specific estimates. Do not use vague terms like 'extensive'.\n"
+                                "Fill out this form strictly:\n\n"
+                                "1. COMPOSITION (Must add up to 100%): [e.g., '10%' Eschar, 40% Slough, '50%' Granulation']\n"
+                                "2. DIMENSIONS: [Estimate LxW in cm. If no ruler, use body landmarks to guess. e.g., 'approx 4x3 cm']\n"
+                                "3. DEPTH: [Superficial / Partial / Full Thickness]\n"
+                                "4. INFECTION: [Yes/No - Look for pus, redness, swelling]\n"
+                                "5. PERIWOUND: [Healthy / Macerated / Inflamed]\n"
+                                f"USER QUESTION: {user_input}"
+                            )
+                            
+                            # The final prompt sent to LLaVA
+                            combined_prompt = f"{context_str}{medical_instruction}"
+                            
+                            # Run Analysis
+                            response = st.session_state['vision_engine'].analyze(temp_path, prompt=combined_prompt)
+                            
+                            st.write(response)
+                            
+                            # Save to History
+                            st.session_state['vision_history'].append({"role": "assistant", "content": response})
+                            
+                        except Exception as e:
+                            st.error(f"Analysis Failed: {str(e)}")

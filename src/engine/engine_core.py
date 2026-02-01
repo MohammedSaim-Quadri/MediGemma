@@ -7,26 +7,221 @@ import torch
 import gc
 import requests
 import pandas as pd
-from src.data_manager import DataManager
 from PIL import Image
-from transformers import BitsAndBytesConfig
+from transformers import BitsAndBytesConfig, AutoTokenizer
 try:
     from llava.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
     from llava.conversation import conv_templates, SeparatorStyle
     from llava.model.builder import load_pretrained_model
     from llava.utils import disable_torch_init
     from llava.mm_utils import tokenizer_image_token, get_model_name_from_path, process_images
+    from llava.model import LlavaLlamaForCausalLM
 except ImportError:
     pass
+
 from llama_index.core import Settings, PromptTemplate
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.vector_stores import MetadataFilter, MetadataFilters
 from llama_index.core.schema import NodeWithScore, TextNode
 from llama_index.llms.ollama import Ollama
 from llama_index.experimental.query_engine import PandasQueryEngine
-
+from llama_index.core import VectorStoreIndex, Document
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
 logger = logging.getLogger(__name__)
+
+class DataManager:
+    """
+    Centralized data handler.
+    Features:
+    - Auto-cleaning of dirty data (Fixes 'N/A' crashes).
+    - LOCAL Embeddings (No OpenAI).
+    - Rich Vector Index for Clinical RAG.
+    """
+    def __init__(self):
+        self.df = None
+        self.index = None
+        
+        # --- 1. SETUP LOCAL EMBEDDINGS (Crucial for RAG) ---
+        try:
+            logger.info("⚙️ Loading Local Embedding Model (BAAI/bge-small-en-v1.5)...")
+            self.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+            
+            # CRITICAL: Apply to Global Settings
+            Settings.embed_model = self.embed_model
+            
+            # Explicitly set LLM to None here to prevent OpenAI default
+            Settings.llm = None
+            Settings.chunk_size = 512 
+            
+        except Exception as e:
+            logger.error(f"❌ Failed to load Embedding Model: {e}")
+
+    def load_data(self, enc_file, pat_file=None):
+        try:
+            logger.info("📂 Processing Uploaded Data...")
+            
+            # --- Load CSVs ---
+            df_enc = pd.read_csv(enc_file)
+
+            # Clean column names (strip whitespace)
+            # 2. Normalize Patient_ID (Force to String)
+            # This fixes the merge failure (Int vs String mismatch)
+            if 'Patient_ID' in df_enc.columns:
+                df_enc['Patient_ID'] = df_enc['Patient_ID'].astype(str).str.strip()
+            elif 'patient_id' in df_enc.columns:
+                df_enc['Patient_ID'] = df_enc['patient_id'].astype(str).str.strip()
+            
+            # 3. Merge Demographics (If provided)
+            if pat_file:
+                df_pat = pd.read_csv(pat_file)
+                
+                # Normalize Patient_ID in demographics too
+                if 'Patient_ID' in df_pat.columns:
+                    df_pat['Patient_ID'] = df_pat['Patient_ID'].astype(str).str.strip()
+                elif 'patient_id' in df_pat.columns:
+                    df_pat['Patient_ID'] = df_pat['patient_id'].astype(str).str.strip()
+                
+                # Perform Left Merge
+                self.df = pd.merge(df_enc, df_pat, on='Patient_ID', how='outer', suffixes=('', '_demo'))
+                logger.info(f"✅ Merged demographics. Shape: {self.df.shape}")
+            else:
+                self.df = df_enc
+                logger.warning("⚠️ No demographics file provided. Using encounters only.")
+
+            # --- 🛡️ CRITICAL FIX: AGGRESSIVE TYPE CLEANING ---
+            # 1. Force Numeric Columns (Fixes ArrowInvalid Crash)
+            numeric_cols = [
+                'Wound_Size_Length_cm', 
+                'Wound_Size_Width_cm', 
+                'Wound_Size_Area_cm2',
+                'Patient_Age',
+                'Age',
+                'Necrosis_Percent', 
+                'Slough_Percent', 
+                'Granulation_Percent',
+                'Pain_Level'
+            ]
+            
+            for col in numeric_cols:
+                if col in self.df.columns:
+                    # Coerce errors (turn "N/A" -> NaN)
+                    self.df[col] = pd.to_numeric(self.df[col], errors='coerce')
+                    # Fill NaN with 0.0 (Safe for Dashboard)
+                    self.df[col] = self.df[col].fillna(0.0)
+
+            # Ensure Comorbidities is never null (Fixes 'History: None')
+            if 'Comorbidities' in self.df.columns:
+                self.df['Comorbidities'] = self.df['Comorbidities'].fillna("No medical history documented").astype(str)
+            else:
+                self.df['Comorbidities'] = "No medical history documented"
+            
+            text_cols = ['Narrative', 'Notes', 'Treatment_Plan', 'Exudate_Type', 'Tissue_Exposed']
+            for col in text_cols:
+                if col in self.df.columns:
+                    self.df[col] = self.df[col].fillna('N/A').astype(str)
+
+            logger.info(f"✅ Data Loaded & Cleaned. Rows: {len(self.df)}")
+            
+            # --- Build RAG Index (Rich Context Strategy) ---
+            self._build_index()
+            
+            return True
+
+        except Exception as e:
+            logger.error(f"❌ Data Manager Error: {e}")
+            return False
+
+    def _build_index(self):
+        logger.info("🧠 Building Clinical Vector Index (Per-Visit Strategy)...")
+        
+        # Ensure Settings are persistent
+        if Settings.embed_model is None:
+             Settings.embed_model = self.embed_model
+
+        documents = []
+        
+        for _, row in self.df.iterrows():
+            
+            # 1. Context Header (Rich Patient Context)
+            context_header = (
+                f"PATIENT CONTEXT: ID {row.get('Patient_ID', 'Unknown')}\n"
+                f"Demographics: Age {row.get('Age', 'N/A')}, Sex {row.get('Sex', 'N/A')}\n"
+                f"Medical History: {row.get('Comorbidities', 'None')}\n"
+            )
+            
+            # 2. Specific Visit Details
+            # Note: We use .get with defaults to handle missing cols safely
+            visit_details = (
+                f"ENCOUNTER DATE: {row.get('Encounter_Date', 'Unknown')}\n"
+                f"Wound Dims: {row.get('Wound_Size_Length_cm', '?')} x {row.get('Wound_Size_Width_cm', '?')} cm\n"
+                f"TISSUE: Necrosis {row.get('Necrosis_Percent', 0)}%, Slough {row.get('Slough_Percent', 0)}%, Granulation {row.get('Granulation_Percent', 0)}%\n"
+                f"EXUDATE: {row.get('Exudate_Type', 'N/A')}\n"
+                f"PAIN: {row.get('Pain_Level', 'N/A')}/10\n"
+                f"Narrative: {row.get('Narrative', 'No notes')}\n"
+                f"Plan: {row.get('Treatment_Plan', 'None')}\n"
+            )
+            
+            # 3. Combine
+            full_text = context_header + "--- VISIT DETAILS ---\n" + visit_details
+            
+            # 4. Create Document with Metadata
+            doc = Document(
+                text=full_text, 
+                metadata={
+                    "patient_id": str(row.get('Patient_ID', 'Unknown')),
+                    "date": str(row.get('Encounter_Date', 'Unknown'))
+                }
+            )
+            documents.append(doc)
+        
+        if documents:
+            self.index = VectorStoreIndex.from_documents(documents)
+            logger.info(f"✅ Index Built Successfully ({len(documents)} clinical encounters).")
+
+    def get_preview(self):
+        return self.df
+
+    # In src/data_manager.py - Add this method to the DataManager class
+
+    def get_patient_current_state(self, patient_id):
+        """
+        Retrieves the absolute latest clinical state (Ground Truth).
+        """
+        try:
+            # Ensure ID is string
+            pid = str(patient_id).strip()
+            
+            # Filter for patient
+            p_data = self.df[self.df['Patient_ID'] == pid].copy()
+            
+            if p_data.empty:
+                return None
+
+            p_data['Encounter_Date'] = pd.to_datetime(p_data['Encounter_Date'])
+            
+            # Sort by Date AND Visit Number (Latest date, highest visit number)
+            # This handles cases where a patient has 2 visits on the same day
+            if 'Visit_Number' in p_data.columns:
+                p_data = p_data.sort_values(by=['Encounter_Date', 'Visit_Number'], ascending=[False, False])
+            else:
+                p_data = p_data.sort_values(by='Encounter_Date', ascending=False)
+                
+            latest = p_data.iloc[0]
+            
+            # Convert back to string for display
+            date_str = latest['Encounter_Date'].strftime('%Y-%m-%d')
+            
+            return {
+                "last_visit": date_str,
+                "wound_dims": f"{latest.get('Wound_Size_Length_cm', '?')} x {latest.get('Wound_Size_Width_cm', '?')} cm",
+                "narrative": str(latest.get('Narrative', 'No notes'))[:200] + "...", # Truncate for token limits
+                "severity": "Critical" if "deteriorating" in str(latest.get('Narrative', '')).lower() else "Stable"
+            }
+        except Exception as e:
+            logger.error(f"Error fetching state: {e}")
+            return None
+
 
 class LLMEngine:
     """
@@ -85,10 +280,10 @@ class ClinicalRAGEngine:
             "### CORE INSTRUCTION: DETERMINE THE RESPONSE FORMAT ###\n"
             "Classify the user's query and strictly follow the formatting rules:\n\n"
 
-            "**SCENARIO A: SPECIFIC CLINICAL QUESTION (e.g., 'Should we use Santyl?', 'Is it infected?')**\n"
+            "**SCENARIO A: SPECIFIC QUESTION OR FACTUAL QUERY**\n"
             "FORMAT:\n"
-            "1. **Clinical Verdict:** Start with a decisive judgment (e.g., 'Recommendation: Contraindicated', 'Yes, Indicated').\n"
-            "2. **Evidence:** Cite the specific data (Date, Size, Tissue %) supporting your verdict.\n"
+            "1. **Direct Answer/Verdict:** If asking a fact (e.g. 'What composition?'), state the data directly. If asking a decision, state the verdict (Indicated/Contraindicated).\n"
+            "2. **Evidence:** Cite the specific data (Date, Size, Tissue %) supporting your answer.\n"
             "3. **Reasoning:** Briefly explain the pathophysiology or guideline basis.\n"
             "🛑 **CONSTRAINT:** Keep it under 100 words. NO 'Clinical Assessment' headers.\n\n"
 
@@ -183,11 +378,8 @@ class ClinicalRAGEngine:
         """
         Queries the patient history or Visual Context from history.
         """
-        if not self.chat_engine:
+        if not self.chat_engine and self.index: 
             self.initialize()
-            
-        if not self.chat_engine:
-            return "System Error: Clinical Data Index is not available."
 
         try:
             # --- DYNAMIC METADATA FILTERING ---
@@ -198,14 +390,14 @@ class ClinicalRAGEngine:
             
             # --- FIX 2: Correct variable name (history vs conversation_history) ---
             if history:
-                last_3 = history[-3:] if len(history) >= 3 else history
-                for msg in last_3:
+                #last_3 = history[-3:] if len(history) >= 3 else history
+                for msg in history:
                     content = msg.get('content', '')
                     if '[SYSTEM UPDATE]' in str(content):
                         visual_context = content
                         break
             
-            if patient_id:
+            if patient_id and self.index:
                 logger.info(f"🎯 Detected Patient ID {patient_id}. Applying Strict Filter.")
                 # CRITICAL FIX: Inject Visual Context into the Query if it exists
                 # This ensures the LLM 'sees' the image analysis alongside the database records
@@ -228,16 +420,20 @@ class ClinicalRAGEngine:
                 ).query(final_query)
             
             # --- CASE B: Visual Follow-Up (Restoring Old Version Logic) ---
-            elif visual_context and not patient_id:
+            elif visual_context:
                 logger.info("👁️ Visual Answering: Answering from image only")
                 
                 # Use LLM directly with visual context (skip database)
                 prompt = (
                     f"{self.system_prompt_str}\n\n"
-                    f"VISUAL CONTEXT:\n{visual_context}\n\n"
+                    f"VISUAL CONTEXT (raw findings from imaging analysis):\n{visual_context}\n\n"
                     f"USER QUERY: {user_query}\n\n"
-                    "INSTRUCTION: Answer based ONLY on the visual context above. "
-                    "Do NOT invent patient history."
+                    "INSTRUCTION:\n"
+                    "1. The VISUAL CONTEXT above is raw data from an imaging pipeline. It is NOT your answer — it is your source material.\n"
+                    "2. You must INTERPRET and SYNTHESIZE the findings into a clinical response. Do not quote or repeat the visual context back.\n"
+                    "3. Answer the USER QUERY directly. If the query is a specific clinical question, give a decisive verdict + your reasoning from the data.\n"
+                    "4. If the visual context does not contain enough information to answer the query, say so explicitly.\n"
+                    "5. Do NOT invent any patient history or data that is not in the visual context.\n"
                 )
                 
                 response_text = Settings.llm.complete(prompt).text
@@ -361,7 +557,6 @@ class VisionEngine:
         try:
             logger.info(f"🏥 Loading Vision Model from: {self.model_path}...")
             disable_torch_init()
-            model_name = get_model_name_from_path(self.model_path)
 
             # We create the config explicitly to satisfy newer Transformers versions
             quantization_config = BitsAndBytesConfig(
@@ -371,17 +566,25 @@ class VisionEngine:
                 bnb_4bit_quant_type='nf4'
             )
             
-            # Call loader with load_4bit=False to prevent LLaVA from setting the conflicting flag.
-            # We pass our valid config in kwargs instead.
-            self.tokenizer, self.model, self.image_processor, _ = load_pretrained_model(
-                model_path=self.model_path, 
-                model_base=None,
-                model_name=model_name, 
-                load_4bit=False,      # <--- CRITICAL: Turn off LLaVA's internal flag
-                load_8bit=False,
-                quantization_config=quantization_config, # <--- Pass our clean config
-                device_map="cuda"
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                self.model_path, 
+                use_fast=False
             )
+
+            # Load Model directly (Bypassing the buggy builder)
+            self.model = LlavaLlamaForCausalLM.from_pretrained(
+                self.model_path,
+                torch_dtype=torch.float16,
+                device_map="auto",
+                quantization_config=quantization_config,
+            )
+
+            # Initialize the Vision Tower
+            vision_tower = self.model.get_vision_tower()
+            if not vision_tower.is_loaded:
+                vision_tower.load_model()
+            
+            self.image_processor = vision_tower.image_processor
 
             self.loaded = True
             logger.info("✅ Vision Model loaded successfully.")
@@ -396,14 +599,14 @@ class VisionEngine:
         """
         if prompt is None:
             prompt = (
-                "ACT AS A MEDICAL IMAGING ANALYST. \n"
-                "Analyze this wound image strictly. \n"
-                "1. LOCATION: Identify the specific body part (e.g., heel, toe, sacrum).\n"
-                "2. TISSUE TYPE: Identify visible tissue colors (Pink=Granulation, Yellow=Slough, Black=Eschar). "
-                "Do NOT describe pink tissue as 'dead' or 'necrotic'.\n"
-                "3. EDGES: Are edges macerated or defined?\n"
-                "4. SIGNS OF INFECTION: Visible purulence or erythema only. Do not guess.\n"
-                "Output a concise clinical description."
+                "ACT AS A CLINICAL SCIENTIST. You are analyzing a wound image for a medical report.\n"
+                "You MUST provide specific estimates. Do not use vague terms like 'extensive'.\n"
+                "Fill out this form strictly:\n\n"
+                "1. COMPOSITION (Must add up to 100%): [e.g., '10% Eschar, 40% Slough, 50% Granulation']\n"
+                "2. DIMENSIONS: [Estimate LxW in cm. If no ruler, use body landmarks to guess. e.g., 'approx 4x3 cm']\n"
+                "3. DEPTH: [Superficial / Partial / Full Thickness]\n"
+                "4. INFECTION: [Yes/No - Look for pus, redness, swelling]\n"
+                "5. PERIWOUND: [Healthy / Macerated / Inflamed]\n"
             )
         self.unload()
 
@@ -543,3 +746,65 @@ class AnalyticsEngine:
                 "type": "error",
                 "text": f"Could not process query: {str(e)}"
             }
+
+
+# 5. TRIAGE LOGIC (Moved here for Binary Compatibility)
+def generate_priority_report(df):
+    report_data = []
+    working_df = df.copy() 
+    
+    if 'Patient_ID' in working_df.columns:
+        working_df['Patient_ID'] = working_df['Patient_ID'].astype(str)
+    
+    for pid, group in working_df.groupby('Patient_ID'):
+        if group['Encounter_Date'].isna().all(): continue
+        group = group.sort_values(by='Encounter_Date', ascending=False)
+        latest_visit = group.iloc[0]
+        
+        flags = []
+        severity = "Normal"
+        
+        curr_area = 0
+        prev_area = 0
+        if len(group) > 1:
+            prev_visit = group.iloc[1]
+            try:
+                curr_area = float(latest_visit.get('Wound_Size_Length_cm', 0)) * float(latest_visit.get('Wound_Size_Width_cm', 0))
+                prev_area = float(prev_visit.get('Wound_Size_Length_cm', 0)) * float(prev_visit.get('Wound_Size_Width_cm', 0))
+            except: pass
+
+        if len(group) > 1 and curr_area > prev_area * 1.1:
+            flags.append(f"⚠️ **Wound Deteriorating**")
+            severity = "Critical"
+        
+        try:
+            pain = float(latest_visit.get('Pain_Level', 0))
+            if pain >= 7:
+                flags.append(f"🔴 **Severe Pain**")
+                severity = "Critical"
+        except: pass
+            
+        narrative = str(latest_visit.get('Narrative', '')).lower()
+        if any(x in narrative for x in ['odor', 'pus', 'infection']):
+            flags.append("☣️ **Infection Risk**")
+            if severity != "Critical": severity = "Urgent"
+
+        if len(group) > 1 and curr_area > 0 and (prev_area * 0.95 <= curr_area <= prev_area * 1.05):
+            flags.append(f"🐢 **Stalled Healing**")
+            if severity == "Normal": severity = "Urgent" 
+        
+        if flags:
+            report_data.append({
+                "Patient ID": pid,
+                "Severity": severity,
+                "Date": latest_visit.get('Encounter_Date', 'Unknown'),
+                "Age": latest_visit.get('Age', 'Unknown'),
+                "Sex": latest_visit.get('Sex', 'Unknown'),
+                "Comorbidities": str(latest_visit.get('Comorbidities', 'None')),
+                "Wound Size (cm)": f"{latest_visit.get('Wound_Size_Length_cm','?')} x {latest_visit.get('Wound_Size_Width_cm','?')}",
+                "Latest Note": str(latest_visit.get('Narrative', ''))[:50],
+                "Alerts": flags
+            })
+    
+    report_data.sort(key=lambda x: (x['Severity'] != 'Critical', x['Severity'] != 'Urgent'))
+    return report_data

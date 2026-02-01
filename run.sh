@@ -8,5 +8,6 @@ if [ -f .env ]; then
     set +a
 fi
 
+export PYTHONPATH=$PYTHONPATH:$(pwd)
 # Run the App
 streamlit run src/interface/app_main.py
