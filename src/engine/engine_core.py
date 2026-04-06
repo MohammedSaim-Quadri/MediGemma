@@ -23,7 +23,7 @@ from llama_index.core import Settings, PromptTemplate
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.vector_stores import MetadataFilter, MetadataFilters
 from llama_index.core.schema import NodeWithScore, TextNode
-from llama_index.llms.ollama import Ollama
+# from llama_index.llms.ollama import Ollama
 from llama_index.experimental.query_engine import PandasQueryEngine
 from llama_index.core import VectorStoreIndex, Document
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
@@ -45,7 +45,7 @@ class DataManager:
         # --- 1. SETUP LOCAL EMBEDDINGS (Crucial for RAG) ---
         try:
             logger.info("⚙️ Loading Local Embedding Model (BAAI/bge-small-en-v1.5)...")
-            self.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+            self.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5", device="cpu")
             
             # CRITICAL: Apply to Global Settings
             Settings.embed_model = self.embed_model
@@ -228,32 +228,40 @@ class LLMEngine:
     Handles clinical reasoning and text generation via Ollama (Gemma 2).
     """
     def __init__(self, model_name="gemma2:27b", timeout=300.0):
+        logger.warning("⚠️ LLMEngine (Gemma2) is DISABLED. Use Gemma3 for all tasks.")
         self.model_name = model_name
         self.timeout = timeout
         self.llm = None
 
     def initialize(self):
         """Connects to the local Ollama instance."""
-        try:
-            logger.info(f"🧠 Connecting to Inference Engine: {self.model_name}...")
-            self.llm = Ollama(model=self.model_name, request_timeout=self.timeout)
-            Settings.llm = self.llm # Set global LlamaIndex setting
-            logger.info("✅ Inference Engine connected.")
-        except Exception as e:
-            logger.error(f"❌ Failed to connect to Ollama: {e}")
-            raise e
+        """Does nothing - Gemma2 is disabled."""
+        logger.info("ℹ️ Gemma2 is disabled. Skipping initialization.")
+        pass
+        # try:
+        #     logger.info(f"🧠 Connecting to Inference Engine: {self.model_name}...")
+        #     self.llm = Ollama(model=self.model_name, request_timeout=self.timeout)
+        #     Settings.llm = self.llm # Set global LlamaIndex setting
+        #     logger.info("✅ Inference Engine connected.")
+        # except Exception as e:
+        #     logger.error(f"❌ Failed to connect to Ollama: {e}")
+        #     raise e
 
     def generate(self, prompt):
         """Direct text completion."""
-        if not self.llm:
-            self.initialize()
-        return self.llm.complete(prompt).text
+        """Does nothing - Gemma2 is disabled."""
+        pass
+        # if not self.llm:
+        #     self.initialize()
+        # return self.llm.complete(prompt).text
 
     def chat(self, messages):
         """Chat completion (list of messages)."""
-        if not self.llm:
-            self.initialize()
-        return self.llm.chat(messages)
+        """Does nothing - Gemma2 is disabled."""
+        pass
+        # if not self.llm:
+        #     self.initialize()
+        # return self.llm.chat(messages)
 
 
 class ClinicalRAGEngine:
@@ -491,68 +499,47 @@ class VisionEngine:
     """
     def __init__(self, model_path=None):
         self.model_path = model_path or os.getenv("VISION_MODEL_PATH", "./LLaVA-Medical-Director")
-        self.ollama_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-        self.reasoning_model = os.getenv("REASONING_MODEL", "gemma2:27b")
         self.tokenizer = None
         self.model = None
         self.image_processor = None
         self.loaded = False
 
-    def _evict_ollama(self):
-        """
-        CRITICAL: Forces the Ollama server to unload the 18GB Gemma model.
-        This clears the VRAM 'parking spot' for LLaVA.
-        """
-        try:
-            logger.info("🧹 Orchestrator: Evicting Ollama model to free VRAM...")
-            # Sending keep_alive: 0 forces an immediate unload
-            response = requests.post(
-                f"{self.ollama_url}/api/chat",
-                json={
-                    "model": self.reasoning_model, 
-                    "messages": [], 
-                    "keep_alive": 0
-                }
-            )
-            if response.status_code == 200:
-                logger.info("✅ Ollama Evicted. VRAM is clear.")
-
-            # 2. VERIFICATION LOOP (The Fix)
-            # We wait up to 10 seconds for VRAM to drop below a safe threshold.
-            max_retries = 5
-            required_free_gb = 8.0 # LLaVA needs ~6GB, plus overhead.
-            
-            logger.info("⏳ Waiting for VRAM release...")
-            for i in range(max_retries):
-                # Force Python Garbage Collection
-                gc.collect()
-                torch.cuda.empty_cache()
-                
-                # Check actual VRAM
-                free_bytes, total_bytes = torch.cuda.mem_get_info()
-                free_gb = free_bytes / (1024 ** 3)
-                
-                if free_gb >= required_free_gb:
-                    logger.info(f"✅ VRAM Clear: {free_gb:.1f} GB free. Ready for Vision.")
-                    return # Success!
-                
-                logger.debug(f"   Retry {i+1}/{max_retries}: Only {free_gb:.1f} GB free. Waiting...")
-                time.sleep(2) # Wait 2 seconds before checking again
-            
-            # If we get here, it didn't clear.
-            logger.error("❌ TIMEOUT: Ollama did not release VRAM in time.")
-            # We don't raise an error here to allow a 'Hail Mary' attempt, 
-            # but LLaVA will likely crash if this log appears.
-
-        except Exception as e:
-            logger.warning(f"⚠️ Could not contact Ollama for eviction: {e}")
-
     def load_model(self):
         """Loads the Vision Model into VRAM."""
         if self.loaded:
+            logger.info("✅ LLaVA already loaded")
             return
+
+        from llava.model.language_model.llava_llama import LlavaLlamaForCausalLM
         
-        self._evict_ollama()
+        # FIX 1: cache_position
+        original_forward = LlavaLlamaForCausalLM.forward
+        def patched_forward(self, *args, **kwargs):
+            kwargs.pop("cache_position", None)
+            return original_forward(self, *args, **kwargs)
+        LlavaLlamaForCausalLM.forward = patched_forward
+
+        # FIX 2: input validation (The 'inputs_embeds' fix)
+        # We force the model to accept inputs_embeds without raising a ValueError
+        def patched_validate_kwargs(self, model_kwargs):
+            # We just bypass the validation entirely for LLaVA
+            return 
+        
+        LlavaLlamaForCausalLM._validate_model_kwargs = patched_validate_kwargs
+        
+        # FIX 3: Cache handling
+        LlavaLlamaForCausalLM.prepare_inputs_for_generation = LlavaLlamaForCausalLM.prepare_inputs_for_generation
+
+        try:
+            from src.engine.test_models import master_evict_with_retry
+            logger.info("🧹 Evicting all models before loading LLaVA...")
+            success = master_evict_with_retry(required_free_gb=8.0, max_retries=10)
+            
+            if not success:
+                raise RuntimeError("Could not free enough VRAM for LLaVA")
+        except Exception as e:
+            logger.error(f"Eviction failed: {e}")
+            raise e
         
         try:
             logger.info(f"🏥 Loading Vision Model from: {self.model_path}...")
@@ -597,21 +584,18 @@ class VisionEngine:
         """
         Runs inference on a single image.
         """
+        if not self.loaded:
+            logger.info("LLaVA not loaded. Loading now...")
+            self.load_model()
+
         if prompt is None:
             prompt = (
-                "ACT AS A CLINICAL SCIENTIST. You are analyzing a wound image for a medical report.\n"
-                "You MUST provide specific estimates. Do not use vague terms like 'extensive'.\n"
-                "Fill out this form strictly:\n\n"
-                "1. COMPOSITION (Must add up to 100%): [e.g., '10% Eschar, 40% Slough, 50% Granulation']\n"
-                "2. DIMENSIONS: [Estimate LxW in cm. If no ruler, use body landmarks to guess. e.g., 'approx 4x3 cm']\n"
-                "3. DEPTH: [Superficial / Partial / Full Thickness]\n"
-                "4. INFECTION: [Yes/No - Look for pus, redness, swelling]\n"
-                "5. PERIWOUND: [Healthy / Macerated / Inflamed]\n"
+                "Describe the wound in this image. "
+                "Include details about location, tissue type (necrotic, slough, granulation), "
+                "and any signs of infection."
             )
-        self.unload()
 
         try:
-            self.load_model()
             # 1. Image Preprocessing
             image = Image.open(image_file).convert('RGB')
             image_tensor = process_images([image], self.image_processor, self.model.config)
@@ -652,8 +636,6 @@ class VisionEngine:
             # Delete tensors first
             del image_tensor
             del input_ids
-            # Then unload the model
-            self.unload()
             
             return output_text
 

@@ -1,0 +1,42 @@
+# Benchmark Question Set (Consolidated)
+# ==================================================
+# 1 fixed master question for complete clinical assessment.
+#
+# Usage:
+#   python scripts/run_benchmark.py --questions-from config/benchmark_questions.yaml
+
+version: "2.0"
+total_questions: 1
+
+# ---------------------------------------------------------------------------
+# Uncertainty handling instruction (prepended to every question)
+# ---------------------------------------------------------------------------
+uncertainty_instruction: >
+  If you are uncertain about any finding, you MUST: (1) state "Uncertain"
+  explicitly, (2) still provide your best prediction or conclusion,
+  (3) explain why you are uncertain, and (4) specify what additional
+  information (e.g., closer photo, bedside exam, patient history) would
+  resolve the uncertainty.
+
+# ---------------------------------------------------------------------------
+# Questions
+# ---------------------------------------------------------------------------
+questions:
+  - id: "Q1_Master"
+    question: "Identify the wound etiology, anatomical location, and clinical stage, describe the tissue bed composition and periwound skin condition, assess infection risk to determine triage severity, and provide immediate management recommendations including dressing selection."
+    module: "Clinical_Report"
+
+# ---------------------------------------------------------------------------
+# JSON output schema for benchmark results
+# ---------------------------------------------------------------------------
+json_output_schema:
+  type: object
+  properties:
+    image_id: { type: string }
+    questions:
+      type: array
+      items:
+        type: object
+        properties:
+          id: { type: string }
+          raw_answer: { type: string }

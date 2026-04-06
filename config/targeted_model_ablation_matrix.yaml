@@ -1,0 +1,23 @@
+medgemma_27b:
+  - profile: default
+    prompt: clinician_v1
+  - profile: conservative
+    prompt: clinician_v2
+  - profile: creative
+    prompt: clinician_v2
+
+hulumed:
+  - profile: default
+    prompt: clinician_v1
+  - profile: low_temp
+    prompt: structured_output
+  - profile: thinking
+    prompt: structured_output
+
+gemma3:
+  - profile: default
+    prompt: clinician_v1
+  - profile: precise
+    prompt: clinician_v2
+  - profile: creative
+    prompt: clinician_v2

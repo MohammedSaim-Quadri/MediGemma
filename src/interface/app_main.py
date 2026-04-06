@@ -1,7 +1,9 @@
 import streamlit as st
 import os
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 import json
 import re
+import time
 from datetime import datetime
 import sys
 # Add the project root directory to Python's path
@@ -19,11 +21,43 @@ from src.core.router import classify_query, QueryIntent
 from src.safety.protocol_manager import ProtocolManager
 from src.safety.verifier import SafetyVerifier
 from src.core.orchestrator import ClinicalOrchestrator
+from src.engine.test_models import (
+    master_evict_with_retry,
+    cleanup_python_models,
+    analyze_with_gemma3,
+    analyze_with_medgemma,
+    analyze_with_hulumed,
+    load_medgemma_27b,
+    analyze_with_medgemma_4b,
+    load_hulumed,
+    unload_model_safely,
+    register_model,
+    get_registered_model,
+    clear_registry,
+    set_model_loading,
+    get_model_loading,
+    build_inference_config,
+)
+from src.engine.load_timer import (
+    get_estimated_load_time, record_load_time,
+    MODEL_KEY_HULUMED, MODEL_KEY_MEDGEMMA_27B, MODEL_KEY_MEDGEMMA_4B
+)
+from src.interface.progress_timer import run_timed_progress
+from src.interface.copy_button import render_copy_button
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 os.makedirs("thesis_data", exist_ok=True)
+os.makedirs("uploads", exist_ok=True)
+
+# --- Deployment baseline configs (from config/deployment_baselines.yaml) ---
+BASELINE_CONFIGS = {
+    "gemma3": build_inference_config("gemma3", profile_name="default", prompt_template="clinician_v1"),
+    "medgemma_27b": build_inference_config("medgemma_27b", profile_name="default", prompt_template="clinician_v1"),
+    "medgemma_4b": build_inference_config("medgemma_4b", profile_name="tuned", prompt_template="clinician_v3_mg4b"),
+    "hulumed": build_inference_config("hulumed", profile_name="thinking", prompt_template="structured_output"),
+}
 
 # --- 1. INITIALIZATION ---
 @st.cache_resource
@@ -46,11 +80,38 @@ def init_system():
 
 llm_engine, data_manager, vision_engine, analytics_engine, rag_engine, protocol_manager, verifier, orchestrator = init_system()
 
+if 'medgemma_loaded' not in st.session_state:
+    st.session_state['medgemma_loaded'] = False
+if 'hulumed_loaded' not in st.session_state:
+    st.session_state['hulumed_loaded'] = False
+if 'medgemma4b_loaded' not in st.session_state:
+    st.session_state['medgemma4b_loaded'] = False
+
 if 'vision_engine' not in st.session_state:
     st.session_state['vision_engine'] = vision_engine
 
 if 'vision_history' not in st.session_state:
     st.session_state['vision_history'] = []
+
+# --- Sync global model registry flags into this session ---
+# Model objects live ONLY in the global registry (never in session_state)
+# to avoid cross-session orphan references that block VRAM cleanup.
+_reg_name = get_registered_model()[0]  # Only get name; do NOT hold model/processor refs
+if _reg_name == "hulumed" and not st.session_state.get('hulumed_loaded'):
+    st.session_state['hulumed_loaded'] = True
+    st.session_state['medgemma_loaded'] = False
+    st.session_state['medgemma4b_loaded'] = False
+    logger.info("📋 Synced Hulu-Med flag from global registry into new session")
+elif _reg_name == "medgemma" and not st.session_state.get('medgemma_loaded'):
+    st.session_state['medgemma_loaded'] = True
+    st.session_state['hulumed_loaded'] = False
+    st.session_state['medgemma4b_loaded'] = False
+    logger.info("📋 Synced MedGemma 27B flag from global registry into new session")
+elif _reg_name == "mg4b" and not st.session_state.get('medgemma4b_loaded'):
+    st.session_state['medgemma4b_loaded'] = True
+    st.session_state['medgemma_loaded'] = False
+    st.session_state['hulumed_loaded'] = False
+    logger.info("📋 Synced MedGemma 4B flag from global registry into new session")
 
 # --- 2. SESSION STATE ---
 if "messages" not in st.session_state:
@@ -93,11 +154,32 @@ with st.sidebar:
         st.session_state.last_analyzed_file = None
         st.rerun()
 
+    # VRAM Management
+    with st.expander("🧠 VRAM Management", expanded=False):
+        if st.button("🔥 Emergency: Clear ALL Models"):
+            with st.spinner("Clearing all models from VRAM..."):
+                set_model_loading(None)  # Reset any stuck loading flag
+                cleanup_python_models()
+                success = master_evict_with_retry(required_free_gb=20.0, max_retries=10)
+                if success:
+                    st.success("✅ All models evicted successfully")
+                    st.rerun()
+                else:
+                    st.error("❌ Could not fully clear VRAM. Check logs.")
+
 # --- 4. MAIN INTERFACE ---
 st.title("🏥 Medi-Gemma Director")
 
 # SWAPPED TABS: Chat is now Tab 1
-tab1, tab2, tab3 = st.tabs(["💬 Clinical Assistant", "📊 MD Dashboard", "LLaVA Test"])
+tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+    "💬 Clinical Assistant",
+    "📊 MD Dashboard",
+    "Hulu-Med",
+    "MedGemma 27B",
+    "Gemma 3 Multimodal",
+    "MedGemma-1.5 4B",
+    "Benchmark",
+    ])
 
 # =========================================================
 # TAB 1: CHAT & VISION (The Main Workflow)
@@ -154,6 +236,7 @@ with tab1:
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
+            render_copy_button(msg["content"])
 
     if prompt := st.chat_input("Ask about a patient, treatment protocol, or medical query..."):
         final_prompt = prompt
@@ -167,6 +250,7 @@ with tab1:
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
+            render_copy_button(prompt)
 
         with st.chat_message("assistant"):
             response_placeholder = st.empty()
@@ -249,6 +333,7 @@ with tab1:
 
                 # Final Output
                 response_placeholder.markdown(full_response)
+                render_copy_button(full_response)
                 st.caption(f"ℹ️ Source: {source_lbl}")
                 # EXPLAINABILITY
                 if response_obj and hasattr(response_obj, 'source_nodes') and response_obj.source_nodes:
@@ -350,94 +435,440 @@ with tab2:
         with st.expander("📋 View Raw Patient Data Table", expanded=False):
             st.dataframe(data_manager.df, width=1000)
 
-# ==========================================
-# TAB 3: VISION DIAGNOSTICS (LLaVA Lab)
-# ==========================================
-with tab3:
-    st.header("👁️ LLaVA-Med Vision Lab")
-    st.caption("Direct access to the Vision-Language Model. Focused on Image Analysis (No Patient Context).")
-    
-    # Initialize Vision Chat History
-    if 'vision_history' not in st.session_state:
-        st.session_state['vision_history'] = []
+# ============================================================================
+# TAB 3: MedGemma 1.5 4B 
+# ============================================================================
+with tab6:
+    st.header("🔬 MedGemma 1.5 4B-IT")
+    st.caption("Lightweight version of Google's medical imaging specialist. Optimized for efficiency.")
 
-    # 1. Image Upload
-    vision_file = st.file_uploader("Upload Image", type=['png', 'jpg', 'jpeg'], key="vision_uploader")
-    
-    # Reset history if file changes
-    if vision_file and 'last_vision_file' not in st.session_state:
-            st.session_state['last_vision_file'] = vision_file.name
-    if vision_file and st.session_state.get('last_vision_file') != vision_file.name:
-            st.session_state['vision_history'] = []
-            st.session_state['last_vision_file'] = vision_file.name
-
-    if vision_file:
-        # Save temp file
-        temp_path = f"temp_vision_{vision_file.name}"
-        with open(temp_path, "wb") as f:
-            f.write(vision_file.getbuffer())
+    # 1. Loading Logic and Interface Gating
+    if st.session_state.get('medgemma4b_loaded', False):
+        st.success("✅ MedGemma 4B is Ready.")
         
-        st.image(vision_file, caption="Input Image", width=350)
+        # Initialize chat history for this specific model
+        if 'mg4b_history' not in st.session_state:
+            st.session_state['mg4b_history'] = []
+            
+        mg4b_file = st.file_uploader("Upload Wound Image", type=['png', 'jpg', 'jpeg'], key="mg4b_uploader")
         
-        # 2. Controls
-        if st.button("🚀 Initialize Vision Engine", key="init_vision_btn"):
-            with st.spinner("Loading Vision Model (This evicts Gemma)..."):
-                st.session_state['vision_engine'].load_model()
-            st.success("Vision Engine Ready.")
+        if mg4b_file:
+            # Reset history if a new file is uploaded
+            if st.session_state.get('last_mg4b_file') != mg4b_file.name:
+                st.session_state['mg4b_history'] = []
+                st.session_state['last_mg4b_file'] = mg4b_file.name
 
-        # 3. Chat Display
-        for msg in st.session_state['vision_history']:
-            with st.chat_message(msg["role"]):
-                st.write(msg["content"])
+            temp_path = os.path.join("uploads", f"temp_mg4b_{mg4b_file.name}")
+            with open(temp_path, "wb") as f:
+                f.write(mg4b_file.getbuffer())
+            
+            st.image(mg4b_file, caption="Input Image", width=350)
+            
+            # Display history
+            for msg in st.session_state['mg4b_history']:
+                with st.chat_message(msg["role"]):
+                    st.write(msg["content"])
+                    render_copy_button(msg["content"])
 
-        # 4. Chat Input
-        user_input = st.chat_input("Ask LLaVA about the image...")
-        
-        if user_input:
-            if not st.session_state['vision_engine'].loaded:
-                st.error("Please click 'Initialize Vision Engine' first.")
-            else:
-                # A. Show User Input immediately
-                st.session_state['vision_history'].append({"role": "user", "content": user_input})
+            # Chat input
+            user_input = st.chat_input("Ask MedGemma 4B about the wound...")
+            if user_input:
+                st.session_state['mg4b_history'].append({"role": "user", "content": user_input})
                 with st.chat_message("user"):
                     st.write(user_input)
-                
-                # B. Generate Response
-                with st.chat_message("assistant"):
-                    with st.spinner("LLaVA is analyzing..."):
-                        try:
-                            # --- ROBUST CONTEXT CONSTRUCTION ---
-                            context_str = ""
-                            if len(st.session_state['vision_history']) > 1:
-                                context_str = "Context from previous turns:\n"
-                                # Take last 3 turns, excluding the current one we just added
-                                for m in st.session_state['vision_history'][:-1][-3:]:
-                                    label = "User asked" if m['role'] == 'user' else "You answered"
-                                    context_str += f"- {label}: {m['content']}\n"
-                                context_str += "\n"
+                    render_copy_button(user_input)
 
-                            medical_instruction = (
-                                "ACT AS A CLINICAL SCIENTIST. You are analyzing a wound image for a medical report.\n"
-                                "You MUST provide specific estimates. Do not use vague terms like 'extensive'.\n"
-                                "Fill out this form strictly:\n\n"
-                                "1. COMPOSITION (Must add up to 100%): [e.g., '10%' Eschar, 40% Slough, '50%' Granulation']\n"
-                                "2. DIMENSIONS: [Estimate LxW in cm. If no ruler, use body landmarks to guess. e.g., 'approx 4x3 cm']\n"
-                                "3. DEPTH: [Superficial / Partial / Full Thickness]\n"
-                                "4. INFECTION: [Yes/No - Look for pus, redness, swelling]\n"
-                                "5. PERIWOUND: [Healthy / Macerated / Inflamed]\n"
-                                f"USER QUESTION: {user_input}"
+                with st.chat_message("assistant"):
+                    with st.spinner("MedGemma 4B is analyzing..."):
+                        try:
+                            _, _proc, _mdl = get_registered_model()
+                            response = analyze_with_medgemma_4b(
+                                temp_path,
+                                user_input,
+                                _proc,
+                                _mdl,
+                                config=BASELINE_CONFIGS["medgemma_4b"],
                             )
-                            
-                            # The final prompt sent to LLaVA
-                            combined_prompt = f"{context_str}{medical_instruction}"
-                            
-                            # Run Analysis
-                            response = st.session_state['vision_engine'].analyze(temp_path, prompt=combined_prompt)
-                            
                             st.write(response)
-                            
-                            # Save to History
-                            st.session_state['vision_history'].append({"role": "assistant", "content": response})
-                            
+                            render_copy_button(response)
+                            st.session_state['mg4b_history'].append({"role": "assistant", "content": response})
                         except Exception as e:
                             st.error(f"Analysis Failed: {str(e)}")
+        else:
+            st.info("📤 Upload a wound image to begin analysis with MedGemma 4B.")
+    
+    elif get_model_loading() == 'mg4b':
+        st.info("⏳ MedGemma 4B is loading, please wait...")
+
+    else:
+        # 2. Not Loaded State
+        st.warning("⚠️ MedGemma 4B is not loaded.")
+
+        # Check for VRAM conflicts
+        if st.session_state.get('medgemma_loaded', False) or st.session_state.get('hulumed_loaded', False):
+            st.info("💡 A larger model is currently in VRAM. Loading this will clear the GPU.")
+
+        if st.button("🚀 Load MedGemma 4B", key="tab3_load_btn"):
+            set_model_loading('mg4b')
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+
+            status_text.text("Step 1/2: Evicting other models (Nuclear Cleanup)...")
+            from src.engine.test_models import load_medgemma_4b
+
+            success = master_evict_with_retry(required_free_gb=6.0, max_retries=10)
+
+            if not success:
+                set_model_loading(None)
+                st.error("❌ Critical: Could not clear VRAM properly.")
+                progress_bar.empty()
+                status_text.empty()
+            else:
+                estimated = get_estimated_load_time(MODEL_KEY_MEDGEMMA_4B)
+                with run_timed_progress(progress_bar, status_text, estimated,
+                                        label_prefix="Step 2/2: Loading MedGemma 4B",
+                                        start_pct=40) as tracker:
+                    processor, model = load_medgemma_4b()
+
+                if processor and model:
+                    register_model("mg4b", processor, model)  # Register IMMEDIATELY
+                    record_load_time(MODEL_KEY_MEDGEMMA_4B, tracker.actual_elapsed)
+                    progress_bar.progress(100)
+                    st.session_state['medgemma4b_loaded'] = True
+                    st.session_state['medgemma_loaded'] = False
+                    st.session_state['hulumed_loaded'] = False
+
+                    status_text.text("✅ MedGemma 4B loaded successfully.")
+                    time.sleep(1)
+                    st.rerun()
+                else:
+                    set_model_loading(None)
+                    progress_bar.empty()
+                    status_text.empty()
+                    st.error("❌ Load failed. Check terminal for OOM details.")
+
+
+# ============================================================================
+# TAB 4: Gemma 3
+# ============================================================================
+with tab5:
+    st.header("🧬 Gemma 3 27B Multimodal")
+    st.caption("Native multimodal model from Google. General-purpose, not medical-specialized.")
+    
+    # Initialize chat history
+    if 'gemma3_history' not in st.session_state:
+        st.session_state['gemma3_history'] = []
+    if 'gemma3_conversation' not in st.session_state:
+        st.session_state['gemma3_conversation'] = []
+    
+    # Image upload
+    gemma3_file = st.file_uploader(
+        "Upload Wound Image", 
+        type=['png', 'jpg', 'jpeg'], 
+        key="gemma3_uploader",
+    )
+    
+    # Reset history if file changes
+    if gemma3_file and 'last_gemma3_file' not in st.session_state:
+        st.session_state['last_gemma3_file'] = gemma3_file.name
+    if gemma3_file and st.session_state.get('last_gemma3_file') != gemma3_file.name:
+        st.session_state['gemma3_history'] = []
+        st.session_state['gemma3_conversation'] = []
+        st.session_state['last_gemma3_file'] = gemma3_file.name
+    
+    if gemma3_file:
+        # Save temp file
+        temp_path = os.path.join("uploads", f"temp_gemma3_{gemma3_file.name}")
+        with open(temp_path, "wb") as f:
+            f.write(gemma3_file.getbuffer())
+        
+        st.image(gemma3_file, caption="Input Image", width=350)
+        
+        # Display chat history
+        for msg in st.session_state['gemma3_history']:
+            with st.chat_message(msg["role"]):
+                st.write(msg["content"])
+                render_copy_button(msg["content"])
+
+        # Chat input
+        user_input = st.chat_input("Ask Gemma 3 about the wound...")
+        
+        if user_input:
+            if st.session_state.get('medgemma_loaded') or st.session_state.get('hulumed_loaded') or st.session_state.get('medgemma4b_loaded'):
+                with st.status("🚨 VRAM Full: Evicting Python Models for Gemma 3...", expanded=True) as status:
+                    from src.engine.test_models import cleanup_python_models
+                    set_model_loading(None)  # Clear any loading flag
+                    cleanup_python_models() # Forces MedGemma/HuluMed out of VRAM
+
+                    # Reset all flags
+                    st.session_state['medgemma_loaded'] = False
+                    st.session_state['hulumed_loaded'] = False
+                    st.session_state['medgemma4b_loaded'] = False
+
+                    status.update(label="✅ GPU Ready for Ollama", state="complete")
+            # Add user message
+            st.session_state['gemma3_history'].append({"role": "user", "content": user_input})
+            with st.chat_message("user"):
+                st.write(user_input)
+                render_copy_button(user_input)
+
+            # Generate response
+            with st.chat_message("assistant"):
+                with st.spinner("Gemma 3 is analyzing..."):
+                    try:
+                        response = analyze_with_gemma3(
+                            temp_path,
+                            user_input,
+                            st.session_state['gemma3_conversation'],
+                            config=BASELINE_CONFIGS["gemma3"],
+                        )
+
+                        st.write(response)
+                        render_copy_button(response)
+                        
+                        # Update conversation for context
+                        st.session_state['gemma3_conversation'].append({
+                            "role": "user",
+                            "content": user_input
+                        })
+                        st.session_state['gemma3_conversation'].append({
+                            "role": "assistant",
+                            "content": response
+                        })
+                        
+                        # Save to history
+                        st.session_state['gemma3_history'].append({
+                            "role": "assistant",
+                            "content": response
+                        })
+                        
+                    except Exception as e:
+                        st.error(f"Analysis Failed: {str(e)}")
+                        st.info("Make sure you've installed Gemma 3: `ollama pull gemma3:27b`")
+    else:
+        st.info("📤 Upload a wound image to begin analysis with Gemma 3.")
+
+# ============================================================================
+# TAB 5: MedGemma 27B
+# ============================================================================
+with tab4:
+    st.header("🏥 MedGemma 27B Multimodal")
+    st.caption("Google's medical imaging specialist.")
+    
+    if st.session_state.get('medgemma_loaded', False):
+        st.success("✅ MedGemma 27B is Ready.")
+        # --- MedGemma Main Interface ---
+        if 'medgemma_history' not in st.session_state:
+            st.session_state['medgemma_history'] = []
+        
+        medgemma_file = st.file_uploader("Upload Wound Image", type=['png', 'jpg', 'jpeg'], key="medgemma_uploader")
+        
+        if medgemma_file:
+            if st.session_state.get('last_medgemma_file') != medgemma_file.name:
+                st.session_state['medgemma_history'] = []
+                st.session_state['last_medgemma_file'] = medgemma_file.name
+
+            temp_path = os.path.join("uploads", f"temp_medgemma_{medgemma_file.name}")
+            with open(temp_path, "wb") as f:
+                f.write(medgemma_file.getbuffer())
+            
+            st.image(medgemma_file, caption="Input Image", width=350)
+            
+            for msg in st.session_state['medgemma_history']:
+                with st.chat_message(msg["role"]):
+                    st.write(msg["content"])
+                    render_copy_button(msg["content"])
+
+            user_input = st.chat_input("Ask MedGemma about the wound...")
+            if user_input:
+                st.session_state['medgemma_history'].append({"role": "user", "content": user_input})
+                with st.chat_message("user"):
+                    st.write(user_input)
+                    render_copy_button(user_input)
+
+                with st.chat_message("assistant"):
+                    with st.spinner("MedGemma is analyzing..."):
+                        try:
+                            _, _proc, _mdl = get_registered_model()
+                            response = analyze_with_medgemma(
+                                temp_path,
+                                user_input,
+                                _proc,
+                                _mdl,
+                                config=BASELINE_CONFIGS["medgemma_27b"],
+                            )
+                            st.write(response)
+                            render_copy_button(response)
+                            st.session_state['medgemma_history'].append({"role": "assistant", "content": response})
+                        except Exception as e:
+                            st.error(f"Analysis Failed: {str(e)}")
+        else:
+            st.info("📤 Upload a wound image to begin analysis with MedGemma.")
+    
+    elif get_model_loading() == 'medgemma':
+        st.info("⏳ MedGemma 27B is loading, please wait...")
+
+    else:
+        st.warning("⚠️ MedGemma is not loaded.")
+
+        if st.session_state.get('hulumed_loaded', False):
+            st.info("💡 Another Model is currently in VRAM. Loading MedGemma will evict it.")
+
+        if st.button("🚀 Load MedGemma", key="tab5_load_btn"):
+            set_model_loading('medgemma')
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+
+            status_text.text("Step 1/2: Clearing VRAM...")
+            success = master_evict_with_retry(required_free_gb=18.0, max_retries=10)
+
+            if not success:
+                set_model_loading(None)
+                st.error("❌ Could not free enough VRAM")
+                progress_bar.empty()
+                status_text.empty()
+            else:
+                estimated = get_estimated_load_time(MODEL_KEY_MEDGEMMA_27B)
+                with run_timed_progress(progress_bar, status_text, estimated,
+                                        label_prefix="Step 2/2: Loading MedGemma 27B",
+                                        start_pct=40) as tracker:
+                    processor, model = load_medgemma_27b()
+
+                if processor and model:
+                    register_model("medgemma", processor, model)  # Register IMMEDIATELY
+                    record_load_time(MODEL_KEY_MEDGEMMA_27B, tracker.actual_elapsed)
+                    progress_bar.progress(100)
+                    st.session_state['medgemma_loaded'] = True
+                    st.session_state['hulumed_loaded'] = False
+                    st.session_state['medgemma4b_loaded'] = False
+                    status_text.text("✅ MedGemma 27B loaded successfully.")
+                    time.sleep(1)
+                    st.rerun()
+                else:
+                    set_model_loading(None)
+                    progress_bar.empty()
+                    status_text.empty()
+                    st.error("❌ Failed. Check terminal logs for details.")
+
+# ============================================================================
+# TAB 6: Hulu-Med 32B
+# ============================================================================
+with tab3:
+    st.header("🧬 Hulu-Med 32B")
+    st.caption("Qwen2.5-32B-based medical VLM")
+    st.info("💡 Hulu-Med 32B is ~18GB at 4-bit.")
+
+    # Check if Hulu-Med is already loaded
+    if st.session_state.get('hulumed_loaded', False):
+        st.success("✅ Hulu-Med 32B is Ready.")
+        
+        # --- Hulu-Med Main Interface ---
+        if 'hulumed_history' not in st.session_state:
+            st.session_state['hulumed_history'] = []
+
+        hulumed_file = st.file_uploader("Upload Wound Image", type=['png', 'jpg', 'jpeg'], key="hulumed_uploader")
+
+        if hulumed_file:
+            if st.session_state.get('last_hulumed_file') != hulumed_file.name:
+                st.session_state['hulumed_history'] = []
+                st.session_state['last_hulumed_file'] = hulumed_file.name
+
+            temp_path = os.path.abspath(os.path.join("uploads", f"temp_hulumed_{hulumed_file.name}"))
+            with open(temp_path, "wb") as f:
+                f.write(hulumed_file.getbuffer())
+
+            st.image(hulumed_file, caption="Input Image", width=350)
+
+            for msg in st.session_state['hulumed_history']:
+                with st.chat_message(msg["role"]):
+                    st.write(msg["content"])
+                    render_copy_button(msg["content"])
+
+            user_input = st.chat_input("Ask Hulu-Med about the wound...")
+            if user_input:
+                st.session_state['hulumed_history'].append({"role": "user", "content": user_input})
+                with st.chat_message("user"):
+                    st.write(user_input)
+                    render_copy_button(user_input)
+
+                with st.chat_message("assistant"):
+                    with st.spinner("Hulu-Med is analyzing..."):
+                        try:
+                            _, _proc, _mdl = get_registered_model()
+                            response = analyze_with_hulumed(
+                                temp_path,
+                                user_input,
+                                _proc,
+                                _mdl,
+                                config=BASELINE_CONFIGS["hulumed"],
+                            )
+                            st.write(response)
+                            render_copy_button(response)
+                            st.session_state['hulumed_history'].append({"role": "assistant", "content": response})
+                        except Exception as e:
+                            st.error(f"Analysis Failed: {str(e)}")
+        else:
+            st.info("📤 Upload a wound image to begin analysis with Hulu-Med.")
+    
+    elif get_model_loading() == 'hulumed':
+        # Loading in progress (rerun during load) — show spinner only
+        st.info("⏳ Hulu-Med is loading, please wait...")
+
+    else:
+        # Model not loaded - show load button
+        st.warning("⚠️ Hulu-Med is not loaded.")
+
+        # Show info if another model is currently loaded
+        if st.session_state.get('medgemma_loaded', False):
+            st.info("💡 Another is currently in VRAM. Loading Hulu-Med will evict it.")
+
+        if st.button("🚀 Load Hulu-Med", key="load_hulu_btn"):
+            set_model_loading('hulumed')
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+
+            status_text.text("Step 1/2: Evicting other models from VRAM...")
+            success = master_evict_with_retry(required_free_gb=20.0, max_retries=10)
+
+            if not success:
+                set_model_loading(None)
+                st.error("❌ Could not free enough VRAM")
+                progress_bar.empty()
+                status_text.empty()
+            else:
+                estimated = get_estimated_load_time(MODEL_KEY_HULUMED)
+                with run_timed_progress(progress_bar, status_text, estimated,
+                                        label_prefix="Step 2/2: Loading Hulu-Med",
+                                        start_pct=30) as tracker:
+                    processor, model = load_hulumed()
+
+                if processor and model:
+                    register_model("hulumed", processor, model)  # Register IMMEDIATELY
+                    record_load_time(MODEL_KEY_HULUMED, tracker.actual_elapsed)
+                    progress_bar.progress(100)
+                    st.session_state['hulumed_loaded'] = True
+                    st.session_state['medgemma_loaded'] = False
+                    st.session_state['medgemma4b_loaded'] = False
+                    status_text.text("✅ Hulu-Med 32B loaded successfully.")
+                    time.sleep(1)
+                    st.rerun()
+                else:
+                    set_model_loading(None)
+                    progress_bar.empty()
+                    status_text.empty()
+                    st.error("❌ Failed to load Hulu-Med.")
+
+# ============================================================================
+# TAB 7: Benchmark (Placeholder)
+# ============================================================================
+with tab7:
+    st.header("Benchmark")
+    st.info(
+        "**Batch Testing (Coming Soon)**\n\n"
+        "This tab will support batch evaluation of vision models across different "
+        "parameter profiles and prompt templates.\n\n"
+        "For now, use the CLI benchmark script:\n"
+        "```bash\n"
+        "python scripts/run_benchmark.py --model medgemma_27b --dry-run\n"
+        "```"
+    )
