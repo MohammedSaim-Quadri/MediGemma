@@ -1,0 +1,400 @@
+# Benchmark Question Set for Wound Image Assessment
+# ==================================================
+#
+# 9 fixed questions asked for EVERY wound image.
+# Each question maps to a report module.
+# All answers combined = full clinical assessment report.
+#
+# Design principles:
+#   - Same questions for all images (enables objective cross-model comparison)
+#   - Conditional wording so any wound type can be assessed
+#   - Uncertainty protocol: state "Uncertain", give prediction anyway,
+#     explain why uncertain, list additional info needed
+#   - Output in English
+#
+# Usage:
+#   python scripts/run_benchmark.py --questions-from config/benchmark_questions.yaml
+#
+# Output formats:
+#   JSON mode: 9 independent inference calls per image, structured fields per question
+#   Markdown mode: concatenate all 9 answers into a formatted clinical report
+
+version: "1.0"
+total_questions: 9
+
+# ---------------------------------------------------------------------------
+# Uncertainty handling instruction (prepended to every question)
+# ---------------------------------------------------------------------------
+uncertainty_instruction: >
+  If you are uncertain about any finding, you MUST: (1) state "Uncertain"
+  explicitly, (2) still provide your best prediction or conclusion,
+  (3) explain why you are uncertain, and (4) specify what additional
+  information (e.g., closer photo, bedside exam, patient history) would
+  resolve the uncertainty.
+
+# ---------------------------------------------------------------------------
+# Questions
+# ---------------------------------------------------------------------------
+questions:
+
+  - id: Q1
+    module: "Wound Identification & Classification"
+    report_section: "Classification"
+    question: >
+      Identify the wound type (e.g., pressure injury, diabetic foot ulcer,
+      venous ulcer, arterial ulcer, burn, surgical wound, traumatic wound,
+      skin tear). Classify using the most appropriate clinical staging or
+      grading system for the identified wound type (e.g., NPIAP staging for
+      pressure injuries, Wagner or University of Texas classification for
+      diabetic foot ulcers, burn depth classification for burns). State the
+      anatomical location, estimated size, and estimated depth.
+    expected_fields:
+      - name: wound_type
+        type: string
+        description: "Primary wound type classification"
+        enum: ["pressure_injury", "diabetic_foot_ulcer", "venous_ulcer",
+               "arterial_ulcer", "burn", "surgical_wound", "traumatic_wound",
+               "skin_tear", "mixed", "other"]
+      - name: staging_system
+        type: string
+        description: "Classification system used (e.g., NPIAP, Wagner, UT, burn_depth, CDC)"
+      - name: stage_or_grade
+        type: string
+        description: "Specific stage/grade within the chosen system"
+      - name: anatomical_location
+        type: string
+        description: "Body region and specific site"
+      - name: estimated_size
+        type: string
+        description: "Size estimate (e.g., 'approximately 3x4cm' or 'small <2cm')"
+      - name: estimated_depth
+        type: string
+        enum: ["superficial", "partial_thickness", "full_thickness",
+               "extending_to_tendon_bone", "unable_to_determine"]
+        description: "Depth classification"
+    evaluation_focus:
+      - "Correct wound type identification"
+      - "Appropriate staging system selection"
+      - "Accurate stage/grade assignment"
+      - "Reasonable size and depth estimation"
+
+  - id: Q2
+    module: "Wound Bed Tissue Assessment"
+    report_section: "Wound Bed"
+    question: >
+      Describe the tissue types visible in the wound bed. Estimate the
+      percentage of each tissue type present (granulation, slough, eschar,
+      epithelial, necrotic, other). Assess granulation tissue quality if
+      present (healthy bright red, pale, hypergranulated/raised above
+      wound surface, friable/easily bleeding). Note any exposed deep
+      structures (tendon, bone, fascia, muscle) or signs of biofilm
+      (shiny/gelatinous surface coating).
+    expected_fields:
+      - name: dominant_tissue
+        type: string
+        enum: ["granulation", "slough", "eschar", "epithelial", "necrotic", "mixed"]
+        description: "Primary tissue type in wound bed"
+      - name: tissue_percentages
+        type: object
+        description: "Estimated percentage of each tissue type"
+        properties:
+          granulation: { type: integer, min: 0, max: 100 }
+          slough: { type: integer, min: 0, max: 100 }
+          eschar: { type: integer, min: 0, max: 100 }
+          necrotic: { type: integer, min: 0, max: 100 }
+          epithelial: { type: integer, min: 0, max: 100 }
+          other: { type: integer, min: 0, max: 100 }
+      - name: granulation_quality
+        type: string
+        enum: ["healthy_bright_red", "pale", "hypergranulated", "friable", "absent", "not_applicable"]
+      - name: exposed_structures
+        type: array
+        items: { type: string, enum: ["none", "tendon", "bone", "fascia", "muscle"] }
+      - name: biofilm_presence
+        type: string
+        enum: ["suspected", "not_evident", "unable_to_determine"]
+      - name: wound_bed_color
+        type: string
+        enum: ["red", "yellow", "black", "pink", "mixed"]
+        description: "RYB color classification"
+    evaluation_focus:
+      - "Correct tissue type identification"
+      - "Reasonable percentage estimation"
+      - "Accurate granulation quality assessment"
+      - "Correct identification of exposed structures"
+
+  - id: Q3
+    module: "Wound Edge Assessment"
+    report_section: "Wound Edges"
+    question: >
+      Assess the wound edges and margins. Describe edge attachment
+      (attached/flat, unattached/non-advancing, rolled/epibole). Evaluate
+      edge condition (healthy, macerated, calloused/hyperkeratotic,
+      fibrotic/scarred). Note any visible undermining (tissue
+      destruction extending under intact skin at wound edges) or tunneling
+      (narrow channel extending from wound).
+    expected_fields:
+      - name: edge_attachment
+        type: string
+        enum: ["attached", "unattached", "rolled_epibole", "mixed", "indistinct"]
+      - name: edge_condition
+        type: string
+        enum: ["healthy", "macerated", "calloused_hyperkeratotic",
+               "fibrotic_scarred", "mixed"]
+      - name: undermining
+        type: string
+        enum: ["present", "not_visible", "unable_to_determine"]
+      - name: tunneling
+        type: string
+        enum: ["present", "not_visible", "unable_to_determine"]
+    evaluation_focus:
+      - "Correct edge attachment classification"
+      - "Accurate edge condition description"
+      - "Appropriate acknowledgment of limitations for undermining/tunneling assessment from photos"
+
+  - id: Q4
+    module: "Periwound Skin Assessment"
+    report_section: "Periwound Skin"
+    question: >
+      Evaluate the skin surrounding the wound (within approximately 4cm of
+      the wound edge). Assess for: erythema (none, mild, moderate, severe,
+      or spreading beyond 4cm), maceration (white/soggy skin from excess
+      moisture), edema (swelling), induration (tissue firmness — note this
+      may be difficult to assess from image alone), discoloration
+      (hemosiderin staining, hyperpigmentation, pallor), excoriation (skin
+      breakdown from moisture or friction), callus formation (especially
+      relevant for diabetic foot wounds), and overall periwound skin
+      integrity.
+    expected_fields:
+      - name: erythema
+        type: string
+        enum: ["none", "mild_less_2cm", "moderate_2_4cm", "severe_spreading_beyond_4cm"]
+      - name: maceration
+        type: string
+        enum: ["present", "absent", "unable_to_determine"]
+      - name: edema
+        type: string
+        enum: ["none", "mild", "moderate", "severe", "unable_to_determine"]
+      - name: induration
+        type: string
+        enum: ["suspected", "not_evident", "unable_to_determine_requires_palpation"]
+      - name: discoloration
+        type: array
+        items: { type: string, enum: ["none", "hemosiderin_staining",
+                 "hyperpigmentation", "hypopigmentation", "pallor"] }
+      - name: excoriation
+        type: string
+        enum: ["present", "absent"]
+      - name: callus
+        type: string
+        enum: ["present", "absent", "not_applicable"]
+      - name: skin_integrity
+        type: string
+        enum: ["intact", "fragile_thin", "broken_damaged"]
+    evaluation_focus:
+      - "Accurate erythema assessment and extent"
+      - "Correct identification of maceration"
+      - "Appropriate uncertainty for palpation-dependent findings (induration)"
+      - "Recognition of periwound complications"
+
+  - id: Q5
+    module: "Infection Assessment"
+    report_section: "Infection Assessment"
+    question: >
+      Assess for visual signs of wound infection. Evaluate each of the
+      following indicators that can be observed from the image: (1) purulent
+      exudate (thick, opaque, yellow/green/brown discharge), (2) spreading
+      erythema or cellulitis, (3) satellite lesions or new areas of skin
+      breakdown around the wound, (4) friable or hypergranulated tissue
+      (abnormally bleeding, raised above wound surface), (5) wound
+      enlargement if serial images are available (note: cannot be assessed
+      from a single image — state "unable to determine" if only one image
+      is provided), (6) tissue
+      discoloration suggesting necrotizing infection (dishwater grey,
+      dusky, gas-related swelling). Provide an overall infection risk
+      level. Explicitly state which infection indicators CANNOT be assessed
+      from the image alone (odor, wound temperature, pain/tenderness,
+      probe-to-bone test, systemic signs such as fever).
+    expected_fields:
+      - name: infection_risk_level
+        type: string
+        enum: ["no_signs", "low_risk", "moderate_local_infection_suspected",
+               "high_spreading_infection_suspected", "critical_necrotizing_suspected"]
+      - name: visible_signs
+        type: array
+        items:
+          type: object
+          properties:
+            sign: { type: string }
+            present: { type: string, enum: ["yes", "no", "uncertain"] }
+            details: { type: string }
+      - name: sign_count
+        type: integer
+        description: "Number of positive infection signs observed"
+      - name: non_assessable_indicators
+        type: array
+        items: { type: string }
+        description: "Indicators that cannot be assessed from image (odor, temperature, pain, etc.)"
+      - name: infection_details
+        type: string
+        description: "Free-text clinical reasoning about infection status"
+    evaluation_focus:
+      - "Sensitivity — must not miss obvious infection signs (safety-critical)"
+      - "Appropriate infection risk level assignment"
+      - "Explicit acknowledgment of non-assessable indicators"
+      - "Clinical reasoning quality for infection judgment"
+
+  - id: Q6
+    module: "Exudate Assessment"
+    report_section: "Exudate"
+    question: >
+      Describe any visible exudate (drainage) on the wound surface or
+      surrounding dressings if visible. Identify the exudate type: serous
+      (clear, thin, watery), serosanguineous (thin, pink/light red),
+      sanguineous (fresh blood, bright red), purulent (thick, opaque,
+      yellow/green/brown), or none visible. Estimate the amount based on
+      visible evidence: dry (no visible moisture), moist (wound bed
+      appears glistening), wet (visible pooling on wound surface), or
+      saturated (exudate extending beyond wound to periwound skin).
+    expected_fields:
+      - name: exudate_type
+        type: string
+        enum: ["serous", "serosanguineous", "sanguineous", "purulent",
+               "none_visible", "unable_to_determine"]
+      - name: exudate_amount
+        type: string
+        enum: ["dry", "moist", "wet", "saturated", "unable_to_determine"]
+    evaluation_focus:
+      - "Correct exudate type identification"
+      - "Reasonable amount estimation from visual cues"
+      - "Purulent exudate detection (links to infection assessment)"
+
+  - id: Q7
+    module: "Healing Status & Prognosis"
+    report_section: "Healing Status"
+    question: >
+      Assess the current wound healing status. Estimate the healing phase:
+      inflammatory (early, red, swollen, typically days 1-6),
+      proliferative (granulation tissue forming, wound contracting,
+      typically days 4-21), maturation/remodeling (scar formation,
+      strengthening, weeks to months), or stalled (no progress, chronic
+      wound characteristics). Estimate the percentage of the wound surface
+      that has epithelialized (new skin coverage). Assess whether the
+      wound appears to be improving (progressing through healing phases),
+      stalling (no visible progress), or deteriorating (worsening
+      appearance, enlarging, increasing necrotic tissue) based on visible
+      evidence.
+    expected_fields:
+      - name: healing_phase
+        type: string
+        enum: ["inflammatory", "proliferative", "maturation_remodeling",
+               "stalled_chronic", "unable_to_determine"]
+      - name: epithelialization_percentage
+        type: integer
+        min: 0
+        max: 100
+        description: "Estimated percentage of wound covered by new epithelium"
+      - name: healing_trajectory
+        type: string
+        enum: ["improving", "stalling", "deteriorating", "unable_to_determine"]
+      - name: evidence
+        type: string
+        description: "Visual evidence supporting the healing status assessment"
+    evaluation_focus:
+      - "Correct healing phase estimation"
+      - "Reasonable epithelialization percentage"
+      - "Evidence-based trajectory assessment"
+      - "Acknowledgment that single-image assessment limits trajectory judgment"
+
+  - id: Q8
+    module: "Severity & Triage"
+    report_section: "Severity"
+    question: >
+      Provide an overall severity assessment for this wound. Assign a
+      severity level: Critical (life or limb threatening — e.g., necrotizing
+      infection, exposed bone with infection, extensive gangrene), Urgent
+      (requires prompt clinical attention — e.g., suspected active infection,
+      rapidly deteriorating wound, full-thickness with exposed deep
+      structures), or Stable (can be managed with routine wound care — e.g.,
+      clean granulating wound, healing appropriately). Also assess the
+      urgency of clinical action: Emergency (immediate intervention needed),
+      Soon (within 24-48 hours), Routine (next scheduled visit), or
+      Continue current care (no change needed). Justify your severity and
+      urgency assessments with specific observations.
+    expected_fields:
+      - name: severity
+        type: string
+        enum: ["critical", "urgent", "stable"]
+      - name: urgency
+        type: string
+        enum: ["emergency", "soon_24_48h", "routine", "continue_current_care"]
+      - name: justification
+        type: string
+        description: "Specific observations supporting severity and urgency"
+    evaluation_focus:
+      - "Appropriate severity level (safety-critical — must not underestimate)"
+      - "Consistent urgency with severity level"
+      - "Evidence-based justification"
+      - "Err on the side of caution for ambiguous cases"
+
+  - id: Q9
+    module: "Clinical Recommendations"
+    report_section: "Recommendations"
+    question: >
+      Based on a complete wound assessment, provide clinical
+      recommendations. Include: (1) recommended treatment directions
+      (e.g., debridement type, dressing selection, offloading, compression
+      therapy, antimicrobial intervention, nutritional support, moisture
+      management), (2) any additional examinations or diagnostic tests
+      that should be performed (e.g., wound culture, X-ray for
+      osteomyelitis, vascular studies/ABPI, blood glucose monitoring,
+      biopsy), and (3) follow-up plan (timing and what to monitor).
+      Recommendations should be specific to the wound findings, not
+      generic advice.
+    expected_fields:
+      - name: treatment_recommendations
+        type: array
+        items: { type: string }
+        description: "Specific treatment actions recommended"
+      - name: further_examinations
+        type: array
+        items: { type: string }
+        description: "Additional tests or examinations to perform"
+      - name: follow_up
+        type: object
+        properties:
+          timing: { type: string, description: "When to reassess" }
+          monitor: { type: array, items: { type: string }, description: "What to watch for" }
+    evaluation_focus:
+      - "Specificity — recommendations tailored to observed wound characteristics"
+      - "Evidence-based treatment alignment with clinical guidelines"
+      - "Appropriate diagnostic workup recommendations"
+      - "Practical follow-up plan"
+
+# ---------------------------------------------------------------------------
+# JSON output schema for benchmark results
+# ---------------------------------------------------------------------------
+json_output_schema:
+  type: object
+  properties:
+    image_id: { type: string }
+    image_path: { type: string }
+    model: { type: string }
+    profile: { type: string }
+    prompt_template: { type: string }
+    timestamp: { type: string, format: "iso8601" }
+    questions:
+      type: array
+      items:
+        type: object
+        properties:
+          id: { type: string, description: "Q1-Q9" }
+          module: { type: string }
+          question: { type: string }
+          raw_answer: { type: string, description: "Full model output text" }
+          structured: { type: object, description: "Parsed fields per question schema" }
+          inference_time_sec: { type: number }
+          uncertainty_flags:
+            type: array
+            items: { type: string }
+            description: "Fields where model expressed uncertainty"

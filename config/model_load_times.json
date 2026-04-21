@@ -1,0 +1,14 @@
+{
+  "hulumed": {
+    "load_seconds": 30.3,
+    "last_updated": "2026-02-06 16:55:37"
+  },
+  "medgemma_27b": {
+    "load_seconds": 30.6,
+    "last_updated": "2026-02-17 13:59:29"
+  },
+  "medgemma_4b": {
+    "load_seconds": 6.5,
+    "last_updated": "2026-02-17 14:15:08"
+  }
+}

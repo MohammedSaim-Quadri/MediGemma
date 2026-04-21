@@ -1,0 +1,113 @@
+# Model Profiles Configuration
+# Defines inference parameters for each vision model.
+# Parameters are split into three layers:
+#   - generate_params: passed to model.generate()
+#   - decode_params: passed to batch_decode() / processor.decode()
+#   - backend_options: Ollama options={} (Ollama backend only)
+
+models:
+  medgemma_27b:
+    model_id: "google/medgemma-27b-it"
+    registry_name: "medgemma"
+    backend: "transformers"
+    image_max_size: 896
+    profiles:
+      default:
+        generate_params:
+          max_new_tokens: 2048
+          do_sample: false
+        decode_params: {}
+      creative:
+        generate_params:
+          max_new_tokens: 2048
+          do_sample: true
+          temperature: 0.7
+          top_p: 0.9
+        decode_params: {}
+      conservative:
+        generate_params:
+          max_new_tokens: 1024
+          do_sample: true
+          temperature: 0.3
+          top_p: 0.95
+        decode_params: {}
+
+  medgemma_4b:
+    model_id: "google/medgemma-1.5-4b-it"
+    registry_name: "mg4b"
+    backend: "transformers"
+    image_max_size: 896
+    profiles:
+      default:
+        generate_params:
+          max_new_tokens: 2048
+          do_sample: false
+        decode_params: {}
+      tuned:
+        generate_params:
+          max_new_tokens: 4096
+          do_sample: true
+          temperature: 0.3
+          top_p: 0.9
+        decode_params: {}
+      creative:
+        generate_params:
+          max_new_tokens: 2048
+          do_sample: true
+          temperature: 0.7
+          top_p: 0.9
+        decode_params: {}
+      conservative:
+        generate_params:
+          max_new_tokens: 1024
+          do_sample: true
+          temperature: 0.3
+          top_p: 0.95
+        decode_params: {}
+
+  hulumed:
+    model_id: "ZJU-AI4H/Hulu-Med-32B"
+    registry_name: "hulumed"
+    backend: "transformers"
+    image_max_size: 512
+    profiles:
+      default:
+        generate_params:
+          max_new_tokens: 2048
+          do_sample: true
+          temperature: 0.6
+        decode_params:
+          use_think: false
+      thinking:
+        generate_params:
+          max_new_tokens: 4096
+          do_sample: true
+          temperature: 0.6
+        decode_params:
+          use_think: true
+      low_temp:
+        generate_params:
+          max_new_tokens: 2048
+          do_sample: true
+          temperature: 0.3
+        decode_params:
+          use_think: false
+
+  gemma3:
+    model_id: "gemma3:27b"
+    registry_name: null
+    backend: "ollama"
+    image_max_size: 896
+    profiles:
+      default:
+        backend_options: {}
+      creative:
+        backend_options:
+          temperature: 0.8
+          top_p: 0.9
+          num_predict: 2048
+      precise:
+        backend_options:
+          temperature: 0.2
+          top_p: 0.95
+          num_predict: 1024

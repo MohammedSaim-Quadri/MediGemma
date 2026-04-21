@@ -1,0 +1,15 @@
+gemma3:
+  - Q3
+  - Q5
+  - Q6
+
+hulumed:
+  - Q4
+  - Q5
+  - Q6
+  - Q8
+
+medgemma_27b:
+  - Q1
+  - Q4
+  - Q5

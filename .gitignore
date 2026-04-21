@@ -34,3 +34,21 @@ build_temp/
 __pycache__/
 audit_logs/
 thesis_data/
+
+# --- Project Data & Results ---
+# These are too large for Git and should stay on the workstation
+data/
+eval_data/
+uploads/
+docs/
+
+# --- Temporary & Execution Files ---
+# Logs and archives created during runs
+nohup.out
+*.tar.gz
+medical_code_only2.tar.gz
+test_models_cli.py
+
+# --- Backup Files ---
+# From our sed modifications
+*.bak
