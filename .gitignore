@@ -34,3 +34,9 @@ build_temp/
 __pycache__/
 audit_logs/
 thesis_data/
+
+*.jpg
+*.jpeg
+*.png
+*.txt
+

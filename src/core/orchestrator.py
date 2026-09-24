@@ -16,7 +16,7 @@ class ClinicalOrchestrator:
         self.llm = llm_engine
         self.dm = data_manager
 
-    def process_query(self, user_query, chat_history):
+    def process_query(self, user_query, chat_history, visual_context=None):
         """
         Main Logic Loop:
         1. Detects Intent (Data vs Clinical)
@@ -41,8 +41,7 @@ class ClinicalOrchestrator:
         else: 
             # --- CLINICAL PATH (RAG/LLM) ---
 
-            # CHECK: Do we have a recent image in history?
-            has_visual = any('[SYSTEM UPDATE]' in str(m.get('content','')) for m in chat_history)
+            has_visual = visual_context is not None
             
             # A. Ground Truth Injection (Robust Lookup)
             final_query = user_query
@@ -78,7 +77,11 @@ class ClinicalOrchestrator:
             # B. Engine Selection
             if self.rag.index or has_visual:
                 # Use RAG if index exists
-                response_obj = self.rag.chat(final_query, chat_history)
+                response_obj = self.rag.chat(
+                    final_query,
+                    chat_history,
+                    visual_context=visual_context,
+                )
                 
                 # Handle response types safely (String vs Object)
                 if hasattr(response_obj, 'response'):

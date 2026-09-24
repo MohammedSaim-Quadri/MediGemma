@@ -1,3 +1,6 @@
+import threading
+
+VISION_LOCK = threading.Lock()
 import logging
 import re
 import os
@@ -24,7 +27,7 @@ from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.vector_stores import MetadataFilter, MetadataFilters
 from llama_index.core.schema import NodeWithScore, TextNode
 from llama_index.llms.ollama import Ollama
-from llama_index.experimental.query_engine import PandasQueryEngine
+from llama_index.experimental.query_engine.pandas import PandasQueryEngine
 from llama_index.core import VectorStoreIndex, Document
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
@@ -45,13 +48,10 @@ class DataManager:
         # --- 1. SETUP LOCAL EMBEDDINGS (Crucial for RAG) ---
         try:
             logger.info("⚙️ Loading Local Embedding Model (BAAI/bge-small-en-v1.5)...")
-            self.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+            self.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5", device="cuda",embed_batch_size=64)
             
-            # CRITICAL: Apply to Global Settings
+            # Apply to Global Settings
             Settings.embed_model = self.embed_model
-            
-            # Explicitly set LLM to None here to prevent OpenAI default
-            Settings.llm = None
             Settings.chunk_size = 512 
             
         except Exception as e:
@@ -139,6 +139,7 @@ class DataManager:
         if Settings.embed_model is None:
              Settings.embed_model = self.embed_model
 
+        logger.info("STEP 1: Creating documents...")
         documents = []
         
         for _, row in self.df.iterrows():
@@ -174,10 +175,19 @@ class DataManager:
                 }
             )
             documents.append(doc)
-        
-        if documents:
-            self.index = VectorStoreIndex.from_documents(documents)
-            logger.info(f"✅ Index Built Successfully ({len(documents)} clinical encounters).")
+
+            logger.info(f"STEP 2: Created {len(documents)} documents.")
+
+        logger.info("STEP 3: Starting VectorStoreIndex.from_documents()...")
+
+        self.index = VectorStoreIndex.from_documents(
+            documents,
+            embed_model=self.embed_model
+        )
+
+        logger.info("STEP 4: VectorStoreIndex finished.")
+
+        logger.info(f"✅ Index Built Successfully ({len(documents)} clinical encounters).")
 
     def get_preview(self):
         return self.df
@@ -227,13 +237,17 @@ class LLMEngine:
     """
     Handles clinical reasoning and text generation via Ollama (Gemma 2).
     """
-    def __init__(self, model_name="gemma2:27b", timeout=300.0):
+    def __init__(self, model_name="gemma3:27b", timeout=300.0):
+        logger.warning("⚠️ LLMEngine (Gemma2) is DISABLED. Use Gemma3 for all tasks.")
         self.model_name = model_name
         self.timeout = timeout
         self.llm = None
 
     def initialize(self):
         """Connects to the local Ollama instance."""
+        """Does nothing - Gemma2 is disabled."""
+        logger.info("ℹ️ Gemma2 is disabled. Skipping initialization.")
+        # pass
         try:
             logger.info(f"🧠 Connecting to Inference Engine: {self.model_name}...")
             self.llm = Ollama(model=self.model_name, request_timeout=self.timeout)
@@ -245,12 +259,16 @@ class LLMEngine:
 
     def generate(self, prompt):
         """Direct text completion."""
+        """Does nothing - Gemma2 is disabled."""
+        # pass
         if not self.llm:
             self.initialize()
         return self.llm.complete(prompt).text
 
     def chat(self, messages):
         """Chat completion (list of messages)."""
+        """Does nothing - Gemma2 is disabled."""
+        # pass
         if not self.llm:
             self.initialize()
         return self.llm.chat(messages)
@@ -261,8 +279,9 @@ class ClinicalRAGEngine:
     Handles Clinical Assessments using RAG (Retrieval Augmented Generation).
     Uses the Vector Index to find patient history.
     """
-    def __init__(self, index):
-        self.index = index
+    def __init__(self,index,llm):
+        self.index=index
+        self.llm=llm
         self.chat_engine = None
 
         # Load constrastive style guide
@@ -359,6 +378,8 @@ class ClinicalRAGEngine:
         
     def initialize(self):
         """Builds the Chat Engine with Context."""
+        logger.info(f"Using LLM object: {self.llm}")
+        logger.info(f"Global Settings.llm: {Settings.llm}")
         if not self.index:
             logger.warning("⚠️ No Index provided to RAG Engine.")
             return
@@ -369,12 +390,17 @@ class ClinicalRAGEngine:
             chat_mode="context",
             memory=memory,
             system_prompt=self.system_prompt_str,
-            llm=Settings.llm,
+            llm=self.llm,
             verbose=True
         )
         logger.info("✅ Clinical RAG Engine initialized.")
 
-    def chat(self, user_query, history=[]):
+    def chat(
+        self,
+        user_query,
+        history=None,
+        visual_context=None,
+        ):
         """
         Queries the patient history or Visual Context from history.
         """
@@ -385,17 +411,6 @@ class ClinicalRAGEngine:
             # --- DYNAMIC METADATA FILTERING ---
             patient_id = self._extract_patient_id(user_query)
 
-            # Look at last 3 messages for the [SYSTEM UPDATE] tag
-            visual_context = None
-            
-            # --- FIX 2: Correct variable name (history vs conversation_history) ---
-            if history:
-                #last_3 = history[-3:] if len(history) >= 3 else history
-                for msg in history:
-                    content = msg.get('content', '')
-                    if '[SYSTEM UPDATE]' in str(content):
-                        visual_context = content
-                        break
             
             if patient_id and self.index:
                 logger.info(f"🎯 Detected Patient ID {patient_id}. Applying Strict Filter.")
@@ -414,7 +429,7 @@ class ClinicalRAGEngine:
                 # This returns a standard Response Object
                 return self.index.as_query_engine(
                     filters=filters,
-                    llm=Settings.llm,
+                    llm= self.llm,
                     similarity_top_k=5,
                     text_qa_template=self.clinical_template
                 ).query(final_query)
@@ -436,7 +451,16 @@ class ClinicalRAGEngine:
                     "5. Do NOT invent any patient history or data that is not in the visual context.\n"
                 )
                 
-                response_text = Settings.llm.complete(prompt).text
+                print("="*80)
+                print(prompt)
+                print("="*80)
+
+                response = Ollama(
+                    model="gemma3:27b",
+                    request_timeout=300.0
+                ).complete(prompt)
+
+                response_text = response.text
                 
                 # Create mock response object for explainability UI
                 class MockResponse:
@@ -468,7 +492,10 @@ class ClinicalRAGEngine:
                     "Answer using only your general medical knowledge and guidelines."
                 )
                 
-                response_text = Settings.llm.complete(prompt).text
+                print("="*80)
+                print(prompt)
+                print("="*80)
+                response_text = self.llm.complete(prompt).text
                 
                 # 2. Return an Object, NOT a String (Prevents UI Crash)
                 class GeneralResponse:
@@ -490,69 +517,35 @@ class VisionEngine:
     Handles all visual perception tasks using the local LLaVA-Medical model.
     """
     def __init__(self, model_path=None):
+        print(f"VisionEngine created: {id(self)}")
         self.model_path = model_path or os.getenv("VISION_MODEL_PATH", "./LLaVA-Medical-Director")
-        self.ollama_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-        self.reasoning_model = os.getenv("REASONING_MODEL", "gemma2:27b")
         self.tokenizer = None
         self.model = None
         self.image_processor = None
         self.loaded = False
 
-    def _evict_ollama(self):
-        """
-        CRITICAL: Forces the Ollama server to unload the 18GB Gemma model.
-        This clears the VRAM 'parking spot' for LLaVA.
-        """
-        try:
-            logger.info("🧹 Orchestrator: Evicting Ollama model to free VRAM...")
-            # Sending keep_alive: 0 forces an immediate unload
-            response = requests.post(
-                f"{self.ollama_url}/api/chat",
-                json={
-                    "model": self.reasoning_model, 
-                    "messages": [], 
-                    "keep_alive": 0
-                }
-            )
-            if response.status_code == 200:
-                logger.info("✅ Ollama Evicted. VRAM is clear.")
-
-            # 2. VERIFICATION LOOP (The Fix)
-            # We wait up to 10 seconds for VRAM to drop below a safe threshold.
-            max_retries = 5
-            required_free_gb = 8.0 # LLaVA needs ~6GB, plus overhead.
-            
-            logger.info("⏳ Waiting for VRAM release...")
-            for i in range(max_retries):
-                # Force Python Garbage Collection
-                gc.collect()
-                torch.cuda.empty_cache()
-                
-                # Check actual VRAM
-                free_bytes, total_bytes = torch.cuda.mem_get_info()
-                free_gb = free_bytes / (1024 ** 3)
-                
-                if free_gb >= required_free_gb:
-                    logger.info(f"✅ VRAM Clear: {free_gb:.1f} GB free. Ready for Vision.")
-                    return # Success!
-                
-                logger.debug(f"   Retry {i+1}/{max_retries}: Only {free_gb:.1f} GB free. Waiting...")
-                time.sleep(2) # Wait 2 seconds before checking again
-            
-            # If we get here, it didn't clear.
-            logger.error("❌ TIMEOUT: Ollama did not release VRAM in time.")
-            # We don't raise an error here to allow a 'Hail Mary' attempt, 
-            # but LLaVA will likely crash if this log appears.
-
-        except Exception as e:
-            logger.warning(f"⚠️ Could not contact Ollama for eviction: {e}")
-
     def load_model(self):
         """Loads the Vision Model into VRAM."""
-        if self.loaded:
-            return
-        
-        self._evict_ollama()
+        with VISION_LOCK:
+            print("=" * 60)
+            print(f"Loading model for object: {id(self)}")
+            print(f"Already loaded: {self.loaded}")
+            print("=" * 60)
+
+            if self.loaded:
+                logger.info("✅ LLaVA already loaded")
+                return
+
+        try:
+            from src.engine.test_models import master_evict_with_retry
+            logger.info("🧹 Evicting all models before loading LLaVA...")
+            success = master_evict_with_retry(required_free_gb=8.0, max_retries=10)
+            
+            if not success:
+                raise RuntimeError("Could not free enough VRAM for LLaVA")
+        except Exception as e:
+            logger.error(f"Eviction failed: {e}")
+            raise e
         
         try:
             logger.info(f"🏥 Loading Vision Model from: {self.model_path}...")
@@ -566,28 +559,21 @@ class VisionEngine:
                 bnb_4bit_quant_type='nf4'
             )
             
-            self.tokenizer = AutoTokenizer.from_pretrained(
-                self.model_path, 
-                use_fast=False
-            )
+            model_name = get_model_name_from_path(self.model_path)
 
-            # Load Model directly (Bypassing the buggy builder)
-            self.model = LlavaLlamaForCausalLM.from_pretrained(
-                self.model_path,
-                torch_dtype=torch.float16,
-                device_map="auto",
+            self.tokenizer, self.model, self.image_processor, _ = load_pretrained_model(
+                model_path=self.model_path,
+                model_base=None,
+                model_name=model_name,
+                load_4bit=False,
+                load_8bit=False,
                 quantization_config=quantization_config,
+                device_map="cuda",
             )
-
-            # Initialize the Vision Tower
-            vision_tower = self.model.get_vision_tower()
-            if not vision_tower.is_loaded:
-                vision_tower.load_model()
-            
-            self.image_processor = vision_tower.image_processor
 
             self.loaded = True
             logger.info("✅ Vision Model loaded successfully.")
+            logger.info("Finished load_model()")
             
         except Exception as e:
             logger.critical(f"❌ Failed to load Vision Model: {e}", exc_info=True)
@@ -597,69 +583,162 @@ class VisionEngine:
         """
         Runs inference on a single image.
         """
+        print(f"Analyze using object {id(self)}")
+        if not self.loaded:
+            logger.info("LLaVA not loaded. Loading now...")
+            self.load_model()
+
         if prompt is None:
             prompt = (
-                "ACT AS A CLINICAL SCIENTIST. You are analyzing a wound image for a medical report.\n"
-                "You MUST provide specific estimates. Do not use vague terms like 'extensive'.\n"
-                "Fill out this form strictly:\n\n"
-                "1. COMPOSITION (Must add up to 100%): [e.g., '10% Eschar, 40% Slough, 50% Granulation']\n"
-                "2. DIMENSIONS: [Estimate LxW in cm. If no ruler, use body landmarks to guess. e.g., 'approx 4x3 cm']\n"
-                "3. DEPTH: [Superficial / Partial / Full Thickness]\n"
-                "4. INFECTION: [Yes/No - Look for pus, redness, swelling]\n"
-                "5. PERIWOUND: [Healthy / Macerated / Inflamed]\n"
+                "Describe the wound in this image. "
+                "Include details about location, tissue type (necrotic, slough, granulation), "
+                "and any signs of infection."
             )
-        self.unload()
 
         try:
-            self.load_model()
-            # 1. Image Preprocessing
-            image = Image.open(image_file).convert('RGB')
-            image_tensor = process_images([image], self.image_processor, self.model.config)
-            
-            if type(image_tensor) is list:
-                image_tensor = [img.to(self.model.device, dtype=torch.float16) for img in image_tensor]
-            else:
-                image_tensor = image_tensor.to(self.model.device, dtype=torch.float16)
 
-            # 2. Prompt Formatting (Vicuna Style)
-            if self.model.config.mm_use_im_start_end:
-                qs = DEFAULT_IM_START_TOKEN + DEFAULT_IMAGE_TOKEN + DEFAULT_IM_END_TOKEN + '\n' + prompt
+            ###########################################################
+            # 1. IMAGE PREPROCESSING
+            ###########################################################
+
+            print("\nIncoming image object:", type(image_file))
+            print(image_file)
+            if hasattr(image_file, "seek"):
+                image_file.seek(0)
+
+            image = Image.open(image_file).convert("RGB")
+
+            print("\n================ IMAGE INFO ================")
+            print("Image:", image)
+            print("Size :", image.size)
+            print("Mode :", image.mode)
+
+            image_tensor = process_images(
+                [image],
+                self.image_processor,
+                self.model.config,
+            )
+
+            if isinstance(image_tensor, list):
+                image_tensor = [
+                    img.to(self.model.device, dtype=torch.float16)
+                    for img in image_tensor
+                ]
             else:
-                qs = DEFAULT_IMAGE_TOKEN + '\n' + prompt
+                image_tensor = image_tensor.to(
+                    self.model.device,
+                    dtype=torch.float16,
+                )
+
+            ###########################################################
+            # 2. PROMPT
+            ###########################################################
+
+            if self.model.config.mm_use_im_start_end:
+                qs = (
+                    DEFAULT_IM_START_TOKEN
+                    + DEFAULT_IMAGE_TOKEN
+                    + DEFAULT_IM_END_TOKEN
+                    + "\n"
+                    + prompt
+                )
+            else:
+                qs = DEFAULT_IMAGE_TOKEN + "\n" + prompt
 
             conv = conv_templates["vicuna_v1"].copy()
             conv.append_message(conv.roles[0], qs)
             conv.append_message(conv.roles[1], None)
+
             prompt_str = conv.get_prompt()
 
-            # 3. Tokenization
-            input_ids = tokenizer_image_token(prompt_str, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).to(self.model.device)
+            ###########################################################
+            # 3. TOKENIZATION
+            ###########################################################
 
-            # 4. Generation
+            input_ids = tokenizer_image_token(
+                prompt_str,
+                self.tokenizer,
+                IMAGE_TOKEN_INDEX,
+                return_tensors="pt",
+            ).unsqueeze(0).to(self.model.device)
+
+            ###########################################################
+            # 4. DEBUG
+            ###########################################################
+
+            print("\n================ DEBUG =================")
+
+            print("image_tensor type:", type(image_tensor))
+
+            if isinstance(image_tensor, list):
+                print("list length:", len(image_tensor))
+                print("shape:", image_tensor[0].shape)
+                print("device:", image_tensor[0].device)
+                print("dtype :", image_tensor[0].dtype)
+            else:
+                print("shape :", image_tensor.shape)
+                print("device:", image_tensor.device)
+                print("dtype :", image_tensor.dtype)
+
+            print()
+
+            print("input_ids:", input_ids.shape)
+            print("input device:", input_ids.device)
+
+            print()
+
+            print("model device:", self.model.device)
+
+            print("mm_use_im_start_end:",
+                self.model.config.mm_use_im_start_end)
+
+            print()
+
+            print("Prompt:")
+            print(prompt_str)
+
+            print("=========================================\n")
+
+            ###########################################################
+            # 5. GENERATION
+            ###########################################################
+
             with torch.inference_mode():
+
                 output_ids = self.model.generate(
                     input_ids,
                     images=image_tensor,
-                    do_sample=True,
-                    temperature=0.2,
-                    max_new_tokens=512,
+                    do_sample=False,
+                    max_new_tokens=256,
+                    use_cache=False,
+                    pad_token_id=self.tokenizer.eos_token_id,
                 )
 
-            # 5. Decoding
-            output_text = self.tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
-            
-            # 7. IMMEDIATE CLEANUP
-            # Delete tensors first
+            ###########################################################
+            # 6. DECODE
+            ###########################################################
+
+            output_text = self.tokenizer.batch_decode(
+                output_ids,
+                skip_special_tokens=True,
+            )[0].strip()
+
             del image_tensor
             del input_ids
-            # Then unload the model
-            self.unload()
-            
+
+            logger.info("Leaving VisionEngine.analyze()")
+
             return output_text
 
         except Exception as e:
-            logger.error(f"Error during vision analysis: {e}")
-            self.unload()
+
+            logger.exception("Vision analysis failed")
+
+            import traceback
+            traceback.print_exc()
+
+            #self.unload()
+
             return "Error during vision analysis."
 
     def unload(self):
@@ -698,7 +777,7 @@ class AnalyticsEngine:
 
         # 1. Force Local LLM (Gemma 2)
         # This prevents the "No OpenAI API Key" error
-        local_llm = Ollama(model="gemma2:27b", request_timeout=300.0)
+        local_llm = Ollama(model="gemma3:27b", request_timeout=300.0)
         Settings.llm = local_llm  # Set global setting just in case
         
         # Instruction string tells LLM how to use the dataframe
