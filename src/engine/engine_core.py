@@ -105,10 +105,9 @@ class DataManager:
             
             for col in numeric_cols:
                 if col in self.df.columns:
-                    # Coerce errors (turn "N/A" -> NaN)
+                    # coece invalid/non numeric values to Nan.
+                    # Missing clinical values remain missing rather than being interpreted as true zeros.
                     self.df[col] = pd.to_numeric(self.df[col], errors='coerce')
-                    # Fill NaN with 0.0 (Safe for Dashboard)
-                    self.df[col] = self.df[col].fillna(0.0)
 
             # Ensure Comorbidities is never null (Fixes 'History: None')
             if 'Comorbidities' in self.df.columns:
@@ -196,38 +195,114 @@ class DataManager:
 
     def get_patient_current_state(self, patient_id):
         """
-        Retrieves the absolute latest clinical state (Ground Truth).
+        Retrieves the latest encounter-level clinical state.
+        Summarizes all wound records documented on the latest encounter.
         """
         try:
-            # Ensure ID is string
             pid = str(patient_id).strip()
-            
-            # Filter for patient
+
             p_data = self.df[self.df['Patient_ID'] == pid].copy()
-            
+
             if p_data.empty:
                 return None
 
-            p_data['Encounter_Date'] = pd.to_datetime(p_data['Encounter_Date'])
-            
-            # Sort by Date AND Visit Number (Latest date, highest visit number)
-            # This handles cases where a patient has 2 visits on the same day
-            if 'Visit_Number' in p_data.columns:
-                p_data = p_data.sort_values(by=['Encounter_Date', 'Visit_Number'], ascending=[False, False])
-            else:
-                p_data = p_data.sort_values(by='Encounter_Date', ascending=False)
-                
-            latest = p_data.iloc[0]
-            
-            # Convert back to string for display
-            date_str = latest['Encounter_Date'].strftime('%Y-%m-%d')
-            
+            p_data['Encounter_Date'] = pd.to_datetime(
+                p_data['Encounter_Date'],
+                errors='coerce'
+            )
+
+            p_data = p_data.dropna(subset=['Encounter_Date'])
+
+            if p_data.empty:
+                return None
+
+            latest_date = p_data['Encounter_Date'].max()
+
+            latest_encounter = p_data[
+                p_data['Encounter_Date'] == latest_date
+            ].copy()
+
+            # If multiple visit numbers exist on the latest date,
+            # retain only the highest/latest visit number.
+            if 'Visit_Number' in latest_encounter.columns:
+                latest_visit_number = pd.to_numeric(
+                    latest_encounter['Visit_Number'],
+                    errors='coerce'
+                ).max()
+
+                if pd.notna(latest_visit_number):
+                    latest_encounter = latest_encounter[
+                        pd.to_numeric(
+                            latest_encounter['Visit_Number'],
+                            errors='coerce'
+                        ) == latest_visit_number
+                    ]
+
+            date_str = latest_date.strftime('%Y-%m-%d')
+
+            # Collect all unique documented wound dimensions
+            dimensions = []
+
+            for _, row in latest_encounter.iterrows():
+                length = row.get('Wound_Size_Length_cm')
+                width = row.get('Wound_Size_Width_cm')
+
+                if pd.notna(length) and pd.notna(width):
+                    dims = f"{float(length):g} x {float(width):g} cm"
+
+                    if dims not in dimensions:
+                        dimensions.append(dims)
+
+            wound_dims = (
+                "; ".join(dimensions)
+                if dimensions
+                else "Not documented"
+            )
+
+            # Determine whether any active non-zero wound is documented
+            active_wound = False
+
+            for _, row in latest_encounter.iterrows():
+                length = row.get('Wound_Size_Length_cm')
+                width = row.get('Wound_Size_Width_cm')
+
+                if pd.notna(length) and pd.notna(width):
+                    if float(length) > 0 or float(width) > 0:
+                        active_wound = True
+                        break
+
+            # Combine latest encounter narratives
+            narratives = []
+
+            for value in latest_encounter.get(
+                'Narrative',
+                pd.Series(dtype=object)
+            ):
+                if pd.notna(value):
+                    text = str(value).strip()
+
+                    if text and text not in narratives:
+                        narratives.append(text)
+
+            narrative_text = (
+                " ".join(narratives)[:500]
+                if narratives
+                else "No narrative documented"
+            )
+
             return {
                 "last_visit": date_str,
-                "wound_dims": f"{latest.get('Wound_Size_Length_cm', '?')} x {latest.get('Wound_Size_Width_cm', '?')} cm",
-                "narrative": str(latest.get('Narrative', 'No notes'))[:200] + "...", # Truncate for token limits
-                "severity": "Critical" if "deteriorating" in str(latest.get('Narrative', '')).lower() else "Stable"
+                "wound_dims": wound_dims,
+                "active_wound": active_wound,
+                "wound_record_count": len(latest_encounter),
+                "narrative": narrative_text,
+                "severity": (
+                    "Critical"
+                    if "deteriorating" in narrative_text.lower()
+                    else "Stable"
+                )
             }
+
         except Exception as e:
             logger.error(f"Error fetching state: {e}")
             return None

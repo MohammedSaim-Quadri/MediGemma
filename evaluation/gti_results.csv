@@ -1,0 +1,167 @@
+patient_id,question,ground_truth_date,ground_truth_wound_dims,ground_truth_active_wound,ground_truth_wound_record_count,baseline_response,gti_response
+10000,What is the latest documented encounter date for patient 10000?,2025-10-13,0 x 0 cm; 4 x 2.7 cm,True,2,"**Direct Answer/Verdict:** 2025-10-13.
+**Evidence:** Wound dimensions and tissue characteristics are documented on 2025-10-13.
+**Reasoning:** This is the most recent date with active wound data; previous entries show 0.0 x 0.0 cm dimensions indicating a closed wound.","**Direct Answer/Verdict:** 2025-10-13. 
+**Evidence:** Wound dimensions documented on 2025-10-13 are 4.0 x 2.7 cm and 0 x 0 cm.
+**Reasoning:** This is the most recent date with documented wound assessment data."
+10000,Does patient 10000 have any active non-zero wound measurement documented at the latest encounter?,2025-10-13,0 x 0 cm; 4 x 2.7 cm,True,2,No. Latest encounter (2025-10-13) documents wound dimensions of 0.0 x 0.0 cm. This indicates complete wound closure.,"Yes. Wound dimensions of 4.0 x 2.7 cm were documented on 2025-10-13, despite a 0.0 x 0.0 cm measurement also present in the same encounter record."
+10000,What wound dimensions are documented at the latest encounter for patient 10000?,2025-10-13,0 x 0 cm; 4 x 2.7 cm,True,2,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm.
+**Reasoning:** This indicates wound closure.","**Direct Answer/Verdict:** Wound dimensions at the latest encounter (2025-10-13) are 0.0 x 0.0 cm and 4.0 x 2.7 cm.
+**Evidence:** Wound dimensions documented on 2025-10-13: 0.0 x 0.0 cm; 4.0 x 2.7 cm.
+**Reasoning:** Reporting all documented wound sizes provides a complete picture of the patient’s current wound state, acknowledging potential measurement discrepancies or multiple wounds."
+10770,What is the latest documented encounter date for patient 10770?,2025-10-07,4 x 2 cm; 0 x 0 cm; 2.7 x 1.3 cm,True,10,"**Direct Answer/Verdict:** 2025-09-30. 
+**Evidence:** Multiple visit details are documented with an encounter date of 2025-09-30.
+**Reasoning:** This is a factual retrieval from the patient's record.","**Direct Answer/Verdict:** 2025-10-07. 
+**Evidence:** Patient record indicates multiple wound encounters documented on 2025-10-07, with dimensions of 4.0 x 2.0 cm, 0.0 x 0.0 cm, and 2.7 x 1.3 cm.
+**Reasoning:** This is the most recent date with documented wound assessments in the provided data."
+10770,Does patient 10770 have any active non-zero wound measurement documented at the latest encounter?,2025-10-07,4 x 2 cm; 0 x 0 cm; 2.7 x 1.3 cm,True,10,No. Wound dimensions are 0.0 x 0.0 cm on 2025-09-30. This indicates a closed wound.,"**Yes.** Wound dimensions of 4.0 x 2.0 cm, 2.7 x 1.3 cm are documented on 2025-10-07."
+10770,What wound dimensions are documented at the latest encounter for patient 10770?,2025-10-07,4 x 2 cm; 0 x 0 cm; 2.7 x 1.3 cm,True,10,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound Dims documented on 2025-09-30 are 0.0 x 0.0 cm.
+**Reasoning:** This indicates the wound is currently closed, or no longer present at the time of assessment.","**Direct Answer/Verdict:** 4.0 x 2.0 cm, 0.0 x 0.0 cm, and 2.7 x 1.3 cm. 
+
+**Evidence:** Wound dimensions documented on 2025-10-07 are 4.0 x 2.0 cm, 0.0 x 0.0 cm, and 2.7 x 1.3 cm.
+
+**Reasoning:** Reporting all documented wound sizes on the latest encounter date ensures a comprehensive overview of the patient's current wound status."
+11673,What is the latest documented encounter date for patient 11673?,2025-10-13,0 x 0 cm; 2 x 3 cm,True,4,"**Direct Answer/Verdict:** 2025-10-13.
+**Evidence:** The latest encounter date documented in the records is 2025-10-13.
+**Reasoning:** This is a factual retrieval from the provided data.
+
+
+
+","**Direct Answer/Verdict:** 2025-10-13. 
+**Evidence:** Wound records document encounters on 2025-10-13, 2025-10-06, and prior dates.
+**Reasoning:** This is the most recent date with documented wound assessment data.
+
+
+
+"
+11673,Does patient 11673 have any active non-zero wound measurement documented at the latest encounter?,2025-10-13,0 x 0 cm; 2 x 3 cm,True,4,No. Wound dimensions are 0.0 x 0.0 cm documented on 2025-10-13.,"**Yes.** Wound dimensions of 2.0 x 3.0 cm were documented on 2025-10-13.
+
+
+
+"
+11673,What wound dimensions are documented at the latest encounter for patient 11673?,2025-10-13,0 x 0 cm; 2 x 3 cm,True,4,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 10/13/25, 10/06/25 are 0.0 x 0.0 cm.
+**Reasoning:** Consistent documentation across latest encounters indicates wound closure.","**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm.
+**Reasoning:** This reflects the latest documented wound size at the time of the encounter."
+15041,What is the latest documented encounter date for patient 15041?,2025-10-10,0 x 0 cm,False,5,"**Direct Answer/Verdict:** 2025-10-10.
+
+**Evidence:** Encounter date documented in records: 2025-10-10.
+
+**Reasoning:** This is a factual retrieval from documented patient visit data.","The latest documented encounter date for patient 15041 is 2025-10-10. 
+
+**Evidence:** Encounter date recorded as 2025-10-10 in patient records. Wound dimensions documented at this encounter are 0.0 x 0.0 cm. 
+
+**Reasoning:** Providing factual data directly addresses the query. No further assessment is required."
+15041,Does patient 15041 have any active non-zero wound measurement documented at the latest encounter?,2025-10-10,0 x 0 cm,False,5,"No. Wound dimensions are documented as 0.0 x 0.0 cm on 2025-10-10. This indicates a resolved wound, precluding active wound management at this time.","No. Wound dimensions are documented as 0.0 x 0.0 cm on 2025-10-10. The encounter note specifically states a resolved blister, indicating no active, measurable wound."
+15041,What wound dimensions are documented at the latest encounter for patient 15041?,2025-10-10,0 x 0 cm,False,5,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-10 are 0.0 x 0.0 cm.
+**Reasoning:** This reflects complete wound resolution based on the latest encounter note.","**0.0 x 0.0 cm.** Documented on 2025-10-10. The encounter note indicates the blister has resolved, with no active wound present. This measurement reflects a closed wound state."
+18604,What is the latest documented encounter date for patient 18604?,2025-10-07,0 x 0 cm; 0.6 x 0.6 cm,True,2,"**Direct Answer/Verdict:** 2025-10-07. 
+**Evidence:** Wound dimensions of 0.0 x 0.0 cm and narrative indicating wound closure documented on 2025-10-07.
+**Reasoning:** Latest encounter represents current wound status.","**Direct Answer/Verdict:** 2025-10-07. 
+
+**Evidence:** Wound records from 2025-10-07 indicate a documented encounter with wound dimensions of 0.6 x 0.6 cm and 0.0 x 0.0 cm. 
+
+**Reasoning:** This date represents the most recent documented assessment of the patient’s wound status within the available records.
+
+
+
+"
+18604,Does patient 18604 have any active non-zero wound measurement documented at the latest encounter?,2025-10-07,0 x 0 cm; 0.6 x 0.6 cm,True,2,"No. Latest encounter (2025-10-07) documents wound dimensions of 0.0 x 0.0 cm. Wound is closed. Previous measurement (2025-09-30) was 1.1 x 1.2 cm, but has since resolved.",Yes. Wound dimensions of 0.6 x 0.6 cm documented on 10/7/2025.
+18604,What wound dimensions are documented at the latest encounter for patient 18604?,2025-10-07,0 x 0 cm; 0.6 x 0.6 cm,True,2,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-07 are 0.0 x 0.0 cm.
+**Reasoning:** This indicates wound closure.","**Direct Answer/Verdict:** 0.0 x 0.0 cm and 0.6 x 0.6 cm.
+
+**Evidence:** Wound dimensions documented on 2025-10-07 are 0.0 x 0.0 cm and 0.6 x 0.6 cm.
+
+**Reasoning:** Reporting all documented wound dimensions at the latest encounter provides a complete picture of the patient's wound healing progress."
+19737,What is the latest documented encounter date for patient 19737?,2025-10-06,0 x 0 cm; 2 x 2 cm,True,3,"**Direct Answer/Verdict:** 2025-10-06. 
+**Evidence:** Multiple entries exist with encounter dates, the latest being 2025-10-06.
+**Reasoning:** Provides a factual response to a direct inquiry regarding the patient's record.","**Direct Answer/Verdict:** 2025-10-06. 
+**Evidence:** Wound dimensions documented on 2025-10-06 are 0.0 x 0.0 cm and 2.0 x 2.0 cm.
+**Reasoning:** This is the most recent date with documented wound encounter data."
+19737,Does patient 19737 have any active non-zero wound measurement documented at the latest encounter?,2025-10-06,0 x 0 cm; 2 x 2 cm,True,3,No. Latest encounter (2025-10-06) documents wound dimensions of 0.0 x 0.0 cm. Previous non-zero measurement: 1.4 x 1.2 cm (2025-09-30).,**Yes.** Wound dimensions of 2.0 x 2.0 cm documented on 2025-10-06.
+19737,What wound dimensions are documented at the latest encounter for patient 19737?,2025-10-06,0 x 0 cm; 2 x 2 cm,True,3,"**Direct Answer/Verdict:** 2.0 x 2.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-06 are 2.0 x 2.0 cm.
+**Reasoning:** Review of available records indicates this is the most recent documented measurement.","**Direct Answer/Verdict:** 2.0 x 2.0 cm and 0.0 x 0.0 cm. 
+
+**Evidence:** Wound dimensions documented on 10/06/2025 are 2.0 x 2.0 cm and 0.0 x 0.0 cm. 
+
+**Reasoning:** Reporting the latest documented measurements provides the most current assessment of wound size."
+20152,What is the latest documented encounter date for patient 20152?,2025-10-05,0.2 x 0.2 cm; 0 x 0 cm; 2 x 0.5 cm,True,8,"**Direct Answer/Verdict:** 2025-10-05. 
+**Evidence:** The latest encounter date documented in the provided records is 2025-10-05.
+**Reasoning:** This is a factual retrieval request based on date stamps within the provided data.
+
+
+
+","**Direct Answer/Verdict:** 2025-10-05. 
+**Evidence:** Patient encounter records document the latest visit date as 2025-10-05.
+**Reasoning:** This is a direct retrieval of documented data."
+20152,Does patient 20152 have any active non-zero wound measurement documented at the latest encounter?,2025-10-05,0.2 x 0.2 cm; 0 x 0 cm; 2 x 0.5 cm,True,8,"No. Wound dimensions are 0.0 x 0.0 cm on 2025-09-30, indicating a closed wound.","**Yes.** Wound dimensions of 0.2 x 0.2 cm and 2.0 x 0.5 cm are documented on 2025-10-05.
+
+
+
+"
+20152,What wound dimensions are documented at the latest encounter for patient 20152?,2025-10-05,0.2 x 0.2 cm; 0 x 0 cm; 2 x 0.5 cm,True,8,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound Dims documented on 2025-09-30 are 0.0 x 0.0 cm.
+**Reasoning:** This indicates wound closure, informing subsequent management decisions.","**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+
+**Evidence:** Wound dimensions documented on 2025-10-05 are 0.0 x 0.0 cm.
+
+**Reasoning:** This represents the most recent wound measurement available in the patient's record, superseding previous measurements."
+20456,What is the latest documented encounter date for patient 20456?,2025-10-13,0 x 0 cm; 2 x 0.5 cm,True,5,"**Direct Answer/Verdict:** 2025-10-13. 
+**Evidence:** The latest visit details are documented on 2025-10-13 with wound dimensions of 0.0 x 0.0 cm and 100% slough coverage.
+**Reasoning:** This is a direct factual query regarding documented data.","**Direct Answer/Verdict:** 2025-10-13. 
+**Evidence:** Wound records from 2025-10-13 document wound dimensions of 0 x 0 cm and 2 x 0.5 cm.
+**Reasoning:** This is the most recent documented encounter date in the provided patient data."
+20456,Does patient 20456 have any active non-zero wound measurement documented at the latest encounter?,2025-10-13,0 x 0 cm; 2 x 0.5 cm,True,5,No. Wound dimensions are documented as 0.0 x 0.0 cm on 2025-10-06. This indicates a resolved or closed wound at the time of assessment.,**Yes.** Wound dimensions of 2.0 x 0.5 cm documented on 2025-10-13.
+20456,What wound dimensions are documented at the latest encounter for patient 20456?,2025-10-13,0 x 0 cm; 2 x 0.5 cm,True,5,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound Dims documented on 2025-10-06 are 0.0 x 0.0 cm.
+**Reasoning:** This indicates a resolved wound, though continued monitoring for skin breakdown is crucial given documented fragility and altered mobility.
+
+
+
+","**Direct Answer/Verdict:** 0.0 x 0.0 cm and 2.0 x 0.5 cm.
+
+**Evidence:** Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm and 2.0 x 0.5 cm. 
+
+**Reasoning:** Multiple wound measurements were documented on the same encounter date. Reporting all measurements provides a complete picture of the patient's current wound state."
+21343,What is the latest documented encounter date for patient 21343?,2025-10-09,0 x 0 cm; 6 x 4 cm,True,2,"**Direct Answer/Verdict:** 2025-10-09. 
+**Evidence:** Wound dimensions documented as 0.0 x 0.0 cm on 2025-10-09.
+**Reasoning:** This represents the most recent encounter with wound assessment data available in the provided records.","**Direct Answer/Verdict:** 2025-10-09. 
+**Evidence:** Wound dimensions documented on 2025-10-09 are 0.0 x 0.0 cm and 6.0 x 4.0 cm.
+**Reasoning:** This is the most recent date with documented wound encounter data."
+21343,Does patient 21343 have any active non-zero wound measurement documented at the latest encounter?,2025-10-09,0 x 0 cm; 6 x 4 cm,True,2,"No. Latest encounter (2025-10-09) documents wound dimensions of 0.0 x 0.0 cm. Prior encounter (2025-10-02) documented 5.0 x 3.0 cm, but the wound is currently closed.","**Direct Answer/Verdict:** Yes.
+
+**Evidence:** Wound dimensions of 6.0 x 4.0 cm documented on 2025-10-09. Additionally, a 0.0 x 0.0 cm wound was also documented on the same date.
+
+
+
+"
+21343,What wound dimensions are documented at the latest encounter for patient 21343?,2025-10-09,0 x 0 cm; 6 x 4 cm,True,2,"**Direct Answer/Verdict:** 6.0 x 4.0 cm. 
+**Evidence:** Wound dimensions documented on 2025-10-09.
+**Reasoning:** Reporting latest documented size for accurate wound tracking.","**Direct Answer/Verdict:** 0.0 x 0.0 cm and 6.0 x 4.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-09 are 0.0 x 0.0 cm and 6.0 x 4.0 cm.
+**Reasoning:** Reporting all documented wound dimensions at the latest encounter provides a complete picture of the patient's current wound status."
+22609,What is the latest documented encounter date for patient 22609?,2025-10-13,0 x 0 cm,False,1,"**Direct Answer/Verdict:** 2025-10-13
+**Evidence:** Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm.
+**Reasoning:** This represents the most recent encounter with documented wound characteristics in the provided records.
+
+
+
+","**Direct Answer/Verdict:** 2025-10-13. 
+**Evidence:** Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm.
+**Reasoning:** This is the most recent documented encounter date in the provided records.
+
+
+
+"
+22609,Does patient 22609 have any active non-zero wound measurement documented at the latest encounter?,2025-10-13,0 x 0 cm,False,1,No. Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm. This indicates wound closure.,No. Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm.
+22609,What wound dimensions are documented at the latest encounter for patient 22609?,2025-10-13,0 x 0 cm,False,1,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-13.
+**Reasoning:** Reporting latest documented measurements as requested.","**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-13.
+**Reasoning:** Reporting latest documented measurements per instruction."

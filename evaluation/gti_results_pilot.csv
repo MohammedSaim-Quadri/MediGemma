@@ -1,0 +1,288 @@
+patient_id,question,ground_truth_date,ground_truth_wound_dims,ground_truth_status,baseline_response,gti_response
+10000,What is the latest documented encounter date for patient 10000?,2025-10-13,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 2025-10-13.
+**Evidence:** Wound dimensions of 4.0 x 2.7 cm and 5.0% necrosis documented on 2025-10-13. 
+**Reasoning:** This is the most recent encounter with measurable wound characteristics in the provided record.
+
+
+
+","**Direct Answer/Verdict:** 2025-10-13.
+**Evidence:** The latest documented encounter date for patient 10000 is 2025-10-13, with a wound size of 0.0 x 0.0 cm.
+**Reasoning:** This is based on the provided database information, prioritizing the latest encounter data for accurate patient status reporting."
+10000,What is the current documented wound size for patient 10000?,2025-10-13,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-13 and 2025-10-06.
+**Reasoning:** Consistent documentation indicates wound closure.","Current wound size is 0.0 x 0.0 cm, documented on 2025-10-13. This indicates complete wound closure. Prior measurements on 2025-10-06 showed a wound size of 4.0 x 2.7 cm with 5% necrosis. Resolution is confirmed."
+10000,Summarize the latest documented wound state for patient 10000.,2025-10-13,0.0 x 0.0 cm,Stable,"**🏥 Clinical Assessment:** Patient 10000 currently presents with a CLOSED wound (0.0 x 0.0 cm) as of 10/13/2025. Prior to that (10/6/2025 & 10/13/2025), the wound measured 4.0 x 2.7 cm with 5% necrosis. Hospice goals focus on comfort and preventing complications.
+**⚠️ Risk Stratification:** Low - Wound is currently closed.
+**📋 Recommended Plan:**
+  1. Continue current offloading protocol (heel protectors/PREVALON boots) as indicated.
+  2. Monitor skin integrity closely for any signs of recurrence or breakdown.
+**👨‍⚕️ Confidence:** High - Data clearly indicates wound closure as of the latest assessment.","**🏥 Clinical Assessment:** Patient 10000 currently presents with a stable wound measuring 0.0 x 0.0 cm as of 2025-10-13. Prior to this, wounds measured 4.0 x 2.7cm with 5% necrosis (documented 2025-10-06). Hospice goals prioritize infection prevention and minimizing harm.
+
+**⚠️ Risk Stratification:** Low - Wound closure.
+
+**📋 Recommended Plan:**
+  1. Continue current offloading protocol (heel protectors/PREVALON boots) as per hospice goals.
+  2. Monitor for any signs of new wound development or skin breakdown.
+
+**👨‍⚕️ Confidence:** High - Based on documented wound closure and consistent hospice-focused care plan.
+
+
+
+"
+10770,What is the latest documented encounter date for patient 10770?,2025-10-07,4.0 x 2.0 cm,Stable,"**Direct Answer/Verdict:** 2025-09-30.
+**Evidence:** Multiple encounter records are documented on 2025-09-30 within the provided data.
+**Reasoning:** This is a factual query regarding documented dates, not a request for clinical interpretation or a comprehensive assessment.","**Direct Answer/Verdict:** 2025-10-07. 
+
+**Evidence:** The latest documented encounter date for patient 10770 is 2025-10-07, with a wound size of 4.0 x 2.0 cm.
+
+**Reasoning:** This is a factual retrieval based on the provided data."
+10770,What is the current documented wound size for patient 10770?,2025-10-07,4.0 x 2.0 cm,Stable,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound Dims documented on 2025-09-30: 0.0 x 0.0 cm.
+**Reasoning:** Accurate wound measurement is critical for monitoring healing trajectory and guiding intervention decisions.","**Direct Answer/Verdict:** 4.0 x 2.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-07.
+**Reasoning:** Reporting the most recent measurement ensures accurate patient status tracking."
+10770,Summarize the latest documented wound state for patient 10770.,2025-10-07,4.0 x 2.0 cm,Stable,"**🏥 Clinical Assessment:** Patient 10770 presents with a resolved wound (0.0 x 0.0 cm) as of 9/30/2025. Prior to resolution, the patient exhibited significant comorbidities (immobility, weight loss, incontinence, etc.) impacting healing potential. Hospice is in place with palliative wound goals. 
+**⚠️ Risk Stratification:** Low - Wound is currently closed.
+**📋 Recommended Plan:**
+  1. Continue current palliative measures and monitor skin integrity.
+  2. Maintain focus on managing underlying comorbidities to prevent future wound development.
+**👨‍⚕️ Confidence:** High - Based on documented wound dimensions (0.0 x 0.0 cm) on 9/30/2025.","**🏥 Clinical Assessment:** Patient 10770 presents with a 4.0 x 2.0 cm wound exhibiting 21% slough and 15% granulation tissue (10/7/2025). The patient is currently stable, awake, and alert with no acute distress. Multiple comorbidities (immobility, weight loss, incontinence, etc.) contribute to increased risk for impaired healing. Hospice is in place with palliative wound goals.
+**⚠️ Risk Stratification:** Medium - Complex comorbidities and presence of slough impede healing.
+**📋 Recommended Plan:**
+  1. Continue current palliative wound care regimen.
+  2. Monitor for signs of infection despite palliative approach.
+**👨‍⚕️ Confidence:** High - Assessment based on directly documented wound characteristics and patient status (10/7/2025)."
+11673,What is the latest documented encounter date for patient 11673?,2025-10-13,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 2025-10-13.
+**Evidence:** The latest visit details are dated 2025-10-13 with corresponding wound dimensions and tissue characteristics documented.
+**Reasoning:** Data retrieval confirms this as the most recent encounter in the available records.
+
+
+
+","**Direct Answer/Verdict:** 2025-10-13. 
+
+**Evidence:** The latest documented encounter date for patient 11673 is 2025-10-13, with wound dimensions of 0.0 x 0.0 cm.
+
+**Reasoning:** This is based on the provided database records and the system-injected ground truth confirming this date as the most recent."
+11673,What is the current documented wound size for patient 11673?,2025-10-13,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 0.0 x 0.0 cm
+**Evidence:** Wound dimensions documented as 0.0 x 0.0 cm on 10/06/25, 10/13/25 and subsequent visits.
+**Reasoning:** Consistent documentation indicates complete wound closure.","**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm.
+**Reasoning:** This represents the most recent measurement available in the patient’s record."
+11673,Summarize the latest documented wound state for patient 11673.,2025-10-13,0.0 x 0.0 cm,Stable,"**🏥 Clinical Assessment:** Patient 11673 presents with a complex clinical picture including spina bifida, impaired mobility, CKD, cystic fibrosis, paraplegia, and muscle weakness, contributing to high risk for wound complications. The most recent documented wound (10/13/2025) measures 2.0 x 3.0 cm with 5% granulation tissue and large amounts of exudate. Prior to that (10/06/2025), the wound was 2.0 x 2.6 cm with 5% granulation and large exudate. Notably, there were multiple prior assessments showing a *closed* wound (0.0 x 0.0 cm) – suggesting recent wound deterioration. 
+**⚠️ Risk Stratification:** High - Wound deterioration despite palliative goals and complex comorbidities.
+**📋 Recommended Plan:**
+  1. Thorough wound reassessment to determine etiology of recent deterioration.
+  2. Consult with palliative care team to confirm alignment of goals of care. 
+**👨‍⚕️ Confidence:** Medium - Limited data on specific causative factors for wound deterioration; reliant on historical context of palliative care goals.","**🏥 Clinical Assessment:** Patient 11673 presents with a stable wound measuring 0.0 x 0.0 cm as of 10/13/2025. The patient is alert and in no acute distress, with generalized weakness and non-ambulatory status. The wound is currently closed with no noted necrosis, slough, or granulation tissue.
+
+**⚠️ Risk Stratification:** Low - Wound Closure
+
+**📋 Recommended Plan:**
+  1. Continue current palliative care focused on preventing infection and minimizing discomfort.
+  2. Monitor skin integrity and provide appropriate pressure relief as needed.
+
+**👨‍⚕️ Confidence:** High - Based on clear documentation of wound closure on 10/13/2025."
+15041,What is the latest documented encounter date for patient 15041?,2025-10-10,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 2025-10-10.
+
+**Evidence:** Encounter date documented in records: 2025-10-10.
+
+**Reasoning:** This is a factual retrieval based on documented visit details.","**Direct Answer/Verdict:** 2025-10-10. 
+
+**Evidence:** Encounter date documented in patient records is 2025-10-10. Wound dimensions are currently 0.0 x 0.0 cm.
+
+**Reasoning:** This is a factual retrieval based on documented encounter dates within the patient’s chart."
+15041,What is the current documented wound size for patient 15041?,2025-10-10,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-03.
+**Reasoning:** Accurate wound measurement is critical for monitoring healing trajectory and guiding interventions.","**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-10 are 0.0 x 0.0 cm.
+**Reasoning:** This reflects wound closure, indicating successful healing or complete resolution of the initial lesion."
+15041,Summarize the latest documented wound state for patient 15041.,2025-10-10,0.0 x 0.0 cm,Stable,"**🏥 Clinical Assessment:** Patient 15041 presents with a resolved blister (0.0 x 0.0 cm) as of 2025-10-10. No active wound is documented. Generalized weakness and urinary incontinence are noted comorbidities.
+**⚠️ Risk Stratification:** Low - Wound Resolution
+**📋 Recommended Plan:**
+  1. Continue to monitor skin integrity, particularly given generalized weakness.
+  2. Address underlying incontinence to minimize risk of skin breakdown.
+**👨‍⚕️ Confidence:** High - Direct documentation of wound resolution.","**🏥 Clinical Assessment:** Patient 15041 presents with a resolved wound (0.0 x 0.0 cm) documented on 2025-10-10. Examination reveals no acute distress and stable vital signs. Generalized weakness is noted, but is not directly related to wound status. No further intervention is indicated at this time based on the current assessment.
+**⚠️ Risk Stratification:** Low - Wound Resolution
+**📋 Recommended Plan:**
+  1. Continue to monitor skin integrity as part of routine care.
+  2. Address underlying generalized weakness with appropriate evaluation and management.
+**👨‍⚕️ Confidence:** High - Clear documentation of wound closure on date of service."
+18604,What is the latest documented encounter date for patient 18604?,2025-10-07,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 2025-10-07.
+**Evidence:** The latest encounter date documented in the database for patient 18604 is 2025-10-07, with wound dimensions of 0.0 x 0.0 cm.
+**Reasoning:** This is a factual retrieval based on the provided data.
+
+
+
+","**Direct Answer/Verdict:** 2025-10-07.
+**Evidence:** Wound dimensions documented on 2025-10-07 are 0.0 x 0.0 cm, indicating wound closure.
+**Reasoning:** Wound closure signifies the latest documented encounter reflects the current wound status."
+18604,What is the current documented wound size for patient 18604?,2025-10-07,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 0.6 x 0.6 cm.
+**Evidence:** Wound dimensions documented on 10/7/2025 are 0.6 x 0.6 cm.
+**Reasoning:** Reporting the most recent documented measurement ensures accurate tracking of wound healing or deterioration.","**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-07 are 0.0 x 0.0 cm.
+**Reasoning:** This indicates wound closure. Continued monitoring for skin integrity is warranted.
+
+
+
+"
+18604,Summarize the latest documented wound state for patient 18604.,2025-10-07,0.0 x 0.0 cm,Stable,"**🏥 Clinical Assessment:** Patient 18604 presents with a chronic skin tear on the left knee, initially measuring 1.1 x 1.2 cm (9/30/25). Recent measurements (10/7/25) indicate wound dimensions of 0.6 x 0.6 cm, demonstrating improvement. Exudate is scant. Patient exhibits generalized weakness and left-sided hemiplegia, contributing to impaired mobility and potential for recurrent trauma.
+
+**⚠️ Risk Stratification:** Medium - Impaired mobility and potential for re-injury increase risk of delayed healing.
+
+**📋 Recommended Plan:**
+  1. Continue current treatment plan as documented.
+  2. Implement preventative measures (e.g., padding, turning schedule) to minimize further trauma to the affected knee. 
+**👨‍⚕️ Confidence:** High - Based on consistent documentation of improvement and established clinical context.","**🏥 Clinical Assessment:** Patient 18604 presents with a healed skin tear along the left knee, currently measuring 0.0 x 0.0 cm as of 2025-10-07. Previous measurements on 2025-09-30 documented a wound size of 1.1 x 1.2 cm, indicating significant improvement. Patient is stable, alert, and denies acute distress. Generalized weakness and left-sided hemiplegia are noted comorbidities.
+
+**⚠️ Risk Stratification:** Low - Wound Closure
+
+**📋 Recommended Plan:**
+  1. Continue current treatment plan.
+  2. Monitor skin integrity for recurrence. 
+
+**👨‍⚕️ Confidence:** High - Based on documented wound closure and stable clinical presentation."
+19737,What is the latest documented encounter date for patient 19737?,2025-10-06,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 2025-10-06. 
+**Evidence:** The latest documented encounter date in the provided records is 2025-10-06.
+**Reasoning:** This is a factual query regarding documented data.","**Direct Answer/Verdict:** 2025-10-06. 
+**Evidence:** Wound dimensions are 0.0 x 0.0 cm on 2025-10-06.
+**Reasoning:** This represents the most recent documented encounter in the provided records, indicating wound closure or complete healing."
+19737,What is the current documented wound size for patient 19737?,2025-10-06,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 2.0 x 2.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-06.
+**Reasoning:** Consistent with serial wound assessments.","**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-06.
+**Reasoning:** This represents the latest documented wound size per available records."
+19737,Summarize the latest documented wound state for patient 19737.,2025-10-06,0.0 x 0.0 cm,Stable,"**🏥 Clinical Assessment:** Patient 19737 presents with a 2.0 x 2.0 cm wound (10/06/2025) demonstrating 5% slough coverage. Wound exhibits scant exudate. Patient’s history includes documented polymicrobial infection (Klebsiella, Group B Strep, Staph aureus) and A1C of 7.0 (9/7/2025), placing them at risk for impaired healing given co-morbidities (DM, COPD).
+**⚠️ Risk Stratification:** Medium - Active infection and presence of slough impede healing.
+**📋 Recommended Plan:**
+  1. Continue current antibiotic regimen as per MDM (10/06/2025).
+  2. Initiate debridement to remove slough and promote granulation tissue formation.
+**👨‍⚕️ Confidence:** High - Assessment based on most recent documented wound dimensions and clinical narrative.","**🏥 Clinical Assessment:** Patient 19737 presents with a closed wound (0.0 x 0.0 cm) as of 10/06/2025. Previous cultures (09/30/2025) revealed *Klebsiella pneumoniae*, Group B *Streptococcus*, and *Staphylococcus aureus*. A1C on 09/07/2025 was 7.0, indicating suboptimal glycemic control. Patient’s comorbidities (DM, COPD) continue to pose a risk for impaired healing. 
+
+**⚠️ Risk Stratification:** Low - Wound is currently closed. Ongoing risk due to comorbidities.
+
+**📋 Recommended Plan:**
+  1. Continue current antibiotic regimen per MDM (10/06/2025).
+  2. Monitor for any signs of recurrence or new wound development.
+
+**👨‍⚕️ Confidence:** High - Based on clear documentation of wound closure on 10/06/2025."
+20152,What is the latest documented encounter date for patient 20152?,2025-10-05,0.2 x 0.2 cm,Stable,"**Direct Answer/Verdict:** 2025-10-05.
+**Evidence:** The most recent encounter date documented in the provided records is 2025-10-05.
+**Reasoning:** This is a factual retrieval based on the chronological order of visit details.
+
+
+
+","**Direct Answer/Verdict:** 2025-10-05. 
+
+**Evidence:** Wound encounter documented on 2025-10-05 with dimensions 0.2 x 0.2 cm and 3.0% granulation tissue.
+
+**Reasoning:** This represents the most recent documented assessment of the patient’s wound status."
+20152,What is the current documented wound size for patient 20152?,2025-10-05,0.2 x 0.2 cm,Stable,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 9/30/2025 are 0.0 x 0.0 cm.
+**Reasoning:** This indicates wound closure, impacting further intervention decisions.
+
+
+
+","**Direct Answer/Verdict:** 0.2 x 0.2 cm.
+**Evidence:** Wound dimensions documented on 2025-09-30 are 0.2 x 0.2 cm.
+**Reasoning:** This reflects the most recent documented measurement available."
+20152,Summarize the latest documented wound state for patient 20152.,2025-10-05,0.2 x 0.2 cm,Stable,"**🏥 Clinical Assessment:** Patient 20152 presents with a now-closed coccyx wound (0.0 x 0.0 cm as of 9/30/25). Previous wound culture revealed heavy *Proteus* and *Staph* (treated with Vancomycin/Cefepime until 9/19/25). Significant comorbidities include impaired mobility, incontinence, T2DM, COPD, ESRD, and prior osteomyelitis, increasing risk for future complications. Elbow wounds are reportedly improved.
+**⚠️ Risk Stratification:** Medium - History of chronic wounds and significant comorbidities.
+**📋 Recommended Plan:**
+  1. Continue current wound care for elbows.
+  2. Focus on preventative measures to minimize risk of new wound development given the patient’s comorbidities.
+**👨‍⚕️ Confidence:** High - Based on clear documentation of wound closure and comprehensive patient history.","**🏥 Clinical Assessment:** Patient 20152 presents with a stable coccyx wound measuring 0.2 x 0.2 cm with 3.0% granulation tissue. The patient also has new skin tears to the left and right elbows, with the left elbow resurfacing and the right improving. Significant comorbidities include impaired mobility, incontinence, Type 2 Diabetes, COPD, ESRD and a history of osteomyelitis, placing the patient at high risk for wound complications. 
+
+**⚠️ Risk Stratification:** High - Complex comorbidities & history of osteomyelitis.
+
+**📋 Recommended Plan:**
+  1. Continue current wound care regimen for the coccyx and elbows as documented on 10/05/2025.
+  2. Monitor closely for signs of infection or deterioration, given the patient’s complex medical history.
+
+**👨‍⚕️ Confidence:** High - Assessment based on documented findings from 10/05/2025."
+20456,What is the latest documented encounter date for patient 20456?,2025-10-13,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 2025-10-13. 
+**Evidence:** The latest visit details are dated 2025-10-13.
+**Reasoning:** This is a factual query regarding documentation date.","**Direct Answer/Verdict:** 2025-10-13. 
+**Evidence:** Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm.
+**Reasoning:** This represents the most recent data available for patient assessment and care planning.
+
+
+
+"
+20456,What is the current documented wound size for patient 20456?,2025-10-13,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 2.0 x 1.0 cm.
+**Evidence:** Wound Dims documented on 2025-10-06 visit details.
+**Reasoning:** Reporting current wound dimensions is crucial for monitoring healing trajectory.","**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-13.
+**Reasoning:** Represents current wound status – resolved to scab/callous based on prior notes."
+20456,Summarize the latest documented wound state for patient 20456.,2025-10-13,0.0 x 0.0 cm,Stable,"**🏥 Clinical Assessment:** Patient 20456 presents with a documented wound measuring 0.0 x 0.0 cm with 100% slough coverage as of 10/6/2025. The patient also exhibits diffuse purpura and hemisediron staining on all extremities, along with decreased muscle strength and fragile skin. Existing interventions include a powered air/pressure redistribution mattress, PR cushion, and PR boots.
+
+**⚠️ Risk Stratification:** High - Fragile skin, advanced age, and 100% slough contribute to high risk of stalled healing.
+
+**📋 Recommended Plan:**
+  1. Debridement to remove 100% slough. Consider sharp or autolytic debridement based on patient factors.
+  2. Assess underlying etiology of slough. Rule out vascular compromise and infection.
+**👨‍⚕️ Confidence:** High - Assessment based on direct wound documentation.","**🏥 Clinical Assessment:** Patient 20456 presents with a resolved wound (0.0 x 0.0 cm as of 10/13/2025). Previous documentation (10/6/2025) indicated a 2.0 x 1.0 cm wound, now scabbed/calloused. Patient is resting comfortably with no acute distress. Significant comorbidities include advanced age, altered mobility and fragile skin evidenced by purpura.
+**⚠️ Risk Stratification:** Low - Wound is resolved. Focus is on skin integrity maintenance.
+**📋 Recommended Plan:**
+  1. Continue current offloading with pillows.
+  2. Monitor skin for breakdown, particularly given advanced age and fragility. 
+**👨‍⚕️ Confidence:** High - Based on documented wound resolution (10/13/2025) and consistent clinical picture."
+21343,What is the latest documented encounter date for patient 21343?,2025-10-09,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 2025-10-09. 
+**Evidence:** Wound dimensions documented as 0.0 x 0.0 cm on 2025-10-09.
+**Reasoning:** This represents the most recent encounter with wound assessment data available in the record.
+
+
+
+","**Direct Answer/Verdict:** 2025-10-09. 
+**Evidence:** Wound dimensions documented on 2025-10-09 are 0.0 x 0.0 cm.
+**Reasoning:** This represents the most recent documented wound assessment available in the patient record.
+
+
+
+"
+21343,What is the current documented wound size for patient 21343?,2025-10-09,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 6.0 x 4.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-09 visit.
+**Reasoning:** Tracking wound size is crucial for monitoring healing trajectory and adjusting treatment plans.","**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-09.
+**Reasoning:** This represents the most recent documented measurement, indicating wound closure."
+21343,Summarize the latest documented wound state for patient 21343.,2025-10-09,0.0 x 0.0 cm,Stable,"**🏥 Clinical Assessment:** Patient 21343 presents with a resolving skin tear and hematoma. Initial wound dimensions were 5.0 x 3.0 cm on 10/02, reduced to 6.0 x 4.0 cm on 10/09. Most recent documentation (10/09) indicates a wound size of 0.0 x 0.0cm. Erythema has resolved, and the hematoma is migrating proximally. Antibiotic therapy was completed on 10/03. 
+
+**⚠️ Risk Stratification:** Low - Resolution trend and absence of active infection.
+
+**📋 Recommended Plan:**
+  1. Continue current wound care regimen focused on pressure offloading with a pressure-reducing cushion.
+  2. Monitor for recurrence or signs of infection during routine assessment. 
+
+**👨‍⚕️ Confidence:** High - Consistent documentation of improvement and resolution.","**🏥 Clinical Assessment:** Patient 21343 presents with a closed wound (0.0 x 0.0 cm as of 10/09/2025). Previous encounters documented a skin tear progressing to hematoma, with dimensions up to 5.0 x 3.0 cm on 10/02/2025. The wound is currently stable with no active signs of infection. Patient exhibits generalized weakness and is dependent for mobility. 
+
+**⚠️ Risk Stratification:** Low - Wound closure achieved.
+
+**📋 Recommended Plan:**
+  1. Continue current plan of care: Monitor for recurrence/complications.
+  2. Focus on supportive care: Optimize nutrition and pressure relief.
+
+**👨‍⚕️ Confidence:** High - Based on clear documentation of wound resolution as of the latest encounter (10/09/2025)."
+22609,What is the latest documented encounter date for patient 22609?,2025-10-13,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 2025-10-13
+**Evidence:** Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm.
+**Reasoning:** This is the most recent encounter with documented wound data in the provided records.
+
+
+
+","**Direct Answer/Verdict:** 2025-10-13.
+**Evidence:** Wound dimensions documented on 2025-10-13 are 0.0 x 0.0 cm.
+**Reasoning:** This represents the most recent documented encounter and current wound status."
+22609,What is the current documented wound size for patient 22609?,2025-10-13,0.0 x 0.0 cm,Stable,"**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 2025-10-13.
+**Reasoning:** Wound size is a key metric for tracking healing progress and guiding intervention decisions.","**Direct Answer/Verdict:** 0.0 x 0.0 cm.
+**Evidence:** Wound dimensions documented on 10/13/2025.
+**Reasoning:** This reflects the latest documented measurement, indicating wound closure or complete resolution."
+22609,Summarize the latest documented wound state for patient 22609.,2025-10-13,0.0 x 0.0 cm,Stable,"**🏥 Clinical Assessment:** Patient 22609 presents with a previously documented 4.0 x 1.0 cm wound (10/6/25) that is now CLOSED (0.0 x 0.0 cm, 10/13/25). No tissue characteristics (necrosis, slough, granulation) are reported for the latest encounter. History reveals atherosclerotic changes in bilateral lower extremities. Patient demonstrates co-morbidities affecting healing, and generalized weakness.
+**⚠️ Risk Stratification:** Low - Wound Closure
+**📋 Recommended Plan:**
+  1. Continue to monitor skin integrity as directed.
+  2. Address underlying co-morbidities contributing to impaired healing.
+**👨‍⚕️ Confidence:** High - Data clearly indicates wound closure.","**🏥 Clinical Assessment:** Patient 22609 presents with a currently stable wound measuring 0.0 x 0.0 cm as of 10/13/2025. Previous documentation (10/06/2025) indicates a wound size of 4.0 x 1.0 cm. Patient exhibits generalized weakness and a resting tremor, with no acute distress noted on exam. History of atherosclerotic changes in bilateral lower extremities.
+**⚠️ Risk Stratification:** Low - Wound Closure
+**📋 Recommended Plan:**
+  1. Continue current supportive care.
+  2. Monitor skin integrity and offload as needed.
+**👨‍⚕️ Confidence:** High - Based on documented wound closure and stable clinical presentation."

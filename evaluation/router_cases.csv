@@ -1,0 +1,62 @@
+query,expected_intent
+How many patients are in the dataset?,data
+Count the total number of patients with diabetes.,data
+What is the average patient age?,data
+What is the mean wound area across all encounters?,data
+What percentage of patients have necrosis above 20 percent?,data
+Show me the distribution of pain levels.,data
+Plot the trend in wound size over time.,data
+Give me a breakdown of patients by age group.,data
+How many encounters have slough above 30 percent?,data
+What is the total number of wound encounters?,data
+List all patients with wounds larger than 5 cm.,data
+Show me all patients with diabetes.,data
+Create a table of patients with necrosis greater than 10 percent.,data
+List the patients with the highest pain levels.,data
+Show me the dataset rows where wound area is above 20 cm2.,data
+Give me a table of encounters from October 2025.,data
+List all records with granulation below 20 percent.,data
+Show me patients with more than one encounter.,data
+Display all patients younger than 65.,data
+List all encounters with missing wound size.,data
+How many records contain a non-zero wound measurement?,data
+What fraction of encounters show complete wound closure?,data
+Which wound sizes occur most often in the dataset?,data
+How many patients had an encounter on 2025-10-07?,data
+Show the number of encounters per patient.,data
+Can you summarize the dataset statistics?,data
+Which age range has the most patients?,data
+How frequently is necrosis documented?,data
+Show me the overall wound-size trend.,data
+Give me the census of patients by encounter date.,data
+
+What is the current status of patient 10770?,clinical
+Summarize patient 20152's latest wound encounter.,clinical
+What is the latest documented encounter date for patient 11673?,clinical
+What wound dimensions are documented for patient 18604?,clinical
+Does patient 19737 currently have an active wound?,clinical
+Give me a clinical assessment of patient 20456.,clinical
+What is going on with patient 21343?,clinical
+Review patient 22609's wound history.,clinical
+What is the latest wound state for patient 10000?,clinical
+Is patient 15041's wound resolved?,clinical
+Should patient 10770 continue the current wound-care plan?,clinical
+What risk factors affect healing for patient 20152?,clinical
+Is there evidence of wound deterioration for patient 11673?,clinical
+What does the latest note say about patient 18604?,clinical
+What are the major clinical concerns for patient 19737?,clinical
+Does patient 20456 show signs of infection?,clinical
+How is patient 21343 progressing?,clinical
+What comorbidities could affect healing for patient 22609?,clinical
+Give me a brief clinical summary for patient 10000.,clinical
+What should I know about patient 15041 before the next visit?,clinical
+Tell me about patient 10770.,clinical
+Review ID 20152.,clinical
+What happened during encounter 11673?,clinical
+What is the wound status for P 18604?,clinical
+Assess patient #19737.,clinical
+Could patient 20456 require debridement?,clinical
+Is patient 21343 improving or worsening?,clinical
+What is the most recent clinical information for patient 22609?,clinical
+"Based on the chart, what is happening with patient 10000?",clinical
+Does patient 15041 need further wound treatment?,clinical
