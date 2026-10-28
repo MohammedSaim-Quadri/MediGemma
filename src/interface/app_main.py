@@ -12,7 +12,6 @@ import logging
 from src.engine.engine_core import (
     ClinicalRAGEngine,
     LLMEngine,
-    VisionEngine,
     AnalyticsEngine,
     DataManager,
     generate_priority_report
@@ -67,7 +66,7 @@ def init_system():
     
     llm = LLMEngine()
     llm.initialize()
-    vision = VisionEngine() 
+    vision = None
     analytics = AnalyticsEngine(dm)
     rag = ClinicalRAGEngine(index=dm.index)
     
@@ -80,15 +79,22 @@ def init_system():
 
 llm_engine, data_manager, vision_engine, analytics_engine, rag_engine, protocol_manager, verifier, orchestrator = init_system()
 
+def evict_models_for_switch(required_free_gb):
+    try:
+        return master_evict_with_retry(
+            required_free_gb=required_free_gb,
+            max_retries=5,
+        )
+    except Exception:
+        logger.exception("GPU model eviction failed")
+        return False
+
 if 'medgemma_loaded' not in st.session_state:
     st.session_state['medgemma_loaded'] = False
 if 'hulumed_loaded' not in st.session_state:
     st.session_state['hulumed_loaded'] = False
 if 'medgemma4b_loaded' not in st.session_state:
     st.session_state['medgemma4b_loaded'] = False
-
-if 'vision_engine' not in st.session_state:
-    st.session_state['vision_engine'] = vision_engine
 
 if 'vision_history' not in st.session_state:
     st.session_state['vision_history'] = []
@@ -128,26 +134,63 @@ with st.sidebar:
         enc_file = st.file_uploader("Encounters CSV", type=["csv"])
         pat_file = st.file_uploader("Demographics CSV", type=["csv"])
         if enc_file and st.button("🔄 Ingest Data"):
-            with st.spinner("Processing..."):
-                if data_manager.load_data(enc_file, pat_file):
-                    # 1. Run the Rules Engine
+            import time
+
+            try:
+                with st.status("Ingesting clinical data...", expanded=True) as status:
+
+                    start = time.perf_counter()
+
+                    st.write("1/4 — Reading CSV and building vector index")
+                    logger.info("INGEST: Starting DataManager.load_data")
+
+                    if not data_manager.load_data(enc_file, pat_file):
+                        raise RuntimeError("CSV ingestion or vector indexing failed.")
+
+                    logger.info(
+                        "INGEST: DataManager completed in %.2f seconds",
+                        time.perf_counter() - start
+                    )
+
+                    st.write("2/4 — Generating patient triage report")
+
                     triage_report = generate_priority_report(data_manager.df)
-                    
-                    # 2. Create a Map (Patient ID -> Severity)
-                    # Example: {'10770': 'Critical', '10771': 'Stable'}
-                    status_map = {entry['Patient ID']: entry['Severity'] for entry in triage_report}
-                    
-                    # 3. Bake it into the DataFrame as a REAL column
-                    # Now the 'Status' column contains "Critical", "Urgent", or "Stable"
-                    data_manager.df['Status'] = data_manager.df['Patient_ID'].map(status_map).fillna('Stable')
-                    logger.info(f"✅ Enriched DataFrame with Triage Status. Critical Count: {len([x for x in triage_report if x['Severity'] == 'Critical'])}")
-                    
+
+                    status_map = {
+                        str(entry["Patient ID"]): entry["Severity"]
+                        for entry in triage_report
+                    }
+
+                    data_manager.df["Status"] = (
+                        data_manager.df["Patient_ID"]
+                        .astype(str)
+                        .map(status_map)
+                        .fillna("Stable")
+                    )
+
+                    st.write("3/4 — Initializing analytics")
+                    logger.info("INGEST: Initializing AnalyticsEngine")
+
                     analytics_engine.dm = data_manager
                     analytics_engine.initialize()
+
+                    st.write("4/4 — Initializing clinical RAG")
+                    logger.info("INGEST: Initializing ClinicalRAGEngine")
+
                     rag_engine.index = data_manager.index
                     rag_engine.initialize()
-                    st.success("Data Ingested!")
-                    st.rerun()
+
+                    status.update(
+                        label="Clinical data ingested successfully",
+                        state="complete"
+                    )
+
+                st.success("Data Ingested!")
+                st.rerun()
+
+            except Exception as e:
+                logger.exception("Clinical ingestion failed")
+                st.error(f"Data ingestion failed: {e}")
 
     if st.button("🧹 Clear Conversation"):
         st.session_state.messages = [{"role": "assistant", "content": "Memory cleared."}]
@@ -159,8 +202,7 @@ with st.sidebar:
         if st.button("🔥 Emergency: Clear ALL Models"):
             with st.spinner("Clearing all models from VRAM..."):
                 set_model_loading(None)  # Reset any stuck loading flag
-                cleanup_python_models()
-                success = master_evict_with_retry(required_free_gb=20.0, max_retries=10)
+                success = evict_models_for_switch(20.0)
                 if success:
                     st.success("✅ All models evicted successfully")
                     st.rerun()
@@ -192,45 +234,21 @@ with tab1:
                                   help="Enter ID here to force the AI to use this patient's history.")
     
     # Store in session state for the Chat Engine to see later
-    if linked_pat_id:
-        st.session_state['linked_patient_id'] = linked_pat_id
+    st.session_state['linked_patient_id'] = linked_pat_id.strip()
 
-    # --- A. AUTO-VISION HANDLER ---
-    # We place the uploader here so it feels like part of the chat flow
-    uploaded_file = st.file_uploader("Upload Clinical Image (Auto-Analysis)", type=["jpg", "png", "jpeg"], key="chat_uploader")
+    # --- A. MULTIMODAL IMAGE INPUT ---
+    uploaded_file = st.file_uploader(
+        "Upload Clinical Image (Optional)",
+        type=["jpg", "png", "jpeg"],
+        key="chat_uploader",
+    )
 
-    # CHECK: Is there a file? AND Is it new?
-    if uploaded_file:
-        st.image(uploaded_file, width=350, caption="Analyzing Specimen...")
-        
-        if uploaded_file.name != st.session_state.last_analyzed_file:
-            # AUTO-TRIGGER (No Button)
-            with st.status("🧠 Running Clinical Vision Pipeline...", expanded=True) as status:
-                st.write("🔌 Orchestrating VRAM (Evicting Chat Engine)...")
-                st.write("👁️ LLaVA Vision Encoder: Scanning Tissue...")
-                
-                # Run Analysis
-                vision_result = vision_engine.analyze(uploaded_file)
-                
-                st.write("🛡️ Protocol Manager: Mapping Guidelines...")
-                protocol = protocol_manager.get_protocol(vision_result)
-                
-                status.update(label="✅ Analysis Complete", state="complete", expanded=False)
-            
-            # Formulate Context Message
-            link_msg = f"**Linked Patient:** {linked_pat_id}" if linked_pat_id else "**Linked Patient:** None"
-            context_msg = (
-                f"**[SYSTEM UPDATE] Visual Analysis Log:**\n"
-                f"**Target:** {uploaded_file.name} | {link_msg}\n"
-                f"**Visual Findings:** {vision_result}\n"
-                f"**Protocol Identified:** {protocol.get('name')}\n"
-                f"**Recommended Actions:** {', '.join(protocol.get('management')[:3])}..."
-            )
-            
-            # Inject & Save State
-            st.session_state.messages.append({"role": "assistant", "content": context_msg})
-            st.session_state.last_analyzed_file = uploaded_file.name 
-            st.rerun() # Force refresh
+    if uploaded_file is not None:
+        st.image(
+            uploaded_file,
+            width=350,
+            caption="Image ready. Ask your clinical question below.",
+        )
 
     # --- B. CHAT INTERFACE ---
     for msg in st.session_state.messages:
@@ -239,6 +257,24 @@ with tab1:
             render_copy_button(msg["content"])
 
     if prompt := st.chat_input("Ask about a patient, treatment protocol, or medical query..."):
+        image_path = None
+
+        if uploaded_file is not None:
+            import uuid
+
+            extension = os.path.splitext(uploaded_file.name)[1].lower()
+
+            image_path = os.path.abspath(
+                os.path.join(
+                    "uploads",
+                    f"gemma_{uuid.uuid4().hex}{extension}",
+                )
+            )
+
+            os.makedirs(os.path.dirname(image_path), exist_ok=True)
+            with open(image_path, "wb") as f:
+                f.write(uploaded_file.getvalue())
+
         final_prompt = prompt
         
         if 'linked_patient_id' in st.session_state and st.session_state['linked_patient_id']:
@@ -255,100 +291,121 @@ with tab1:
         with st.chat_message("assistant"):
             response_placeholder = st.empty()
 
-            # CHECK: Is data loaded?
-            if data_manager.df is None and not st.session_state.last_analyzed_file:
-                full_response = "⚠️ **System Empty:** Please upload patient data or an image."
-                response_placeholder.error(full_response)
-                st.session_state.messages.append({"role": "assistant", "content": full_response})
-            else:
-                # --- START NEW ORCHESTRATOR BLOCK ---
-                with st.status("🤖 Medical Director Logic Active...", expanded=True) as status:
-                    try:
-                        # 1. THE DECOUPLED CALL (One line does it all)
-                        raw_response, source_lbl, response_obj, intent = orchestrator.process_query(
-                            final_prompt, 
-                            st.session_state.messages
-                        )
-                        
-                        st.write(f"🔀 Intent: **{str(intent).upper()}**")
-                        st.write(f"⚙️ Engine: {source_lbl}")
-                        
-                        status.update(label="Response Generated", state="complete", expanded=False)
-                        
-                    except Exception as e:
-                        # Graceful Error Handling
-                        st.error(f"System Error: {str(e)}")
-                        logger.error(f"Orchestrator Failed: {e}", exc_info=True)
-                        raw_response = "⚠️ I encountered an internal error processing your request."
-                        source_lbl = "System Error"
-                        response_obj = None
-                        intent = "ERROR"
-                # --- END NEW ORCHESTRATOR BLOCK ---
-                    
-                # 3. SAFETY VERIFICATION
-                st.write("🛡️ Verifying Output...")
-                is_safe, reason = verifier.verify(raw_response)
-                    
-                if is_safe:
-                    full_response = raw_response
-                        
-                else:
-                    full_response = f"⚠️ **Safety Block:** {reason}"
-                    logger.warning(f"Blocked response: {raw_response}")
-
+            # --- START NEW ORCHESTRATOR BLOCK ---
+            with st.status("🤖 Medical Director Logic Active...", expanded=True) as status:
                 try:
-                    # 1. Get the directory where app_main.py lives (src/interface)
-                    current_dir = os.path.dirname(os.path.abspath(__file__))
-                        
-                    # 2. Go up two levels to get project root
-                    project_root = os.path.abspath(os.path.join(current_dir, "../../"))
-                        
-                    # 3. Build the absolute path to thesis_data
-                    log_dir = os.path.join(project_root, "audit_logs")
-                        
-                    # Ensure dir exists (safe to run every time)
-                    os.makedirs(log_dir, exist_ok=True)
-                        
-                    # 4. Define the full file path
-                    log_file = os.path.join(log_dir, "interactions.jsonl")
-                    log_entry = {
-                        "timestamp": datetime.now().isoformat(),
-                        "query": prompt,
-                        "response": full_response,
-                        "raw_response": raw_response,  # Original before safety check
-                        "intent": intent if isinstance(intent, str) else str(intent),
-                        "source": source_lbl,
-                        "is_safe": is_safe,
-                        "safety_reason": reason if not is_safe else None,
-                        "has_image": bool(uploaded_file),
-                        "patient_id_mentioned": bool(re.search(r'\b\d{4,6}\b', prompt))
-                    }
-                        
-                    with open(log_file, "a", encoding="utf-8") as f:
-                        f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
-                except Exception as e:
-                    logger.error(f"Failed to log interaction: {e}")
+                    # 1. THE DECOUPLED CALL (One line does it all)
+                    raw_response, source_lbl, response_obj, intent = orchestrator.process_query(
+                        final_prompt,
+                        st.session_state.messages[:-1],
+                        image_path=image_path,
+                    )
                     
-                status.update(label="Response Generated", state="complete", expanded=False)
+                    st.write(f"🔀 Intent: **{str(intent).upper()}**")
+                    st.write(f"⚙️ Engine: {source_lbl}")
+                    
+                    status.update(label="Response Generated", state="complete", expanded=False)
+                    
+                except Exception as e:
+                    # Graceful Error Handling
+                    st.error(f"System Error: {str(e)}")
+                    logger.error(f"Orchestrator Failed: {e}", exc_info=True)
+                    raw_response = "⚠️ I encountered an internal error processing your request."
+                    source_lbl = "System Error"
+                    response_obj = None
+                    intent = "ERROR"
+                    status.update(
+                        label="Response Generation Failed",
+                        state="error",
+                        expanded=False,
+                    )
+            # --- END NEW ORCHESTRATOR BLOCK ---
+            # 2. CLINICAL PROTOCOL MATCHING
+            if image_path is not None and source_lbl != "System Error":
+                try:
+                    protocol = protocol_manager.get_protocol(raw_response)
 
-                # Final Output
-                response_placeholder.markdown(full_response)
-                render_copy_button(full_response)
-                st.caption(f"ℹ️ Source: {source_lbl}")
-                # EXPLAINABILITY
-                if response_obj and hasattr(response_obj, 'source_nodes') and response_obj.source_nodes:
-                    with st.expander("🔍 Evidence Used (Explainability)", expanded=False):
-                        st.caption("The AI consulted these patient records:")
-                        for i, node in enumerate(response_obj.source_nodes):
-                            # Try to parse metadata safely
-                            meta_id = node.metadata.get('patient_id', 'Unknown')
-                            meta_date = node.metadata.get('date', 'Unknown')
-                            st.markdown(f"**📄 Record {i+1}:** Patient {meta_id} ({meta_date})")
-                            st.text(f"...{node.text[:150]}...")
-                            st.markdown("---")
+                    if isinstance(protocol, dict) and protocol.get("name"):
+                        actions = protocol.get("management") or []
+
+                        raw_response += (
+                            "\n\n### Matched Clinical Protocol\n"
+                            f"**Protocol:** {protocol['name']}\n"
+                            + "\n".join(f"- {action}" for action in actions)
+                        )
+
+                except Exception as e:
+                    logger.warning(f"Protocol matching failed: {e}")
+                
+            # 3. SAFETY VERIFICATION
+            st.write("🛡️ Verifying Output...")
+            is_safe, reason = verifier.verify(raw_response)
+                
+            if is_safe:
+                full_response = raw_response
+                    
+            else:
+                full_response = f"⚠️ **Safety Block:** {reason}"
+                logger.warning(f"Blocked response: {raw_response}")
+
+            try:
+                # 1. Get the directory where app_main.py lives (src/interface)
+                current_dir = os.path.dirname(os.path.abspath(__file__))
+                    
+                # 2. Go up two levels to get project root
+                project_root = os.path.abspath(os.path.join(current_dir, "../../"))
+                    
+                # 3. Build the absolute path to thesis_data
+                log_dir = os.path.join(project_root, "audit_logs")
+                    
+                # Ensure dir exists (safe to run every time)
+                os.makedirs(log_dir, exist_ok=True)
+                    
+                # 4. Define the full file path
+                log_file = os.path.join(log_dir, "interactions.jsonl")
+                log_entry = {
+                    "timestamp": datetime.now().isoformat(),
+                    "query": prompt,
+                    "response": full_response,
+                    "raw_response": raw_response,  # Original before safety check
+                    "intent": intent if isinstance(intent, str) else str(intent),
+                    "source": source_lbl,
+                    "is_safe": is_safe,
+                    "safety_reason": reason if not is_safe else None,
+                    "has_image": bool(uploaded_file),
+                    "patient_id_mentioned": bool(re.search(r'\b\d{4,6}\b', prompt))
+                }
+                    
+                with open(log_file, "a", encoding="utf-8") as f:
+                    f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
+            except Exception as e:
+                logger.error(f"Failed to log interaction: {e}")
+                
+
+            # Final Output
+            response_placeholder.markdown(full_response)
+            render_copy_button(full_response)
+            st.caption(f"ℹ️ Source: {source_lbl}")
+            # EXPLAINABILITY
+            if response_obj and hasattr(response_obj, 'source_nodes') and response_obj.source_nodes:
+                with st.expander("🔍 Evidence Used (Explainability)", expanded=False):
+                    st.caption("The AI consulted these patient records:")
+                    for i, node in enumerate(response_obj.source_nodes):
+                        # Try to parse metadata safely
+                        meta_id = node.metadata.get('patient_id', 'Unknown')
+                        meta_date = node.metadata.get('date', 'Unknown')
+                        st.markdown(f"**📄 Record {i+1}:** Patient {meta_id} ({meta_date})")
+                        st.text(f"...{node.text[:150]}...")
+                        st.markdown("---")
             
             # Save to History
             st.session_state.messages.append({"role": "assistant", "content": full_response})
+    
+        if image_path is not None:
+            try:
+                os.remove(image_path)
+            except OSError:
+                logger.warning("Could not delete temporary image %s", image_path)
 
 # =========================================================
 # TAB 2: MD DASHBOARD (Cohort Overview & Triage)
@@ -516,7 +573,7 @@ with tab6:
             status_text.text("Step 1/2: Evicting other models (Nuclear Cleanup)...")
             from src.engine.test_models import load_medgemma_4b
 
-            success = master_evict_with_retry(required_free_gb=6.0, max_retries=10)
+            success = evict_models_for_switch(6.0)
 
             if not success:
                 set_model_loading(None)
@@ -598,6 +655,7 @@ with tab5:
                 with st.status("🚨 VRAM Full: Evicting Python Models for Gemma 3...", expanded=True) as status:
                     from src.engine.test_models import cleanup_python_models
                     set_model_loading(None)  # Clear any loading flag
+                    
                     cleanup_python_models() # Forces MedGemma/HuluMed out of VRAM
 
                     # Reset all flags
@@ -720,7 +778,7 @@ with tab4:
             status_text = st.empty()
 
             status_text.text("Step 1/2: Clearing VRAM...")
-            success = master_evict_with_retry(required_free_gb=18.0, max_retries=10)
+            success = evict_models_for_switch(18.0)
 
             if not success:
                 set_model_loading(None)
@@ -828,7 +886,7 @@ with tab3:
             status_text = st.empty()
 
             status_text.text("Step 1/2: Evicting other models from VRAM...")
-            success = master_evict_with_retry(required_free_gb=20.0, max_retries=10)
+            success = evict_models_for_switch(20.0)
 
             if not success:
                 set_model_loading(None)

@@ -2,6 +2,11 @@ import logging
 import re
 from src.core.router import classify_query, QueryIntent
 from llama_index.core.llms import ChatMessage, MessageRole
+import ollama
+from llama_index.core.vector_stores import (
+    MetadataFilters,
+    ExactMatchFilter,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -16,91 +21,167 @@ class ClinicalOrchestrator:
         self.llm = llm_engine
         self.dm = data_manager
 
-    def process_query(self, user_query, chat_history):
+    
+    def process_query(self, user_query, chat_history, image_path=None):
         """
-        Main Logic Loop:
-        1. Detects Intent (Data vs Clinical)
-        2. Injects Context (Patient IDs)
-        3. Executes the appropriate Engine
-        
-        Returns: (response_text, source_label, response_object, intent)
+        Unified Gemma 3 clinical inference:
+        - Analytics stays deterministic
+        - Optional image is sent directly to Gemma 3
+        - Patient history is retrieved before inference
+        - One Ollama inference call per clinical question
         """
-        # 1. Routing
         intent = classify_query(user_query, chat_history)
-        logger.info(f"🔀 Orchestrator Route: {intent}")
+        logger.info("Orchestrator route: %s", intent)
 
-        # 2. Execution
-        if intent == QueryIntent.DATA:
-            # --- DATA PATH ---
-            if self.dm.df is not None:
-                result = self.analytics.execute_query(user_query)
-                return result['text'], "Analytics Engine", None, intent
-            else:
-                return "⚠️ Analytics Unavailable: No CSV loaded.", "System", None, intent
+        # Preserve deterministic analytics for text-only questions.
+        if image_path is None and intent == QueryIntent.DATA:
+            if self.dm.df is None:
+                return (
+                    "Analytics unavailable: No CSV loaded.",
+                    "System",
+                    None,
+                    intent,
+                )
+            result = self.analytics.execute_query(user_query)
+            return result["text"], "Analytics Engine", None, intent
 
-        else: 
-            # --- CLINICAL PATH (RAG/LLM) ---
+        context_parts = []
+        pid = None
 
-            # CHECK: Do we have a recent image in history?
-            has_visual = any('[SYSTEM UPDATE]' in str(m.get('content','')) for m in chat_history)
-            
-            # A. Ground Truth Injection (Robust Lookup)
-            final_query = user_query
-            pid = None
+        # Identify a patient only if the ID exists in the dataset.
+        if self.dm.df is not None:
+            candidates = re.findall(r"\b(\d{3,6})\b", user_query)
+            valid_ids = set(
+                self.dm.df["Patient_ID"].astype(str).unique()
+            )
+            pid = next(
+                (candidate for candidate in candidates
+                 if candidate in valid_ids),
+                None,
+            )
 
-            # Only attempt ID lookup if we have a Database loaded
-            if self.dm.df is not None:
-                # FIX: Pull every numeric token (3-6 digits) and validate against actual Data
-                candidates = re.findall(r'\b(\d{3,6})\b', user_query)
-                valid_ids = set(self.dm.df['Patient_ID'].astype(str).unique())
-                
-                for c in candidates:
-                    if c in valid_ids:
-                        pid = c
-                        break
-            
-            if pid:
-                # Fetch the incontestable truth from Pandas
-                state = self.dm.get_patient_current_state(pid)
-                
-                if state:
-                    logger.info(f"🔎 Injecting Ground Truth for {pid}")
-                    ground_truth = (
-                        f"\n\n[SYSTEM INJECTED GROUND TRUTH - PRIORITY OVER RETRIEVAL]\n"
-                        f"Latest Encounter Date: {state['last_visit']}\n"
-                        f"Current Wound Size: {state['wound_dims']}\n"
-                        f"Current Status: {state['severity']}\n"
-                        f"Latest Note Snippet: {state['narrative']}\n"
-                        f"INSTRUCTION: You MUST use this date ({state['last_visit']}) as the current status.\n"
+        # Inject the latest patient record.
+        if pid:
+            state = self.dm.get_patient_current_state(pid)
+
+            if state:
+                context_parts.append(
+                    f"PATIENT {pid} - LATEST CLINICAL RECORD\n"
+                    f"Date: {state['last_visit']}\n"
+                    f"Wound size: {state['wound_dims']}\n"
+                    f"Status: {state['severity']}\n"
+                    f"Latest note: {state['narrative']}"
+                )
+
+        # Retrieve supporting RAG context.
+        if self.rag.index is not None:
+            try:
+                retriever_kwargs = {"similarity_top_k": 3}
+
+                # Never retrieve other patients' records
+                # when a valid patient ID is specified.
+                if pid:
+                    retriever_kwargs["filters"] = MetadataFilters(
+                        filters=[
+                            ExactMatchFilter(
+                                key="patient_id",
+                                value=str(pid),
+                            )
+                        ]
                     )
-                    final_query = user_query + ground_truth
+                elif self.dm.df is not None:
+                    # Avoid mixing unidentified patient records.
+                    retriever_kwargs = None
 
-            # B. Engine Selection
-            if self.rag.index or has_visual:
-                # Use RAG if index exists
-                response_obj = self.rag.chat(final_query, chat_history)
-                
-                # Handle response types safely (String vs Object)
-                if hasattr(response_obj, 'response'):
-                    return str(response_obj.response), "Clinical Engine", response_obj, intent
-                else:
-                    return str(response_obj), "Clinical Engine", response_obj, intent
-            else:
-                # Fallback to pure LLM if no data loaded (General Knowledge)
-                messages = []
-                
-                # Convert History
-                for m in chat_history:
-                    role_str = m.get("role", "user")
-                    role_enum = MessageRole.USER if role_str == "user" else MessageRole.ASSISTANT
-                    # Handle System role if present
-                    if role_str == "system": role_enum = MessageRole.SYSTEM
-                        
-                    messages.append(ChatMessage(role=role_enum, content=str(m.get("content", ""))))
+                if retriever_kwargs is not None:
+                    retriever = self.rag.index.as_retriever(
+                        **retriever_kwargs
+                    )
+                    nodes = retriever.retrieve(user_query)
 
-                # Append Current Query
-                messages.append(ChatMessage(role=MessageRole.USER, content=final_query))
-                
-                # Now this will work because 'messages' contains Objects, not Dicts
-                resp = self.llm.chat(messages)
-                return resp.message.content, "LLM (General Knowledge)", None, intent
+                    if nodes:
+                        retrieved = "\n\n".join(
+                            node.node.get_content()
+                            for node in nodes
+                        )
+                        context_parts.append(
+                            "RETRIEVED CLINICAL RECORDS:\n"
+                            + retrieved
+                        )
+            except Exception:
+                logger.exception("RAG retrieval failed")
+
+        system_prompt = (
+            "You are a clinical decision-support assistant "
+            "supporting wound-care clinicians. "
+            "Use the provided image, patient history, and "
+            "clinical records to answer the user's question. "
+            "Distinguish visual observations from documented "
+            "patient facts. Do not invent clinical measurements, "
+            "laboratory results, or unseen findings. "
+            "If an image is provided, analyze the image directly. "
+            "Provide a clear clinical assessment and relevant "
+            "next steps. State important uncertainty."
+        )
+
+        # Build a concise conversation history.
+        messages = [
+            {"role": "system", "content": system_prompt}
+        ]
+
+        for entry in chat_history[-6:]:
+            role = entry.get("role")
+            content = str(entry.get("content", ""))
+
+            if role not in ("user", "assistant"):
+                continue
+
+            # Exclude old machine-generated visual log messages.
+            if "[SYSTEM UPDATE]" in content:
+                continue
+
+            messages.append({
+                "role": role,
+                "content": content,
+            })
+
+        question = user_query
+
+        if context_parts:
+            question += (
+                "\n\nCLINICAL CONTEXT:\n"
+                + "\n\n".join(context_parts)
+            )
+
+        user_message = {
+            "role": "user",
+            "content": question,
+        }
+
+        if image_path is not None:
+            # Image bytes are passed directly to Ollama.
+            with open(image_path, "rb") as image_file:
+                user_message["images"] = [image_file.read()]
+
+        messages.append(user_message)
+
+        logger.info(
+            "Calling Gemma 3 multimodal: image=%s, patient=%s",
+            bool(image_path),
+            pid,
+        )
+
+        response = ollama.chat(
+            model="gemma3:27b",
+            messages=messages,
+            options={"temperature": 0.2},
+        )
+
+        answer = response["message"]["content"]
+
+        return (
+            answer,
+            "Gemma 3 Multimodal" if image_path else "Gemma 3",
+            None,
+            intent,
+        )

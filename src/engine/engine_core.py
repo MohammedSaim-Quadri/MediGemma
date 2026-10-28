@@ -23,8 +23,7 @@ from llama_index.core import Settings, PromptTemplate
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.vector_stores import MetadataFilter, MetadataFilters
 from llama_index.core.schema import NodeWithScore, TextNode
-# from llama_index.llms.ollama import Ollama
-from llama_index.experimental.query_engine import PandasQueryEngine
+from llama_index.llms.ollama import Ollama
 from llama_index.core import VectorStoreIndex, Document
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
@@ -51,7 +50,6 @@ class DataManager:
             Settings.embed_model = self.embed_model
             
             # Explicitly set LLM to None here to prevent OpenAI default
-            Settings.llm = None
             Settings.chunk_size = 512 
             
         except Exception as e:
@@ -133,7 +131,10 @@ class DataManager:
             return False
 
     def _build_index(self):
-        logger.info("🧠 Building Clinical Vector Index (Per-Visit Strategy)...")
+        import time
+
+        index_start = time.perf_counter()
+        logger.info("Starting clinical vector indexing...")
         
         # Ensure Settings are persistent
         if Settings.embed_model is None:
@@ -176,8 +177,16 @@ class DataManager:
             documents.append(doc)
         
         if documents:
+            logger.info(
+                "Created %d documents in %.2f seconds. Starting embeddings...",
+                len(documents),
+                time.perf_counter() - index_start
+            )
             self.index = VectorStoreIndex.from_documents(documents)
-            logger.info(f"✅ Index Built Successfully ({len(documents)} clinical encounters).")
+            logger.info(
+                "Vector indexing completed in %.2f seconds.",
+                time.perf_counter() - index_start
+            )
 
     def get_preview(self):
         return self.df
@@ -227,33 +236,27 @@ class LLMEngine:
     """
     Handles clinical reasoning and text generation via Ollama (Gemma 2).
     """
-    def __init__(self, model_name="gemma2:27b", timeout=300.0):
-        logger.warning("⚠️ LLMEngine (Gemma2) is DISABLED. Use Gemma3 for all tasks.")
+    def __init__(self, model_name="gemma3:27b", timeout=300.0):
         self.model_name = model_name
         self.timeout = timeout
         self.llm = None
 
     def initialize(self):
-        """Connects to the local Ollama instance."""
-        """Does nothing - Gemma2 is disabled."""
-        logger.info("ℹ️ Gemma2 is disabled. Skipping initialization.")
-        pass
-        # try:
-        #     logger.info(f"🧠 Connecting to Inference Engine: {self.model_name}...")
-        #     self.llm = Ollama(model=self.model_name, request_timeout=self.timeout)
-        #     Settings.llm = self.llm # Set global LlamaIndex setting
-        #     logger.info("✅ Inference Engine connected.")
-        # except Exception as e:
-        #     logger.error(f"❌ Failed to connect to Ollama: {e}")
-        #     raise e
+        logger.info(f"Initializing clinical LLM: {self.model_name}")
+
+        self.llm = Ollama(
+            model=self.model_name,
+            request_timeout=self.timeout,
+        )
+
+        Settings.llm = self.llm
+        logger.info("Clinical LLM configured successfully.")
 
     def generate(self, prompt):
-        """Direct text completion."""
-        """Does nothing - Gemma2 is disabled."""
-        pass
-        # if not self.llm:
-        #     self.initialize()
-        # return self.llm.complete(prompt).text
+        if self.llm is None:
+            self.initialize()
+
+        return self.llm.complete(prompt).text
 
     def chat(self, messages):
         """Chat completion (list of messages)."""
@@ -620,13 +623,17 @@ class VisionEngine:
             input_ids = tokenizer_image_token(prompt_str, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).to(self.model.device)
 
             # 4. Generation
+            attention_mask = torch.ones_like(input_ids, dtype=torch.long)
+
             with torch.inference_mode():
                 output_ids = self.model.generate(
-                    input_ids,
+                    inputs=input_ids,  # IMPORTANT: LLaVA expects 'inputs'
                     images=image_tensor,
+                    attention_mask=attention_mask,
                     do_sample=True,
                     temperature=0.2,
                     max_new_tokens=512,
+                    pad_token_id=self.tokenizer.eos_token_id,
                 )
 
             # 5. Decoding
@@ -640,28 +647,25 @@ class VisionEngine:
             return output_text
 
         except Exception as e:
-            logger.error(f"Error during vision analysis: {e}")
+            logger.exception("Error during LLaVA vision analysis")
             self.unload()
             return "Error during vision analysis."
 
     def unload(self):
-        """Frees GPU memory manually."""
-        if self.loaded:
-            # Delete instance variables
-            del self.model
-            del self.tokenizer
-            del self.image_processor
-            
-            # Reset flags
+        if self.model is not None:
             self.model = None
-            self.tokenizer = None
+
+        if self.image_processor is not None:
             self.image_processor = None
-            self.loaded = False
-            
-            # Force Garbage Collection
+
+        import gc
+        gc.collect()
+
+        if torch.cuda.is_available():
             torch.cuda.empty_cache()
-            gc.collect()
-            logger.info("♻️ Vision Model unloaded from VRAM.")
+            torch.cuda.ipc_collect()
+
+        logger.info("Vision model references released.")
 
 
 class AnalyticsEngine:
@@ -675,13 +679,18 @@ class AnalyticsEngine:
         
     def initialize(self):
         """Setup the query engine with dataframe schema."""
+        from llama_index.experimental.query_engine import PandasQueryEngine
         # Get the clean dataframe from your DataManager
         df = self.dm.get_preview()
 
         # 1. Force Local LLM (Gemma 2)
         # This prevents the "No OpenAI API Key" error
-        local_llm = Ollama(model="gemma2:27b", request_timeout=300.0)
-        Settings.llm = local_llm  # Set global setting just in case
+        local_llm = Ollama(
+            model="gemma3:27b",
+            request_timeout=300.0,
+        )
+
+        Settings.llm = local_llm
         
         # Instruction string tells LLM how to use the dataframe
         instruction = (

@@ -243,71 +243,96 @@ def log_vram(stage=""):
         logger.info(f"🧠 VRAM {stage}: {free_gb:.2f} GB free / {total_gb:.2f} GB total")
 
 
-def evict_ollama_with_retry(required_free_gb=20.0, max_retries=10, retry_delay=3.0):
-    logger.info(f"🧹 Starting aggressive Ollama eviction (need {required_free_gb:.1f} GB free)")
-    
-    for attempt in range(max_retries):
-        try:
-            # Step 1: Query running models
-            resp = requests.get(f"{OLLAMA_URL}/api/ps", timeout=5)
-            
-            if resp.status_code == 200:
-                running_models = resp.json().get('models', [])
-                
-                if running_models:
-                    logger.info(f"Attempt {attempt + 1}/{max_retries}: Found {len(running_models)} models running")
-                    
-                    # Unload each model
-                    for m in running_models:
-                        model_name = m['name']
-                        logger.info(f"  Unloading: {model_name}")
-                        try:
-                            requests.post(
-                                f"{OLLAMA_URL}/api/generate",
-                                json={"model": model_name, "keep_alive": 0},
-                                timeout=10
-                            )
-                        except Exception as e:
-                            logger.warning(f"  Failed to unload {model_name}: {e}")
-                else:
-                    logger.info(f"Attempt {attempt + 1}/{max_retries}: No Ollama models currently loaded")
-            
-            # Step 2: Aggressive Python cleanup
+def evict_ollama_with_retry(
+    required_free_gb=20.0,
+    max_retries=5,
+    retry_delay=1.0
+):
+    """
+    Evict Ollama models and verify available VRAM.
+
+    Returns False if memory remains insufficient after Ollama
+    is empty and a bounded stabilization period has elapsed.
+    """
+    logger.info(
+        "Starting Ollama eviction (need %.1f GiB free)",
+        required_free_gb
+    )
+
+    if not torch.cuda.is_available():
+        logger.error("CUDA is not available")
+        return False
+
+    def available_gb():
+        free_bytes, _ = torch.cuda.mem_get_info()
+        return free_bytes / (1024 ** 3)
+
+    try:
+        resp = requests.get(f"{OLLAMA_URL}/api/ps", timeout=5)
+        resp.raise_for_status()
+
+        running_models = resp.json().get("models", [])
+
+        for model in running_models:
+            name = model["name"]
+            logger.info("Unloading Ollama model: %s", name)
+
+            response = requests.post(
+                f"{OLLAMA_URL}/api/generate",
+                json={
+                    "model": name,
+                    "prompt": "",
+                    "keep_alive": 0,
+                    "stream": False
+                },
+                timeout=15
+            )
+            response.raise_for_status()
+
+        # Allow a bounded period for Ollama memory release.
+        for attempt in range(max_retries):
             force_vram_cleanup()
-            
-            # Step 3: Wait for VRAM to stabilize
-            time.sleep(retry_delay)
-            
-            # Step 4: Check if we have enough free VRAM
-            if torch.cuda.is_available():
-                free_bytes, total_bytes = torch.cuda.mem_get_info()
-                free_gb = free_bytes / (1024 ** 3)
-                total_gb = total_bytes / (1024 ** 3)
-                
-                logger.info(f"  VRAM Status: {free_gb:.1f} GB free / {total_gb:.1f} GB total")
-                
-                if free_gb >= required_free_gb:
-                    logger.info(f"✅ SUCCESS: {free_gb:.1f} GB free (needed {required_free_gb:.1f} GB)")
-                    return True
-                else:
-                    shortage = required_free_gb - free_gb
-                    logger.warning(f"  ⚠️ Still need {shortage:.1f} GB more. Retrying...")
-            else:
-                logger.error("CUDA not available!")
+            free_gb = available_gb()
+
+            logger.info(
+                "VRAM check %d/%d: %.2f GiB free",
+                attempt + 1,
+                max_retries,
+                free_gb
+            )
+
+            if free_gb >= required_free_gb:
+                logger.info("Sufficient VRAM available")
+                return True
+
+            resp = requests.get(
+                f"{OLLAMA_URL}/api/ps",
+                timeout=5
+            )
+            resp.raise_for_status()
+
+            remaining = resp.json().get("models", [])
+
+            if not remaining and attempt >= 1:
+                logger.error(
+                    "Ollama is empty but only %.2f GiB is free. "
+                    "Memory may be held by Python or another process.",
+                    free_gb
+                )
                 return False
-                
-        except Exception as e:
-            logger.error(f"Attempt {attempt + 1} error: {e}")
-        
-        # Wait before next retry (with exponential backoff)
-        if attempt < max_retries - 1:
-            wait_time = retry_delay * (1.5 ** attempt)  # 3s, 4.5s, 6.75s, etc.
-            logger.info(f"  Waiting {wait_time:.1f}s before retry {attempt + 2}/{max_retries}...")
-            time.sleep(wait_time)
-    
-    # If we get here, all retries failed
-    logger.error(f"❌ FAILED: Could not free {required_free_gb:.1f} GB after {max_retries} attempts")
-    return False
+
+            if attempt < max_retries - 1:
+                time.sleep(retry_delay)
+
+        logger.error(
+            "Insufficient VRAM after eviction: %.2f GiB free",
+            available_gb()
+        )
+        return False
+
+    except Exception:
+        logger.exception("Ollama eviction failed")
+        return False
 
 
 def _destroy_cuda_model(model):
